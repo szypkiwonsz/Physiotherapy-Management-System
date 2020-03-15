@@ -4,5 +4,5 @@ from users.views import offices
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/signup/office/', offices.OfficeSignUpView.as_view(), name='office_signup'),
+    path('accounts/signup/office/', offices.SignUpView.as_view(), name='signup'),
 ]
