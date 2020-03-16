@@ -1,5 +1,5 @@
 """
-ASGI config for Physiotherapy_Management_System project.
+ASGI config for css project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
