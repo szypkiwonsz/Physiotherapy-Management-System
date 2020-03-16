@@ -1,0 +1,30 @@
+{% extends 'Physiotherapy_Management_System/base.html'%}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% block content %}
+    <form method="post">
+                <div class="row">
+                    <div class="col-md-4 col-lg-12">
+                        <div class="card">
+                                {% csrf_token %}
+                                <fieldset class="form-group">
+                                    <h3>Login to your account:</h3>
+                                    {{ form|crispy }}
+                                </fieldset>
+                                <div class="form-group">
+                                    <button class="btn btn-outline-info" type="submit">Sign In</button>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+
+            </form>
+{% endblock content %}
+</body>
+</html>

@@ -1,0 +1,64 @@
+{#{% extends 'Physiotherapy_Management_System/base.html'%}#}
+{% load crispy_forms_tags %}
+{% load static %}
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+        <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static "css/signup.css" %}">
+
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+   ></script>
+    <style>
+
+    </style>
+</head>
+{% block content %}
+  	<div class="login-reg-panel">
+		<div class="login-info-box">
+			<h2>Jesteś pacjentem?</h2>
+			<p>Umawiaj wizyty, sprawdź swoją historie medyczną oraz więcej...</p>
+			<label id="label-register" for="log-reg-show">Zarejestruj</label>
+			<input type="radio" name="active-log-panel" id="log-reg-show"  checked="checked">
+		</div>
+
+		<div class="register-info-box">
+			<h2>Posiadasz Gabinet Fizjoterapii?</h2>
+			<p>Zarządzaj pacjetami, wizytami, wszystko w jednym miejscu...</p>
+			<label id="label-login" for="log-login-show">Zarejestruj</label>
+			<input type="radio" name="active-log-panel" id="log-login-show">
+		</div>
+
+		<div class="white-panel">
+			<div class="login-show">
+				<h2>ZAREJESTRUJ SIĘ JAKO PACJENT</h2>
+                <form method="post">{% csrf_token %}
+                {{ forms.patient|crispy }}
+                <button type="submit" value="register-patient" class="btn btn-success">Sign up</button>
+                </form>
+                <small class="text-dark">
+                    Masz już konto? <a class="ml-2 text-dark" href="#">Zaloguj się</a>
+                </small>
+			</div>
+			<div class="register-show">
+				<h2>ZAREJESTRUJ SIĘ JAKO GABINET</h2>
+                <form method="post">{% csrf_token %}
+                {{ forms.office|crispy }}
+                <button type="submit" value="register-office" class="btn btn-success">Sign up</button>
+                </form>
+			</div>
+		</div>
+	</div>
+ <script src="{% static "js/signup.js" %}"></script>
+{% endblock content %}
+</body>
+</html>

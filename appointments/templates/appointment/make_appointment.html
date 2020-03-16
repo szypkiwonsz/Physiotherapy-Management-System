@@ -1,0 +1,52 @@
+{#{% extends 'fizjomed/base.html' %}#}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block head %}
+    <title>FIZJO-MED - Make an appointment</title>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+
+    <!-- XDSoft DateTimePicker -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+{% endblock head %}
+{% block content %}
+    <div class="container" id="uslugi">
+        <div class="content-section">
+            <form method="post">
+                {% csrf_token %}
+                <div class="container">
+
+                    <div class="row">
+                        <div class="col-md-4 col-lg-12">
+                            <div class="card">
+                                    <fieldset class="form-group">
+                                    <h3>Make an appointment:</h3>
+                                    {{ form|crispy }}
+                                    </fieldset>
+                                    <div class="form-group">
+                                        <button class="button btn-outline-info" type="submit">Submit</button>
+                                    </div>
+                                                                                        <div class="border-top pt-3">
+                <small class="text-muted">
+                    Want to Cancel Your Visit? <a class="ml-2" href="{% url 'appointments-cancel_appointment' %}">Click
+                    here</a>
+                </small>
+                    </div>
+                            </div>
+                        </div>
+                </div>
+                </div>
+            </form>
+            <script src="{% static "appointments/datetimepicker.js" %}"></script>
+        </div>
+    </div>
+
+{% endblock content %}
+
