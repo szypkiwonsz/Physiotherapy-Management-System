@@ -30,8 +30,8 @@ class SignUp:
 
     @staticmethod
     def email_valid(form):
-        email = form.cleaned_data.get("email")
-        confirm_email = form.cleaned_data.get("confirm_email")
+        email = form.cleaned_data.get('email')
+        confirm_email = form.cleaned_data.get('confirm_email')
         if email != confirm_email:
             return False
 
@@ -56,22 +56,18 @@ class RegisterPatient(View, SignUp):
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
-        if request.method == 'POST':
-            form = PatientSignUpForm(request.POST)
-            if form.is_valid():
-                if self.email_valid(form) is False:
-                    messages.warning(request, "Podane emaile nie zgadzają się.")
-                    return redirect('patient-signup')
-                else:
-                    user = self.user_save(form, is_patient=True)
-                    current_site = get_current_site(request)
-                    patient_email = form.cleaned_data.get('email')
-                    self.send_email(user, current_site, patient_email)
-                    messages.warning(request, f'Please confirm your email address to complete the registration.')
-                    return redirect('login')
-        else:
-            form = PatientSignUpForm()
-        return render(request, 'users/signup_patient.html', {'form': form})
+        form = PatientSignUpForm(request.POST)
+        if form.is_valid():
+            if self.email_valid(form) is False:
+                messages.warning(request, 'Podane emaile nie zgadzają się.')
+                return redirect('patient-signup')
+            else:
+                user = self.user_save(form, is_patient=True)
+                current_site = get_current_site(request)
+                patient_email = form.cleaned_data.get('email')
+                self.send_email(user, current_site, patient_email)
+                messages.warning(request, 'Please confirm your email address to complete the registration.')
+                return redirect('login')
 
 
 class RegisterOffice(View, SignUp):
@@ -84,19 +80,15 @@ class RegisterOffice(View, SignUp):
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
-        if request.method == 'POST':
-            form = OfficeSignUpForm(request.POST)
-            if form.is_valid():
-                if self.email_valid(form) is False:
-                    messages.warning(request, "Podane emaile nie zgadzają się.")
-                    return redirect('office-signup')
-                else:
-                    user = self.user_save(form, is_office=True)
-                    current_site = get_current_site(request)
-                    office_email = form.cleaned_data.get('email')
-                    self.send_email(user, current_site, office_email)
-                    messages.warning(request, f'Please confirm your email address to complete the registration.')
-                    return redirect('login')
-        else:
-            form = PatientSignUpForm()
-        return render(request, 'users/signup_patient.html', {'form': form})
+        form = OfficeSignUpForm(request.POST)
+        if form.is_valid():
+            if self.email_valid(form) is False:
+                messages.warning(request, 'Podane emaile nie zgadzają się.')
+                return redirect('office-signup')
+            else:
+                user = self.user_save(form, is_office=True)
+                current_site = get_current_site(request)
+                office_email = form.cleaned_data.get('email')
+                self.send_email(user, current_site, office_email)
+                messages.warning(request, 'Please confirm your email address to complete the registration.')
+                return redirect('login')
