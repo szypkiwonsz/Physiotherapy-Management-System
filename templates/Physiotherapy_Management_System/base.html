@@ -2,6 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     {% block head %}{% endblock head %}
 
@@ -11,40 +12,63 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-
-    <!-- Brand -->
-    <a class="navbar-brand" href="{% url 'home' %}">Navbar</a>
-
-    <!-- Toggler/collapsibe Button -->
+    <a class="navbar-brand" href="{% url 'home' %}">FIZJO-SYSTEM</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
     </button>
-
-    <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'panel' %}">Panel</a>
+                <a class="nav-link" href="{% url 'panel' %}">Panel Użytkownika</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">Logowanie</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'signup' %}">Rejestracja</a>
-            </li>
+            {% if user.is_patient %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'make-appointment' %}">Umów wizytę</a>
+                </li>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Wyloguj</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Zaloguj</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'patient-signup' %}">Zarejestruj</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
+<div class="container" id="messages">
+    {% if messages %}
+        <div class="container" id="uslugi">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} text-center">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
 
 {% block content %}{% endblock content %}
 
 <footer id="sticky-footer" class="py-4 bg-dark text-white-50">
-    <div class="container text-center">
-      <small>Copyright &copy; Your Website</small>
+    <div class="container text-center text-white">
+        <small>Strona wykonana dla celów edukacyjnych - Jan Kacper Sawicki</small>
     </div>
-  </footer>
+</footer>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </body>
 </html>
