@@ -7,6 +7,10 @@
     <title>XDD</title>
 </head>
 <body>
-
+{% block content %}
+    {% for patient in patients %}
+        {{ patient }}
+    {% endfor %}
+{% endblock content %}
 </body>
 </html>
