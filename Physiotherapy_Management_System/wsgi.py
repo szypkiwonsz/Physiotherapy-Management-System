@@ -1,5 +1,5 @@
 """
-WSGI config for Physiotherapy_Management_System project.
+WSGI config for css project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
