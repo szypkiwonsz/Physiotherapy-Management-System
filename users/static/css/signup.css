@@ -16,7 +16,7 @@ a{
 }
 .login-reg-panel{
     position: relative;
-    top: 50%;
+    top: 40%;
     transform: translateY(-50%);
 	text-align:center;
     width:70%;
@@ -27,7 +27,7 @@ a{
 }
 .white-panel{
     background-color: rgba(255,255, 255, 1);
-    height:550px;
+    height:700px;
     position:absolute;
     top:-75px;
     width:50%;
