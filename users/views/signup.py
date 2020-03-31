@@ -7,6 +7,7 @@ from users.tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.views import View
+from users.models import Office
 
 from users.forms import OfficeSignUpForm, PatientSignUpForm
 
@@ -66,8 +67,10 @@ class RegisterPatient(View, SignUp):
                 current_site = get_current_site(request)
                 patient_email = form.cleaned_data.get('email')
                 self.send_email(user, current_site, patient_email)
-                messages.warning(request, 'Please confirm your email address to complete the registration.')
+                messages.warning(request, 'Potwierdź swoje konto poprzez link wysłany na email.')
                 return redirect('login')
+
+        return render(request, self.template_name, {'form': form})
 
 
 class RegisterOffice(View, SignUp):
@@ -87,8 +90,13 @@ class RegisterOffice(View, SignUp):
                 return redirect('office-signup')
             else:
                 user = self.user_save(form, is_office=True)
+                office = Office.objects.create(user=user)
+                office.name = form.cleaned_data.get('name')
+                office.save()
                 current_site = get_current_site(request)
                 office_email = form.cleaned_data.get('email')
                 self.send_email(user, current_site, office_email)
                 messages.warning(request, 'Please confirm your email address to complete the registration.')
                 return redirect('login')
+
+        return render(request, self.template_name, {'form': form})
