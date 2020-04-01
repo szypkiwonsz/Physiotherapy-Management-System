@@ -4,16 +4,13 @@ from .models import Appointment
 
 
 class AppointmentForm(forms.ModelForm):
-    date = forms.DateTimeField(label='Provide date of visit:', input_formats=['%d.%m.%Y %H:%M'])
-    choice_first = 'Consultation'
-    choice_second = 'Manual and individual therapy'
-    choice_third = 'Massage'
-    choice_fourth = 'Shock wave'
+    date = forms.DateTimeField(label='Podaj datę wizyty:', input_formats=['%d.%m.%Y %H:%M'])
+    choice = ['Konsultacja', 'Terapia manualna i indywidualna', 'Masaż', 'Fala uderzeniowa']
 
-    choice = forms.ChoiceField(label='Choose a service', choices=[(choice_first, choice_first),
-                                                                  (choice_second, choice_second),
-                                                                  (choice_third, choice_third),
-                                                                  (choice_fourth, choice_fourth)])
+    choice = forms.ChoiceField(label='Choose a service', choices=[(choice[0], choice[0]),
+                                                                  (choice[1], choice[1]),
+                                                                  (choice[2], choice[2]),
+                                                                  (choice[3], choice[3])])
 
     class Meta:
         model = Appointment
@@ -21,4 +18,4 @@ class AppointmentForm(forms.ModelForm):
 
 
 class AppointmentCancel(forms.Form):
-    key = forms.CharField(label='Enter the visit number to confirm your cancellation:')
+    key = forms.CharField(label='Podaj numer wizyty aby potwierdzić odwołanie wizyty.')
