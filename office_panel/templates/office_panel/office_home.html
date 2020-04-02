@@ -1,16 +1,48 @@
-{% extends 'Physiotherapy_Management_System/base.html'%}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{% extends 'Physiotherapy_Management_System/base_panel.html' %}
+{% block head %}
     <title>XDD</title>
-</head>
-<body>
+{% endblock head %}
 {% block content %}
-    {% for patient in patients %}
-        {{ patient }}
-    {% endfor %}
+    <div class="container border rounded mt-3 bg-light">
+        <div class="form">
+        {% if patients %}
+            <h2>Ostatnio dodani pacjenci:</h2>
+        {% else %}
+            <h2>Nie masz żadnych pacjentów.</h2>
+        {% endif %}
+            {% for patient in patients %}
+                <hr>
+                {{ patient.first_name }}
+                {{ patient.last_name }},
+                {{ patient.email }}
+                <div class="xd">
+                    <a href="{% url 'office-patient-change' patient.pk %}" class="btn btn-info" role="button">Edytuj</a>
+                    <a href="{% url 'office-patient-delete-confirm' patient.pk %}" class="btn btn-danger" role="button">Usuń</a>
+                </div>
+            {% endfor %}
+            <hr>
+        {% if patients %}
+        <a href="{% url 'office-patients' %}" class="btn btn-warning" role="button">Pokaż wszystkich pacjentów</a>
+        {% else %}
+        <a href="{% url 'office-patients' %}" class="btn btn-warning" role="button">Dodaj ich tutaj</a>
+        {% endif %}
+        </div>
+    </div>
+
+    <div class="container border rounded mt-3 bg-light">
+        <div class="form">
+            <h2>Ostatnie umówione wizyty:</h2>
+            {% for appointment in appointments %}
+                <hr>
+                {{ appointment.date }} -
+                {{ appointment.name }},
+                {{ appointment.owner }}
+                <div class="xd">
+                    <a href="{% url 'office-appointment-change' appointment.pk %}" class="btn btn-info" role="button">Edytuj</a>
+                    {#        <a href="{% url 'office-appointment-delete' appointment.pk %}" class="btn btn-danger" role="button">Usuń</a>#}
+                </div>
+            {% endfor %}
+            <hr>
+        </div>
+    </div>
 {% endblock content %}
-</body>
-</html>
