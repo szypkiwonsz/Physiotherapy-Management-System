@@ -1,32 +1,20 @@
-from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 
 
-def patient_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='login'):
-    '''
-    Decorator for views that checks that the logged in user is a student,
-    redirects to the log-in page if necessary.
-    '''
-    actual_decorator = user_passes_test(
-        lambda u: u.is_active and u.is_patient,
-        login_url=login_url,
-        redirect_field_name=redirect_field_name
-    )
-    if function:
-        return actual_decorator(function)
-    return actual_decorator
+def patient_required(function):
+    def _function(request, *args, **kwargs):
+        if not request.user.is_patient:
+            messages.warning(request, 'Aby mieć dostęp do tej sekcji, zaloguj się jako pacjent.')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return function(request, *args, **kwargs)
+    return _function
 
 
-def office_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url='login'):
-    '''
-    Decorator for views that checks that the logged in user is a teacher,
-    redirects to the log-in page if necessary.
-    '''
-    actual_decorator = user_passes_test(
-        lambda u: u.is_active and u.is_office,
-        login_url=login_url,
-        redirect_field_name=redirect_field_name
-    )
-    if function:
-        return actual_decorator(function)
-    return actual_decorator
+def office_required(function):
+    def _function(request, *args, **kwargs):
+        if not request.user.is_patient:
+            messages.warning(request, 'Aby mieć dostęp do tej sekcji, zaloguj się jako gabinet.')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return function(request, *args, **kwargs)
+    return _function
