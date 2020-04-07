@@ -44,3 +44,9 @@ text-decoration:none;
 .navbar-toggler-icon{
 	font-size: 12px;
 }
+
+.right-button{
+	text-align: right;
+	margin-bottom: -7px;
+	margin-top: -30px;
+}
