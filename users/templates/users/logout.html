@@ -1,0 +1,15 @@
+{% extends 'Physiotherapy_Management_System/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block head %}
+    <title>Fizjo-System - Wylogowanie</title>
+{% endblock head %}
+{% block content %}
+    <div class="container">
+        <div class="form">
+            <h2>Poprawne wylogowanie.</h2>
+            <hr>
+            <a href="{% url 'login' %}" class="btn btn-warning" role="button">Zaloguj się ponownie</a>
+        </div>
+    </div>
+{% endblock content %}
