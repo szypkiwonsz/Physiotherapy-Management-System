@@ -8,6 +8,8 @@ from django.utils.translation import gettext as _
 class LoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
+        self.error_messages['invalid_login'] = 'Nieporawny email lub hasło. Badź konto nie zostało jeszcze aktywowane.'
+        super().__init__(*args, **kwargs)
         super(LoginForm, self).__init__(*args, **kwargs)
 
         label = ['Email', 'Hasło']
