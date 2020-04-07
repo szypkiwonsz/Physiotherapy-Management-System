@@ -18,7 +18,6 @@ class LoginForm(AuthenticationForm):
 
 class OfficeSignUpForm(UserCreationForm):
     error_messages = {
-        'password_mismatch': _('Podane hasła nie zgadzają się.'),
         'email_mismatch': _('Podane emaile nie zgadzają się.'),
     }
 
@@ -51,7 +50,6 @@ class OfficeSignUpForm(UserCreationForm):
 
 class PatientSignUpForm(UserCreationForm):
     error_messages = {
-        'password_mismatch': _('Podane hasła nie zgadzają się.'),
         'email_mismatch': _('Podane emaile nie zgadzają się.'),
     }
 
