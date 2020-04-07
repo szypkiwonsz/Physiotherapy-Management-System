@@ -8,22 +8,20 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.views import View
 from users.models import Office
-
 from users.forms import OfficeSignUpForm, PatientSignUpForm
 
 
 class SignUp:
-
     @staticmethod
     def send_email(user, current_site, user_email):
-        subject = 'Activate your blog account.'
+        subject = 'Fizjo-System - Aktywacja Konta'
         message = render_to_string('users/activate_email.html', {
             'user': user,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
         })
-        to_email = user_email
+        to_email = 'kacpersawicki321@gmail.com'
         email = EmailMessage(
             subject, message, to=[to_email]
         )
@@ -59,16 +57,12 @@ class RegisterPatient(View, SignUp):
     def post(self, request):
         form = PatientSignUpForm(request.POST)
         if form.is_valid():
-            if self.email_valid(form) is False:
-                messages.warning(request, 'Podane emaile nie zgadzają się.')
-                return redirect('patient-signup')
-            else:
-                user = self.user_save(form, is_patient=True)
-                current_site = get_current_site(request)
-                patient_email = form.cleaned_data.get('email')
-                self.send_email(user, current_site, patient_email)
-                messages.warning(request, 'Potwierdź swoje konto poprzez link wysłany na email.')
-                return redirect('login')
+            user = self.user_save(form, is_patient=True)
+            current_site = get_current_site(request)
+            patient_email = form.cleaned_data.get('email')
+            self.send_email(user, current_site, patient_email)
+            messages.warning(request, 'Potwierdź swoje konto poprzez link wysłany na email.')
+            return redirect('login')
 
         return render(request, self.template_name, {'form': form})
 
@@ -85,18 +79,14 @@ class RegisterOffice(View, SignUp):
     def post(self, request):
         form = OfficeSignUpForm(request.POST)
         if form.is_valid():
-            if self.email_valid(form) is False:
-                messages.warning(request, 'Podane emaile nie zgadzają się.')
-                return redirect('office-signup')
-            else:
-                user = self.user_save(form, is_office=True)
-                office = Office.objects.create(user=user)
-                office.name = form.cleaned_data.get('name')
-                office.save()
-                current_site = get_current_site(request)
-                office_email = form.cleaned_data.get('email')
-                self.send_email(user, current_site, office_email)
-                messages.warning(request, 'Please confirm your email address to complete the registration.')
-                return redirect('login')
+            user = self.user_save(form, is_office=True)
+            office = Office.objects.create(user=user)
+            office.name = form.cleaned_data.get('name')
+            office.save()
+            current_site = get_current_site(request)
+            office_email = form.cleaned_data.get('email')
+            self.send_email(user, current_site, office_email)
+            messages.warning(request, 'Potwierdź swoje konto poprzez link wysłany na email.')
+            return redirect('login')
 
         return render(request, self.template_name, {'form': form})

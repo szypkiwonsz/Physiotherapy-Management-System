@@ -17,7 +17,7 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        messages.success(request, 'Konto zostało poprawnie aktywowane. Możesz się zalogować.')
+        messages.success(request, 'Konto zostało pomyślnie aktywowane. Możesz się zalogować.')
         return redirect('login')
     else:
         messages.warning(request, 'Link aktywacyjny jest nieprawidłowy lub konto zostało już aktywowane.')
