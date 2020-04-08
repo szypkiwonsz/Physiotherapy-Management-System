@@ -45,6 +45,13 @@ class SignUp:
         return user
 
 
+class Register(View):
+    template_name = 'users/signup.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
 class RegisterPatient(View, SignUp):
     form_class = PatientSignUpForm
     initial = {'form': 'form'}
