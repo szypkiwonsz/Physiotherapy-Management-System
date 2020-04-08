@@ -13,10 +13,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Navigation Bar CSS -->
-    <link rel="stylesheet" type="text/css" href="{% static "css/base_navbar.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/navbar.css" %}">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="{% static "css/signup.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/mystyle.css" %}">
 </head>
 <body>
 <!--Navbar-->
@@ -38,7 +38,7 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'home' %}">Strona Główna
-                              <span class="sr-only">(current)</span>
+                    <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -46,30 +46,26 @@
             </li>
 
             <!-- Dropdown -->
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">O nas</a>
-                <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </li>
+            {#            <li class="nav-item dropdown">#}
+            {#                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"#}
+            {#                   aria-haspopup="true" aria-expanded="false">O nas</a>#}
+            {#                <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">#}
+            {#                    <a class="dropdown-item" href="#">Action</a>#}
+            {#                    <a class="dropdown-item" href="#">Another action</a>#}
+            {#                    <a class="dropdown-item" href="#">Something else here</a>#}
+            {#                </div>#}
+            {#            </li>#}
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login' %}">Zaloguj</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'patient-signup' %}">Zarejestruj</a>
+                <a class="nav-link" href="{% url 'signup' %}">Zarejestruj</a>
             </li>
         </ul>
-        <!-- Links -->
     </div>
-
-    <!-- Collapsible content -->
 </nav>
-<!--/.Navbar-->
 <div class="container" id="messages">
     {% if messages %}
         <div class="container" id="uslugi">
@@ -100,6 +96,6 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
-<script src="{% static "js/base_navbar.js" %}"></script>
+<script src="{% static "js/navbar.js" %}"></script>
 </body>
 </html>
