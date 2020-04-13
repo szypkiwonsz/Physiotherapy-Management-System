@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% block head %}{% endblock head %}
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Navigation Bar CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static "css/navbar.css" %}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static "css/mystyle.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/sidebar.css" %} ">
+</head>
+<body>
+<!--Navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+
+    <!-- Navbar brand -->
+    <a class="navbar-brand" href="{% url 'home' %}">Fizjo-System</a>
+
+    <!-- Collapse button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+            aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="basicExampleNav">
+
+        <!-- Links -->
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                {% if user.is_patient %}
+                    <a class="nav-link" href="{% url 'patient-home' %}">Panel pacjenta
+                        <span class="sr-only">(current)</span>
+                    </a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'office-home' %}">Panel gabinetu
+                        <span class="sr-only">(current)</span>
+                    </a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">Gabinety</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Wyloguj</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!--/.Navbar-->
+
+<div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        {#      <div class="sidebar-heading">Start Bootstrap </div>#}
+        <div class="list-group list-group-flush">
+            <a href="{% url 'office-home' %}" class="list-group-item list-group-item-action bg-light">Strona Główna</a>
+            <a href="{% url 'office-patients' %}" class="list-group-item list-group-item-action bg-light">Pacjenci</a>
+            <a href="{% url 'office-appointments' %}" class="list-group-item list-group-item-action bg-light">Wizyty</a>
+        </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+        {% if not messages %}
+            <button class="btn" id="menu-toggle"><span class="navbar-toggler-icon my-toggler bg-light"></span></button>
+        {% endif %}
+
+        <div class="container-fluid">
+            {% if messages %}
+                <button class="btn left-side" id="menu-toggle"><span
+                        class="navbar-toggler-icon my-toggler bg-light"></span></button>
+            {% endif %}
+            {% if messages %}
+                <div class="container" id="messages-office">
+
+
+                <div class="container" id="uslugi">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} text-center">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            </div>
+            {% block content %}{% endblock content %}
+            <footer>
+                <p class="main">
+                    2020 © JK Sawicki | Wszystkie prawa zastrzeżone
+                </p>
+            </footer>
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<!-- Bootstrap core JavaScript -->
+<script src="{% static "vendor/jquery/jquery.min.js" %}"></script>
+
+<!-- Menu Toggle Script -->
+<script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+<script src="{% static "js/navbar.js" %}"></script>
+</body>
+</html>

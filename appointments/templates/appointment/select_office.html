@@ -1,0 +1,20 @@
+{% extends 'Physiotherapy_Management_System/base_panel_patient.html' %}
+
+{% block head %}
+    <title>XDD</title>
+{% endblock head %}
+{% block content %}
+        <div class="container border rounded bg-light">
+        <div class="form">
+<h2>Wybierz gabinet w którym chcesz umówić wizytę:</h2>
+        <hr>
+    {% for office in offices %}
+<p><img src="https://media.istockphoto.com/photos/female-physiotherapist-giving-exercise-treatment-picture-id917896152?k=6&m=917896152&s=612x612&w=0&h=ditlSVd8fq_SvtmeAmsZLhXULdPvw_a4yGwjwjj6T-s=" alt="Smiley face" style="float:left;width:42px;height:42px;">
+<a href="{% url 'appointments-make-appointment' office.pk %}">
+        {{ office.name }}</a></p>
+<hr>
+
+    {% endfor %}
+        </div>
+        </div>
+{% endblock content %}
