@@ -9,9 +9,15 @@
         <div class="form">
             <h2>Twój Profil</h2>
             <hr>
-            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
-            {{ user.username }}
+            <img class="rounded-circle avatar p-2" src="{{ user.profile.image.url }}">
             {{ user.email }}
+            <hr>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="csrfmiddlewaretoken" value="pHK2CZzBB323BM2Nq7DE2sxnQoBG1jPl" disabled="">
+                {{ p_form|crispy }}
+                <button type="submit" class="btn btn-success">Zaloguj</button>
+            </form>
         </div>
     </div>
 {% endblock content %}
