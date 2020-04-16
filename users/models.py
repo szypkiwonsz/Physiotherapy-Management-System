@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext as _
+from PIL import Image
 
 
 class User(AbstractUser):
@@ -29,7 +30,6 @@ class Patient(models.Model):
 class Office(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=50)
-    patients = models.ManyToManyField(Patient)
 
 
 class Profile(models.Model):
@@ -41,3 +41,10 @@ class Profile(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
+        img = Image.open(self.image.path)
+
+        if img.height > 100 or img.width > 100:
+            output_size = (100, 100)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
