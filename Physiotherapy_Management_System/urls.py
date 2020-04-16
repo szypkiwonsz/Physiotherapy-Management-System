@@ -1,23 +1,17 @@
 from django.contrib import admin
-from django.urls import path, include, re_path
-from users.views import signup, login, activate_account
-from django.contrib.auth import views as auth_views
+from django.urls import path, include
+from users.views import login
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', include('home_page.urls')),
-    path('panel/', login.check_user, name='panel'),
+    path('panel/', login.CheckUser.as_view(), name='panel'),
     path('patient/', include('patient_panel.urls')),
     path('office/', include('office_panel.urls')),
+    path('account/', include('users.urls')),
     path('admin/', admin.site.urls),
-    path('accounts/password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
-    path('accounts/password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
-    re_path(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-            auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('accounts/reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
-    path('accounts/login/', login.Login.as_view(), name='login'),
-    path('accounts/logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
-    path('accounts/signup/patient/', signup.RegisterPatient.as_view(), name='patient-signup'),
-    path('accounts/signup/office/', signup.RegisterOffice.as_view(), name='office-signup'),
-    re_path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-            activate_account.activate, name='activate')
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
