@@ -30,12 +30,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'office_panel.apps.OfficePanelConfig',
     'crispy_forms',
     'users.apps.UsersConfig',
     'home_page.apps.HomePageConfig',
     'patient_panel.apps.PatientPanelConfig',
-    'office_panel.apps.OfficePanelConfig',
     'appointments.apps.AppointmentConfig',
+    'medical_history.apps.MedicalHistoryConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -125,6 +126,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 # Custom Django auth settings
 
 AUTH_USER_MODEL = 'users.User'
@@ -135,3 +139,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'panel'
 
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'kacpersawicki321@gmail.com'
+EMAIL_HOST_PASSWORD = 'csrryfawrmkqkrfz'
+EMAIL_PORT = 587
