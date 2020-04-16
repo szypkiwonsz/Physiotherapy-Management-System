@@ -1,4 +1,4 @@
-{% extends 'Physiotherapy_Management_System/base_panel.html' %}
+{% extends 'Physiotherapy_Management_System/base_panel_office.html' %}
 {% block head %}
     <title>XDD</title>
 {% endblock head %}
@@ -15,7 +15,7 @@
                 {{ patient.first_name }}
                 {{ patient.last_name }},
                 {{ patient.email }}
-                <div class="xd">
+                <div class="right-button">
                     <a href="{% url 'office-patient-change' patient.pk %}" class="btn btn-info" role="button">Edytuj</a>
                     <a href="{% url 'office-patient-delete-confirm' patient.pk %}" class="btn btn-danger" role="button">Usuń</a>
                 </div>
@@ -31,18 +31,25 @@
 
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
+        {% if patients %}
             <h2>Ostatnie umówione wizyty:</h2>
+        {% else %}
+            <h2>Nie masz umówionych żadnych wizyt.</h2>
+        {% endif %}
             {% for appointment in appointments %}
                 <hr>
-                {{ appointment.date }} -
-                {{ appointment.name }},
-                {{ appointment.owner }}
-                <div class="xd">
+                {{ appointment.owner }},
+                {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
+                {{ appointment.choice }}
+                <div class="right-button">
                     <a href="{% url 'office-appointment-change' appointment.pk %}" class="btn btn-info" role="button">Edytuj</a>
-                    {#        <a href="{% url 'office-appointment-delete' appointment.pk %}" class="btn btn-danger" role="button">Usuń</a>#}
+                    <a href="{% url 'office-appointment-delete' appointment.pk %}" class="btn btn-danger" role="button">Usuń</a>
                 </div>
             {% endfor %}
             <hr>
+        {% if appointments %}
+        <a href="{% url 'office-appointments' %}" class="btn btn-warning" role="button">Pokaż wszystkie wizyty</a>
+        {% endif %}
         </div>
     </div>
 {% endblock content %}

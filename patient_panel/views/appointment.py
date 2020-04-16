@@ -60,11 +60,6 @@ class AppointmentUpdateView(UpdateView):
     #     return super().get_context_data(**kwargs)
 
     def get_queryset(self):
-        '''
-        This method is an implicit object-level permission management
-        This view will only match the ids of existing quizzes that belongs
-        to the logged in user.
-        '''
         name = self.request.user.id
         return Appointment.objects.filter(owner=name)
 

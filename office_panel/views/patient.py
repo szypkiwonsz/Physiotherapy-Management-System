@@ -45,7 +45,7 @@ class PatientListView(View):
 
 class PatientUpdateView(UpdateView):
     model = Patient
-    fields = ('first_name', 'last_name', 'email', )
+    fields = ('first_name', 'last_name', 'email', 'medical_history' )
     context_object_name = 'patient'
     template_name = 'office_panel/patient_update_form.html'
 

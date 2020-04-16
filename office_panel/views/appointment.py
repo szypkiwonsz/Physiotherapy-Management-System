@@ -10,7 +10,7 @@ from appointments.models import Appointment
 class AppointmentListView(View):
     model = Appointment
     ordering = ('owner', )
-    template_name = 'office_panel/office_patients.html'
+    template_name = 'office_panel/office-appointments.html'
 
     def get_queryset(self):
         name = self.request.user.id

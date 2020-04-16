@@ -4,7 +4,8 @@ from .models import Appointment
 
 
 class AppointmentForm(forms.ModelForm):
-    date = forms.DateTimeField(label='Podaj datę wizyty:', input_formats=['%d.%m.%Y %H:%M'])
+    date = forms.DateTimeField(label='Podaj datę wizyty:', input_formats=['%d.%m.%Y %H:%M'],
+                               widget=forms.TextInput(attrs={'autocomplete': 'off'}))
     choice = ['Konsultacja', 'Terapia manualna i indywidualna', 'Masaż', 'Fala uderzeniowa']
 
     choice = forms.ChoiceField(label='Choose a service', choices=[(choice[0], choice[0]),

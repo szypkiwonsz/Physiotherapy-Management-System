@@ -9,7 +9,6 @@ from users.decorators import patient_required
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class PatientHome(View):
-    ordering = ('owner', )
     template_name = 'patient_panel/patient_home.html'
 
     def get_queryset(self):
