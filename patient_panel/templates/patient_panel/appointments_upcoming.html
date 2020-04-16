@@ -1,0 +1,31 @@
+{% extends 'Physiotherapy_Management_System/base_panel_patient.html' %}
+{% block head %}
+    <title>Fizjo-System - Zbliżające się wizyty</title>
+{% endblock head %}
+{% block content %}
+    <div class="container border rounded bg-light">
+        <div class="form">
+            <h2>Twoje zbliżające się wizyty:</h2>
+            {% if appointments %}
+                {% for appointment in appointments %}
+                <hr>
+                {{ appointment.office.name }},
+                {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
+                {{ appointment.choice }}
+                {% if appointment.confirmed %}
+                    [<span id="confirmed-color">Potwierdzona</span>]
+                {% else %}
+                    [<span id="unconfirmed-color">Niepotwierdzona</span>]
+                {% endif %}
+                <div class="right-button">
+                    <a href="{% url 'patient-appointment-change' appointment.pk %}" class="btn btn-info" role="button">Zmień</a>
+                    <a href="{% url 'patient-appointment-cancel' appointment.pk %}" class="btn btn-danger" role="button">Odwołaj</a>
+                </div>
+            {% endfor %}
+                <hr>
+            {% else %}
+                <h2>Nie umówiłeś jeszcze żadnych wizyt.</h2>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

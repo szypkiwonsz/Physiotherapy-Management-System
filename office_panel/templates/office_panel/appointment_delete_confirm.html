@@ -1,0 +1,15 @@
+{% extends 'Physiotherapy_Management_System/base_panel_office.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="container mt-3">
+  <h2 class="mb-3">Confirm deletion</h2>
+  <p class="lead">Jesteś pewny, że chcesz usunąc wizytę pacjenta?: <strong>"{{ appointment.name}}"</strong>? There is no going back.</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger btn-lg">Yes, I'm sure</button>
+    <a href="{% url 'office-patient-change' appointment.pk %}" class="btn btn-outline-secondary btn-lg" role="button">Nevermind</a>
+  </form>
+    </div>
+{% endblock %}
