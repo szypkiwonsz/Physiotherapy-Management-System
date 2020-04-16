@@ -1,14 +1,15 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
 from django.contrib.auth.views import SetPasswordForm
-from .models import User, Patient
+from users.widgets import MyClearableFileInput
+from .models import User, Patient, Profile
 from django.utils.translation import gettext as _
 
 
 class LoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
-        self.error_messages['invalid_login'] = 'Nieporawny email lub hasło. Badź konto nie zostało jeszcze aktywowane.'
+        self.error_messages['invalid_login'] = 'Niepoprawny email lub hasło. Badź konto nie zostało jeszcze aktywowane.'
         super().__init__(*args, **kwargs)
         super(LoginForm, self).__init__(*args, **kwargs)
 
@@ -101,3 +102,15 @@ class NewSetPasswordForm(SetPasswordForm):
         strip=False,
         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
     )
+
+
+# class UserUpdateForm(forms.ModelForm):
+#     pass
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    image = forms.ImageField(label="Zmień swoje zdjęcie profilowe:", widget=MyClearableFileInput)
+
+    class Meta:
+        model = Profile
+        fields = ['image']
