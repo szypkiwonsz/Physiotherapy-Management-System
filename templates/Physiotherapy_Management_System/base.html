@@ -56,6 +56,13 @@
             {#                </div>#}
             {#            </li>#}
         </ul>
+        {% if user.is_authenticated %}
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Wyloguj</a>
+            </li>
+        </ul>
+        {% else %}
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login' %}">Zaloguj</a>
@@ -64,6 +71,7 @@
                 <a class="nav-link" href="{% url 'signup' %}">Zarejestruj</a>
             </li>
         </ul>
+        {% endif %}
     </div>
 </nav>
 <div class="container" id="messages">
