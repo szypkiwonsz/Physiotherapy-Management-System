@@ -48,9 +48,11 @@
                     <a href="{% url 'patient-appointment-cancel' appointment.pk %}" class="btn btn-danger" role="button">Odwołaj</a>
                 </div>
             {% endfor %}
-            <hr>
+        <hr>
             {% if appointments %}
                 <a href="{% url 'patient-appointment-upcoming' %}" class="btn btn-warning" role="button">Pokaż wszystkie wizyty</a>
+            {% else %}
+                <a href="{% url 'appointments-select' %}" class="btn btn-warning" role="button">Umów się na wizytę</a>
             {% endif %}
         </div>
     </div>

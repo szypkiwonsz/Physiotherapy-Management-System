@@ -4,6 +4,8 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.views.generic import TemplateView, CreateView
+
+from users.models import Office
 from users.tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib import messages
@@ -21,7 +23,7 @@ class SignUp:
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
         })
-        to_email = user_email
+        to_email = 'kacpersawicki321@gmail.com'
         email = EmailMessage(
             subject, message, to=[to_email]
         )
@@ -61,8 +63,11 @@ class RegisterOffice(CreateView, SignUp):
 
     def form_valid(self, form):
         user = self.user_save(form, is_office=True)
+        office = Office.objects.create(user=user)
+        office.name = form.cleaned_data.get('name')
+        office.save()
         current_site = get_current_site(self.request)
-        patient_email = form.cleaned_data.get('email')
-        self.send_email(user, current_site, patient_email)
+        office_email = form.cleaned_data.get('email')
+        self.send_email(user, current_site, office_email)
         messages.warning(self.request, 'Potwierdź swoje konto poprzez link wysłany na email.')
         return redirect('login')

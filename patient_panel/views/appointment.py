@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -16,7 +18,8 @@ class AppointmentListView(View):
     template_name = 'patient_panel/appointments_upcoming.html'
 
     def get_queryset(self):
-        queryset = self.request.user.appointments.select_related('owner')
+        queryset = self.request.user.appointments.select_related('owner').order_by('date')\
+            .filter(date__gte=datetime.today())
         return queryset
 
     def get(self, request):
@@ -24,6 +27,23 @@ class AppointmentListView(View):
             'appointments': self.get_queryset(),
         }
         return render(request, 'patient_panel/appointments_upcoming.html', context)
+
+
+@method_decorator([login_required, patient_required], name='dispatch')
+class OldAppointmentListView(View):
+    model = Appointment
+    template_name = 'patient_panel/appointments_old.html'
+
+    def get_queryset(self):
+        queryset = self.request.user.appointments.select_related('owner').order_by('date')\
+            .filter(date__lte=datetime.today())
+        return queryset
+
+    def get(self, request):
+        context = {
+            'appointments': self.get_queryset(),
+        }
+        return render(request, 'patient_panel/appointments_old.html', context)
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
@@ -38,7 +58,7 @@ class AppointmentCancelView(DeleteView):
         return super().delete(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Appointment.objects.filter(owner=self.request.user)
+        return Appointment.objects.filter(owner=self.request.user.id)
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
@@ -47,7 +67,7 @@ class AppointmentUpdateView(UpdateView):
     template_name = 'patient_panel/appointment_update_form.html'
 
     def get_queryset(self):
-        return Appointment.objects.filter(owner=self.request.user)
+        return Appointment.objects.filter(owner=self.request.user.id)
 
     def get_success_url(self):
         return reverse('patient-appointment-change', kwargs={'pk': self.object.pk})

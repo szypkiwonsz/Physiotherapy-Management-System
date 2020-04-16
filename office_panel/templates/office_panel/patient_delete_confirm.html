@@ -11,7 +11,7 @@
                 <strong>{{ patient.first_name }} {{ patient.last_name }}</strong>?</p>
             <form method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Tak, odwołaj</button>
+                <button type="submit" class="btn btn-danger">Tak, usuń</button>
                 <a href="{% url 'office-patients' %}" class="btn btn-outline-secondary" role="button">Powrót</a>
             </form>
         </div>

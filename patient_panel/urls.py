@@ -5,6 +5,7 @@ urlpatterns = [
     path('', home.PatientHome.as_view(), name='patient-home'),
     path('appointments/', include('appointments.urls')),
     path('appointment/upcoming', appointment.AppointmentListView.as_view(), name='patient-appointment-upcoming'),
+    path('appointment/old', appointment.OldAppointmentListView.as_view(), name='patient-appointment-old'),
     path('appointment/<int:pk>/', appointment.AppointmentUpdateView.as_view(), name='patient-appointment-change'),
     path('appointment/<int:pk>/cancel/', appointment.AppointmentCancelView.as_view(), name='patient-appointment-cancel'
          ),

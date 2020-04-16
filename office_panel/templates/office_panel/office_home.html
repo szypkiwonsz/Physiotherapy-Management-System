@@ -1,6 +1,6 @@
 {% extends 'Physiotherapy_Management_System/base_panel_office.html' %}
 {% block head %}
-    <title>XDD</title>
+    <title>Fizjo-System - Panel Gabinetu</title>
 {% endblock head %}
 {% block content %}
     <div class="container border rounded mt-3 bg-light">
@@ -31,7 +31,7 @@
 
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
-        {% if patients %}
+        {% if appointments %}
             <h2>Ostatnie umówione wizyty:</h2>
         {% else %}
             <h2>Nie masz umówionych żadnych wizyt.</h2>

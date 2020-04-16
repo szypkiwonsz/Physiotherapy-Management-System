@@ -5,9 +5,10 @@
 {% block content %}
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
-        <h2>Wszystkie wizyty:</h2>
+        {% if appointments %}
+            <h2>Wszystkie wizyty:</h2>
+            <hr>
             {% for appointment in appointments %}
-                <hr>
                 {{ appointment.owner }},
                 {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
                 {{ appointment.choice }}
@@ -19,13 +20,17 @@
                 {% endif %}
                 <div class="right-button">
                 <a href="{% url 'office-appointment-change' appointment.pk %}" class="btn btn-info"
-                   role="button">Edit</a>
+                   role="button">Edytuj</a>
                 <a href="{% url 'office-appointment-delete' appointment.pk %}"
                    class="btn btn-danger"
-                   role="button">Delete</a>
+                   role="button">Odwołaj</a>
                 </div>
             {% endfor %}
-            <hr>
+        {% else %}
+            <h2>Nie masz umówionych żadnych wizyt.</h2>
+            <h6>(pacjent musi umówić wizytę w twoim gabinecie.)</h6>
+        {% endif %}
+        <hr>
         </div>
     </div>
 {% endblock content %}

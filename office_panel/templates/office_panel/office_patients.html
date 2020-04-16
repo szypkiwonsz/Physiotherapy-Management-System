@@ -20,12 +20,12 @@
                            class="btn btn-danger" role="button">Usuń</a>
                     </div>
                 {% endfor %}
+                <hr>
             {% else %}
                 <h2>Nie masz żadnych pacjentów.</h2>
                 <hr>
                 <a href="{% url 'office-patient-add' %}" class="btn btn-warning" role="button">Dodaj pacjenta</a>
             {% endif %}
-            <hr>
         </div>
     </div>
 {% endblock content %}
