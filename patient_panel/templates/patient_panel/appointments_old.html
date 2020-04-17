@@ -1,0 +1,28 @@
+{% extends 'Physiotherapy_Management_System/base_panel_patient.html' %}
+{% block head %}
+    <title>Fizjo-System - Stare Wizyty</title>
+{% endblock head %}
+{% block content %}
+    <div class="container border rounded bg-light">
+        <div class="form">
+            {% if appointments %}
+                <h2>Twoje odbyte wizyty:</h2>
+                {% for appointment in appointments %}
+                <hr>
+                {{ appointment.office.name }},
+                {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
+                {{ appointment.choice }}
+                <div class="right-button">
+                    <a href="{% url 'patient-appointment-change' appointment.pk %}" class="btn btn-info" role="button">Zmień</a>
+                    <a href="{% url 'patient-appointment-cancel' appointment.pk %}" class="btn btn-danger" role="button">Odwołaj</a>
+                </div>
+            {% endfor %}
+                <hr>
+            {% else %}
+                <h2>Nie umówiłeś jeszcze żadnych wizyt.</h2>
+                <hr>
+                <a href="{% url 'appointments-select' %}" class="btn btn-warning" role="button">Umów się na wizytę</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}
