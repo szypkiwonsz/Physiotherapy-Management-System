@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
 from django.contrib.auth.views import SetPasswordForm
 from users.widgets import MyClearableFileInput
-from .models import User, Patient, Profile
+from .models import User, Patient, Profile, Office
 from django.utils.translation import gettext as _
 
 
@@ -118,8 +118,17 @@ class NewSetPasswordForm(SetPasswordForm):
     )
 
 
-# class UserUpdateForm(forms.ModelForm):
-#     pass
+class UsersUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email']
+
+
+class OfficeUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Office
+        fields = ['name', 'address', 'city', 'telephone_number']
 
 
 class ProfileUpdateForm(forms.ModelForm):

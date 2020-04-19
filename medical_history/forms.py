@@ -1,8 +1,10 @@
 from django import forms
 from .models import MedicalHistory
+from appointments.models import Appointment
 
 
 class MedicalHistoryForm(forms.ModelForm):
+    appointment = forms.ModelChoiceField(queryset=Appointment.objects.all(), required=False)
 
     def __init__(self, *args, **kwargs):
         super(MedicalHistoryForm, self).__init__(*args, **kwargs)

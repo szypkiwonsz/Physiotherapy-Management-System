@@ -37,7 +37,7 @@ class Office(models.Model):
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
-    telephone_number = models.CharField(max_length=9)
+    telephone_number = models.CharField(max_length=12)
 
 
 class Profile(models.Model):

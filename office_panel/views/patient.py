@@ -2,10 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, View, UpdateView, DeleteView
+from django.views.generic import CreateView, View, UpdateView, DeleteView, DetailView
 from users.decorators import office_required
 from users.forms import PatientForm
 from django.contrib import messages
+from medical_history.models import MedicalHistory
 
 
 @method_decorator([login_required, office_required], name='dispatch')
@@ -20,6 +21,7 @@ class PatientListView(View):
     def get(self, request):
         context = {
             'patients': self.get_queryset(),
+            'medical_history': MedicalHistory.objects.all()
         }
         return render(request, 'office_panel/office_patients.html', context)
 

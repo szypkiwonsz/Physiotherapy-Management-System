@@ -7,6 +7,6 @@ from appointments.models import Appointment
 class MedicalHistory(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, null=True)
     description = models.TextField()
     recommendations = models.TextField()

@@ -21,7 +21,7 @@ class Appointment(models.Model):
     choice = models.CharField(max_length=120)
 
     def __str__(self):
-        return str(self.author)
+        return str(self.owner)
 
     class Meta:
         # Name on the admin page.

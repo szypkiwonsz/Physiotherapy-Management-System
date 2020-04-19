@@ -52,4 +52,27 @@
         {% endif %}
         </div>
     </div>
+    <div class="container border rounded mt-3 bg-light">
+        <div class="form">
+        {% if medical_histories %}
+            <h2>Ostatnie dodane historie:</h2>
+        {% else %}
+            <h2>Nie dodałeś żadnych historii.</h2>
+        {% endif %}
+            {% for medical_history in medical_histories %}
+                <hr>
+                {{ medical_history.patient }}
+                {{ medical_history.patient.email }},
+                {{ medical_history.description }}
+                <div class="right-button">
+                    <a href="{% url 'office-medical-history-change' medical_history.pk %}" class="btn btn-info" role="button">Edytuj</a>
+                    <a href="{% url 'office-medical-history-delete' medical_history.pk %}" class="btn btn-danger" role="button">Usuń</a>
+                </div>
+            {% endfor %}
+            <hr>
+        {% if appointments %}
+        <a href="{% url 'office-medical-history' %}" class="btn btn-warning" role="button">Pokaż wszystkie historie</a>
+        {% endif %}
+        </div>
+    </div>
 {% endblock content %}
