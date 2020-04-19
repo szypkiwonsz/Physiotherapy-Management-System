@@ -1,0 +1,21 @@
+{% extends 'Physiotherapy_Management_System/base.html' %}
+
+{% block head %}
+    <title>Fizjo-System - Wybierz Gabinet</title>
+{% endblock head %}
+{% block content %}
+        <div class="container border rounded bg-light">
+        <div class="form">
+<h2>Wszystkie gabinety</h2>
+        <hr>
+    {% for office in offices %}
+        <div class="row">
+        <div class="col-4">{{ office.name }}</div>
+        <div class="col-4">{{ office.name }}</div>
+        <div class="col-4">{{ office.name }}</div>
+        </div>
+        <hr>
+    {% endfor %}
+        </div>
+        </div>
+{% endblock content %}
