@@ -65,6 +65,8 @@ class RegisterOffice(CreateView, SignUp):
         user = self.user_save(form, is_office=True)
         office = Office.objects.create(user=user)
         office.name = form.cleaned_data.get('name')
+        office.address = form.cleaned_data.get('address')
+        office.city = form.cleaned_data.get('city')
         office.save()
         current_site = get_current_site(self.request)
         office_email = form.cleaned_data.get('email')

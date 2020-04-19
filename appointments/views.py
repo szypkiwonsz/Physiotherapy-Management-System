@@ -43,24 +43,17 @@ class Appointments:
 @method_decorator([login_required, patient_required], name='dispatch')
 class SelectOffice(View):
     model = Office
-    ordering = ('name',)
     template_name = 'appointment/select_office.html'
-
-    def get_queryset(self):
-        queryset = Office.objects.raw('select * FROM users_office')
-        return queryset
 
     def get(self, request):
         context = {
-            'offices': self.get_queryset(),
-            # 'form': self.post(request)
+            'offices': Office.objects.all()
         }
         return render(request, 'appointment/select_office.html', context)
 
 
 class MakeAppointment(CreateView):
     form_class = AppointmentForm
-    context_object_name = 'appointments.office'
     template_name = 'appointment/make_appointment.html'
 
     def form_valid(self, form):

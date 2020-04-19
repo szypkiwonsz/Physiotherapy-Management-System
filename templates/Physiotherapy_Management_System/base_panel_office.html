@@ -48,9 +48,6 @@
                     </a>
                 {% endif %}
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Gabinety</a>
-            </li>
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
@@ -73,6 +70,7 @@
             <a href="{% url 'office-home' %}" class="list-group-item list-group-item-action bg-light">Strona Główna</a>
             <a href="{% url 'office-patients' %}" class="list-group-item list-group-item-action bg-light">Pacjenci</a>
             <a href="{% url 'office-appointments' %}" class="list-group-item list-group-item-action bg-light">Wizyty</a>
+            <a href="{% url 'office-make-medical-history' %}" class="list-group-item list-group-item-action bg-light">Historia Medyczna</a>
         </div>
     </div>
     <!-- /#sidebar-wrapper -->

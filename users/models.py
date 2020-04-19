@@ -17,6 +17,11 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
 
+class UserPatient(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    telephone_number = models.CharField(max_length=9)
+
+
 class Patient(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='patients')
     first_name = models.CharField(max_length=20, unique=False, default='')
@@ -30,6 +35,9 @@ class Patient(models.Model):
 class Office(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=50)
+    address = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    telephone_number = models.CharField(max_length=9)
 
 
 class Profile(models.Model):

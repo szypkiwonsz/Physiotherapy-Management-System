@@ -7,11 +7,17 @@
 {% block content %}
     <div class="container border rounded bg-light">
     <div class="form">
-    <h2>Umów wizytę</h2>
+    <h2>Dodaj historię medyczyną</h2>
     <hr>
     <form method="post" id="register-office">{% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" class="btn btn-success">Umów wizytę</button>
+        <div class="row">
+            <div class="col">{{ form.patient|as_crispy_field }}</div>
+            <div class="col"><div class="float-right">Nie dodałeś jeszcze tego pacjenta?</div><br><a href="{% url 'office-patients' %}" class="btn btn-warning float-right mt-2" role="button">Dodaj go tutaj</a></div>
+            </div>
+        {{ form.appointment|as_crispy_field }}
+        {{ form.description|as_crispy_field }}
+        {{ form.recommendations|as_crispy_field }}
+        <button type="submit" class="btn btn-success">Zapisz</button>
     </form>
     </div>
     </div>

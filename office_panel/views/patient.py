@@ -4,13 +4,13 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, View, UpdateView, DeleteView
 from users.decorators import office_required
-from users.models import Patient
+from users.forms import PatientForm
 from django.contrib import messages
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientListView(View):
-    model = Patient
+    form_class = PatientForm
     template_name = 'office_panel/office_patients.html'
 
     def get_queryset(self):
@@ -26,8 +26,8 @@ class PatientListView(View):
 
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientCreateView(CreateView):
-    model = Patient
-    fields = ('first_name', 'last_name', 'email')
+    form_class = PatientForm
+    # fields = ('first_name', 'last_name', 'email')
     template_name = 'office_panel/patient_add_form.html'
 
     def form_valid(self, form):
@@ -40,8 +40,8 @@ class PatientCreateView(CreateView):
 
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientUpdateView(UpdateView):
-    model = Patient
-    fields = ('first_name', 'last_name', 'email')
+    form_class = PatientForm
+    # fields = ('first_name', 'last_name', 'email')
     template_name = 'office_panel/patient_update_form.html'
 
     def get_queryset(self):
@@ -53,7 +53,7 @@ class PatientUpdateView(UpdateView):
 
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientDeleteView(DeleteView):
-    model = Patient
+    form_class = PatientForm
     template_name = 'office_panel/patient_delete_confirm.html'
     success_url = reverse_lazy('office-patients')
 

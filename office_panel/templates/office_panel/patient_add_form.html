@@ -1,43 +1,18 @@
 {% extends 'Physiotherapy_Management_System/base_panel_office.html' %}
-
 {% load crispy_forms_tags %}
-
+{% block head %}
+    <title>Fizjo-System - Pacjenci</title>
+{% endblock head %}
 {% block content %}
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb rounded-0">
-      <li class="breadcrumb-item"><a href="">Pacjenci</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Dodaj nowego pacjenta</li>
-    </ol>
-  </nav>
-  <h2 class="mb-3">Add a new quiz</h2>
-    <div class="row">
-    <div class="col-md-12 col-lg-2">
-        Imie
+    <div class="container border rounded mt-3 bg-light">
+        <div class="form">
+            <h2>Dodaj pacjenta</h2>
+    <hr>
+    <form method="post" id="register-office">{% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success">Dodaj</button>
+        <a href="{% url 'office-patients' %}" class="btn btn-outline-secondary" role="button">Powrót</a>
+    </form>
+        </div>
     </div>
-     <div class="col-md-12 col-lg-2">
-        Nazwisko
-    </div>
-    <div class="col-md-12 col-lg-2">
-        Adres Email
-    </div>
-    </div>
-      <form method="post" novalidate>
-        {% csrf_token %}
-          <div class="row">
-              <div class="col-md-12 col-lg-2">
-        {{ form.first_name }}
-              </div>
-              <div class="col-md-12 col-lg-2">
-          {{ form.last_name }}
-              </div>
-              <div class="col-md-12 col-lg-2">
-          {{ form.email }}
-              </div>
-                <div class="col-md-12 col-lg-2">
-        <button type="submit" class="btn btn-success">Save</button>
-        <a href="" class="btn btn-outline-secondary" role="button">Nevermind</a>
-          </div>
-          </div>
-      </form>
-  </div>
-{% endblock %}
+{% endblock content %}

@@ -7,8 +7,6 @@ from users.forms import LoginForm
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
 
-csrf_protect_method = method_decorator(csrf_protect)
-
 
 class CheckUser(View):
 
@@ -34,6 +32,7 @@ class Login(View):
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
+        csrf_protect_method = method_decorator(csrf_protect)
         if request.method == 'POST':
             form = AuthenticationForm(request=request, data=request.POST)
             if form.is_valid():

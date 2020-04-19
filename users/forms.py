@@ -25,20 +25,25 @@ class OfficeSignUpForm(UserCreationForm):
     }
 
     name = forms.CharField()
+    address = forms.CharField()
+    city = forms.CharField()
+    telephone_number = forms.CharField()
     email = forms.CharField(widget=forms.EmailInput)
     confirm_email = forms.CharField(widget=forms.EmailInput)
 
     def __init__(self, *args, **kwargs):
         super(OfficeSignUpForm, self).__init__(*args, **kwargs)
 
-        label = ['Nazwa gabinetu', 'Adres email', 'Potwierdź adres email', 'Hasło', 'Potwierdź hasło']
-        for i, field_name in enumerate(['name', 'email', 'confirm_email', 'password1', 'password2']):
+        label = ['Nazwa gabinetu', 'Adres', 'Miasto', 'Numer telefonu', 'Adres email', 'Potwierdź adres email', 'Hasło',
+                 'Potwierdź hasło']
+        for i, field_name in enumerate(['name', 'address', 'city', 'telephone_number', 'email', 'confirm_email',
+                                        'password1', 'password2']):
             self.fields[field_name].help_text = None
             self.fields[field_name].label = label[i]
 
     class Meta:
         model = User
-        fields = ['name', 'email', 'confirm_email', 'password1', 'password2']
+        fields = ['name', 'address', 'city', 'telephone_number', 'email', 'confirm_email', 'password1', 'password2']
 
     def clean_confirm_email(self):
         email = self.cleaned_data.get("email")
@@ -83,6 +88,15 @@ class PatientSignUpForm(UserCreationForm):
 
 
 class PatientForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(PatientForm, self).__init__(*args, **kwargs)
+
+        label = ['Imię', 'Nazwisko', 'Adres email']
+        for i, field_name in enumerate(['first_name', 'last_name', 'email']):
+            self.fields[field_name].help_text = None
+            self.fields[field_name].label = label[i]
+
     class Meta:
         model = Patient
         fields = ['first_name', 'last_name', 'email']

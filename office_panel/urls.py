@@ -11,6 +11,6 @@ urlpatterns = [
     path('appointments/', appointment.AppointmentListView.as_view(), name='office-appointments'),
     path('appointments/<int:pk>/', appointment.AppointmentUpdateView.as_view(), name='office-appointment-change'),
     path('appointments/<int:pk>/delete/', appointment.AppointmentDeleteView.as_view(), name='office-appointment-delete'),
-    path('medical_history/<int:pk>/', medical_history_view.MakeMedicalHistory.as_view(),
+    path('medical_history/add/', medical_history_view.MakeMedicalHistory.as_view(),
          name='office-make-medical-history'),
     ]

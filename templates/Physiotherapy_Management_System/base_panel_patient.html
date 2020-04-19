@@ -48,18 +48,17 @@
                 {% endif %}
             </li>
         <!-- Dropdown -->
+        {% if user.is_patient %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">Panel wizyt</a>
                 <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="{% url 'patient-appointment-upcoming' %}">Zbliżające się wizyty</a>
                     <a class="dropdown-item" href="{% url 'appointments-select' %}">Umów wizytę</a>
-                    <a class="dropdown-item" href="#">Poprzednie wizyty</a>
+                    <a class="dropdown-item" href="{% url 'patient-appointment-old' %}">Poprzednie wizyty</a>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Gabinety</a>
-            </li>
+        {% endif %}
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
