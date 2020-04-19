@@ -1,0 +1,33 @@
+{% extends 'Physiotherapy_Management_System/base_panel_office.html' %}
+{% block head %}
+    <title>Fizjo-System - Wizyty</title>
+{% endblock %}
+{% block content %}
+    <div class="container border rounded mt-3 bg-light">
+        <div class="form">
+        {% if medical_histories %}
+            <h2>Wszystkie historie medyczne</h2>
+            <div class="right-button"><a href="{% url 'office-make-medical-history' %}" class="btn btn-warning" role="button">Dodaj historię</a></div>
+            <hr>
+            {% for medical_history in medical_histories %}
+                <a href="{% url 'office-medical-history-detail' medical_history.pk %}"
+                   role="button">{{ medical_history.patient }}</a>
+                {{ medical_history.patient.email }},
+                {{ medical_history.appointment.date|date:"d.m.Y" }}, {{ medical_history.appointment.date|date:"H:i" }},
+                {{ medical_history.appointment.choice }}
+                <div class="right-button">
+                <a href="{% url 'office-medical-history-change' medical_history.pk %}" class="btn btn-info"
+                   role="button">Edytuj</a>
+                <a href="{% url 'office-medical-history-delete' medical_history.pk %}"
+                   class="btn btn-danger"
+                   role="button">Odwołaj</a>
+                </div>
+                <hr>
+            {% endfor %}
+        {% else %}
+            <h2>Nie masz umówionych żadnych wizyt.</h2>
+            <h6>(pacjent musi umówić wizytę w twoim gabinecie.)</h6>
+        {% endif %}
+        </div>
+    </div>
+{% endblock content %}
