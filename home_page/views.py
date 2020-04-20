@@ -7,6 +7,10 @@ class HomeView(TemplateView):
     template_name = 'home_page/home.html'
 
 
+class HelpView(TemplateView):
+    template_name = 'home_page/help.html'
+
+
 class Offices(View):
     model = Office
     template_name = 'home_page/offices.html'

@@ -21,3 +21,47 @@
 .textxd{
     padding: 200px;
 }
+
+.centered-left {
+     text-shadow: 1px 1px #555555;
+    border-style: dashed;
+    border-radius: 10px;
+    border-width: 1px;
+    padding: 30px;
+    color: white;
+    font-weight: lighter;
+    font-size: 2.6vw;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.help {
+     text-shadow: 2px 2px #555555;
+    border-style: solid;
+    border-radius: 5px;
+        border-width: 1px;
+    padding: 10px;
+    color: white;
+    font-weight: 100;
+    font-size: 2.5vw;
+  position: absolute;
+  top: 85%;
+  left: 95.5%;
+  transform: translate(-50%, -50%);
+}
+
+.container-flex {
+  position: relative;
+  text-align: center;
+  color: brown;
+    box-shadow:0 20px 15px rgba(0,0,0,.15);
+    border-bottom-style: solid;
+    border-color: white;
+}
+
+#footer{
+    border-bottom-style: solid;
+	border-width: 1px;
+}
