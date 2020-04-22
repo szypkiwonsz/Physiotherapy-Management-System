@@ -11,8 +11,8 @@
             <hr>
             <form method="post">
                 <input type="hidden" name="csrfmiddlewaretoken" value="pHK2CZzBB323BM2Nq7DE2sxnQoBG1jPl" disabled="">
-                {% csrf_token %}
                 {{ form|crispy }}
+                {% csrf_token %}
                 <button type="submit" class="btn btn-success">Zaloguj</button>
             </form>
             <div class="border-top pt-3 mt-4"></div>

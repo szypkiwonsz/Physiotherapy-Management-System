@@ -3,7 +3,7 @@
     <title>Fizjo-System - Panel Gabinetu</title>
 {% endblock head %}
 {% block content %}
-    <div class="container border rounded mt-3 bg-light">
+    <div class="container border rounded bg-light">
         <div class="form">
         {% if patients %}
             <h2>Ostatnio dodani pacjenci:</h2>
@@ -12,8 +12,9 @@
         {% endif %}
             {% for patient in patients %}
                 <hr>
-                {{ patient.first_name }}
-                {{ patient.last_name }},
+                <a href="{% url 'office-patient-detail' patient.pk %}"
+                   role="button">{{ patient.first_name }}
+                    {{ patient.last_name }}</a>,
                 {{ patient.email }}
                 <div class="right-button">
                     <a href="{% url 'office-patient-change' patient.pk %}" class="btn btn-info" role="button">Edytuj</a>
@@ -22,9 +23,12 @@
             {% endfor %}
             <hr>
         {% if patients %}
+            <div>
         <a href="{% url 'office-patients' %}" class="btn btn-warning" role="button">Pokaż wszystkich pacjentów</a>
+        <a href="{% url 'office-patient-add' %}" class="btn btn-secondary" role="button">Dodaj</a>
+            </div>
         {% else %}
-        <a href="{% url 'office-patients' %}" class="btn btn-warning" role="button">Dodaj ich tutaj</a>
+        <a href="{% url 'office-patient-add' %}" class="btn btn-warning" role="button">Dodaj ich tutaj</a>
         {% endif %}
         </div>
     </div>
@@ -32,7 +36,7 @@
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
         {% if appointments %}
-            <h2>Ostatnie umówione wizyty:</h2>
+            <h2>Ostatnio umówione wizyty:</h2>
         {% else %}
             <h2>Nie masz umówionych żadnych wizyt.</h2>
         {% endif %}
@@ -55,7 +59,7 @@
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
         {% if medical_histories %}
-            <h2>Ostatnie dodane historie:</h2>
+            <h2>Ostatnio dodane historie:</h2>
         {% else %}
             <h2>Nie dodałeś żadnych historii.</h2>
         {% endif %}
@@ -71,7 +75,12 @@
             {% endfor %}
             <hr>
         {% if appointments %}
+            <div>
         <a href="{% url 'office-medical-history' %}" class="btn btn-warning" role="button">Pokaż wszystkie historie</a>
+        <a href="{% url 'office-make-medical-history' %}" class="btn btn-secondary" role="button">Dodaj</a>
+            </div>
+            {% else %}
+        <a href="{% url 'office-make-medical-history' %}" class="btn btn-warning" role="button">Dodaj je tutaj</a>
         {% endif %}
         </div>
     </div>

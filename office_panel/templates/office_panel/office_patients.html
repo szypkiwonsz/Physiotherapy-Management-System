@@ -11,8 +11,9 @@
                            role="button">Historie</a><a href="{% url 'office-patient-add' %}" class="btn btn-warning" role="button">Dodaj pacjenta</a></div>
                 {% for patient in patients %}
                     <hr>
-                    {{ patient.first_name }}
-                    {{ patient.last_name }},
+                    <a href="{% url 'office-patient-detail' patient.pk %}"
+                   role="button">{{ patient.first_name }}
+                    {{ patient.last_name }}</a>,
                     {{ patient.email }}
                     <div class="right-button">
                         <a href="{% url 'office-patient-change' patient.pk %}" class="btn btn-info"

@@ -10,11 +10,12 @@
             <div class="right-button"><a href="{% url 'office-make-medical-history' %}" class="btn btn-warning" role="button">Dodaj historię</a></div>
             <hr>
             {% for medical_history in medical_histories %}
-                <a href="{% url 'office-medical-history-detail' medical_history.pk %}"
-                   role="button">{{ medical_history.patient }}</a>
-                {{ medical_history.patient.email }},
+                {{ medical_history.patient }} -
+                {{ medical_history.date_selected|date:"d.m.Y" }}, {{ medical_history.date_selected|date:"H:i" }}
+                {% if medical_history.appointment %}
                 {{ medical_history.appointment.date|date:"d.m.Y" }}, {{ medical_history.appointment.date|date:"H:i" }},
                 {{ medical_history.appointment.choice }}
+                {% endif %}
                 <div class="right-button">
                 <a href="{% url 'office-medical-history-change' medical_history.pk %}" class="btn btn-info"
                    role="button">Edytuj</a>
