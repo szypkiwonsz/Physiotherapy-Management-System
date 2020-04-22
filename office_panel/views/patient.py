@@ -7,6 +7,7 @@ from users.decorators import office_required
 from users.forms import PatientForm
 from django.contrib import messages
 from medical_history.models import MedicalHistory
+from users.models import Patient
 
 
 @method_decorator([login_required, office_required], name='dispatch')
@@ -38,6 +39,18 @@ class PatientCreateView(CreateView):
         patient.save()
         messages.success(self.request, 'Pacjent został dodany poprawnie.')
         return redirect('office-home')
+
+
+@method_decorator([login_required, office_required], name='dispatch')
+class MedicalHistoryDetailView(DetailView):
+    form_class = PatientForm
+    template_name = 'office_panel/patient_detail_form.html'
+
+    def get_queryset(self):
+        return Patient.objects.all()
+
+    def get_success_url(self):
+        return reverse('office-patient-change', kwargs={'pk': self.object.pk})
 
 
 @method_decorator([login_required, office_required], name='dispatch')

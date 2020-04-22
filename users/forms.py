@@ -89,17 +89,21 @@ class PatientSignUpForm(UserCreationForm):
 
 class PatientForm(forms.ModelForm):
 
+    address = forms.CharField(required=False)
+    pesel = forms.CharField(required=False)
+    phone_number = forms.CharField(required=False)
+
     def __init__(self, *args, **kwargs):
         super(PatientForm, self).__init__(*args, **kwargs)
 
-        label = ['Imię', 'Nazwisko', 'Adres email']
-        for i, field_name in enumerate(['first_name', 'last_name', 'email']):
+        label = ['Imię', 'Nazwisko', 'Adres email', 'Adres zamieszkania', 'Pesel', 'Numer telefonu']
+        for i, field_name in enumerate(['first_name', 'last_name', 'email', 'address', 'pesel', 'phone_number']):
             self.fields[field_name].help_text = None
             self.fields[field_name].label = label[i]
 
     class Meta:
         model = Patient
-        fields = ['first_name', 'last_name', 'email']
+        fields = ['first_name', 'last_name', 'email', 'address', 'pesel', 'phone_number']
 
 
 class NewSetPasswordForm(SetPasswordForm):
