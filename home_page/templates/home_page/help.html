@@ -1,0 +1,59 @@
+{% extends 'Physiotherapy_Management_System/base.html' %}
+{% load static %}
+
+    {% block head %}
+{% endblock %}
+        {% block content %}
+
+        <div class="container border rounded bg-light">
+        <div class="form">
+            <p id="unconfirmed-color">Strona stworzona jako przykładowy projekt.</p>
+            <h2>Dane do logowania:</h2>
+            (Aby nie trzeba było zakładać konta.)
+            <hr>
+            <p>przekladowy_pacjent@gmail.com - Jako pacjent</p>
+            <p>przykładowy_gabinet@gmail.com - Jako gabinet</p>
+            </div>
+        </div>
+            <div class="container border rounded bg-light mt-3">
+        <div class="form">
+            <h2>Strona umożliwia:</h2>
+            <hr>
+            <h5>Od strony pacjenta:</h5>
+            <ul>
+                <li>
+                    Umawianie wizyt do zarejestrowanych gabinetów.
+                </li>
+                <li>
+                    Wyświetlanie gabinetów przypisanych dla danego pacjenta.
+                </li>
+                <li>
+                    Wyświetlania przyszłych i przeszłych wizyt z możliwością ich edytowania lub odwołania.
+                </li>
+                <li>
+                    Wyświetlanie historii medycznej pacjenta.
+                </li>
+            </ul>
+
+            <h5> Od strony gabinetu:</h5>
+            <ul>
+                <li>
+                    Możliwość dodawania pacjentów.
+                </li>
+                <li>
+                                        Potwierdzanie wizyt umówionych przez pacjentów.
+                </li>
+                <li>
+                    Lista wizyt odbytych przez pacjentów w gabinecie.
+                </li>
+                <li>
+                    Dodawanie historii medycznej dla danej wizyty pacjenta.
+                </li>
+
+            </ul>
+        </div>
+            </div>
+
+
+
+{% endblock %}
