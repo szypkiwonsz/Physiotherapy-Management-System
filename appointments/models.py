@@ -14,8 +14,8 @@ class Appointment(models.Model):
     office = models.ForeignKey(Office, on_delete=models.CASCADE)
     date = models.DateTimeField()
     name = models.CharField('Enter your first name:', max_length=120)
-    key = models.CharField(max_length=5, default=random_string)
     date_selected = models.DateTimeField(default=timezone.now)
+    phone_number = models.CharField(max_length=9)
     # Argument 'on_delete=models.CASCADE' - when User will be deleted, his post will be deleted too.
     confirmed = models.BooleanField(default=False)
     choice = models.CharField(max_length=120)

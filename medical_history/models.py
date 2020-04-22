@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 from users.models import User, Patient
 from appointments.models import Appointment
 
@@ -10,3 +12,5 @@ class MedicalHistory(models.Model):
     appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, null=True)
     description = models.TextField()
     recommendations = models.TextField()
+    date_selected = models.DateTimeField(default=timezone.now)
+
