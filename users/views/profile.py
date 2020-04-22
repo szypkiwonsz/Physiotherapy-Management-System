@@ -1,8 +1,11 @@
+from users.decorators import login_required
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
 from django.views import View
 from users.forms import ProfileUpdateForm, OfficeUpdateForm, UsersUpdateForm
 
 
+@method_decorator([login_required], name='dispatch')
 class Profile(View):
     template_name = 'users/profile.html'
 
