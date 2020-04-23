@@ -1,15 +1,15 @@
 {% extends 'Physiotherapy_Management_System/base.html' %}
 {% load static %}
-
-    {% block head %}
+{% block head %}
+    <title>Fizjo-System</title>
 {% endblock %}
-        {% block content %}
+{% block content %}
 
-<div class="container-flex">
-  <img src="{% static 'img/massage-599532_1920.jpg'%}" style="width:100%">
-<div class="centered-left">SYSTEM DLA GABINETÓW <br>I PACJENTÓW FIZJIOTERAPII</div>
-<a href="{% url 'help' %}">
-                <div class="help">?</div>
-            </a>
-</div>
+    <div class="container-flex">
+        <img src="{% static 'img/massage-599532_1920.jpg' %}" style="width:100%">
+        <div class="centered-left">SYSTEM DLA GABINETÓW <br>I PACJENTÓW FIZJIOTERAPII</div>
+        <a href="{% url 'help' %}">
+            <div class="help">?</div>
+        </a>
+    </div>
 {% endblock %}
