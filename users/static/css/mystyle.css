@@ -73,3 +73,44 @@
     border-color: lightgrey;
     padding: 10px;
 }
+
+.center-office{
+	text-align: center;
+    color: whitesmoke;
+	margin-bottom: 160px;
+	margin-top: -184px;
+}
+
+.container-office {
+  position: relative;
+  text-align: center;
+    border-style: dashed;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: lightgrey;
+    padding: 10px;
+}
+
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 50%;
+  padding: 5px;
+}
+
+#center-office{
+	text-shadow: 2px 2px #555555;
+    border-style: solid;
+    border-radius: 5px;
+        border-width: 1px;
+    padding: 10px;
+    color: white;
+    font-weight: 100;
+    font-size: 2.5vw;
+  position: absolute;
+  top: 25%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+}

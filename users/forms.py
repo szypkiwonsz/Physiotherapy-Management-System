@@ -30,20 +30,21 @@ class OfficeSignUpForm(UserCreationForm):
     telephone_number = forms.CharField()
     email = forms.CharField(widget=forms.EmailInput)
     confirm_email = forms.CharField(widget=forms.EmailInput)
+    website = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         super(OfficeSignUpForm, self).__init__(*args, **kwargs)
 
-        label = ['Nazwa gabinetu', 'Adres', 'Miasto', 'Numer telefonu', 'Adres email', 'Potwierdź adres email', 'Hasło',
+        label = ['Nazwa gabinetu', 'Adres', 'Miasto', 'Numer telefonu', 'Strona internetowa', 'Adres email', 'Potwierdź adres email', 'Hasło',
                  'Potwierdź hasło']
-        for i, field_name in enumerate(['name', 'address', 'city', 'telephone_number', 'email', 'confirm_email',
+        for i, field_name in enumerate(['name', 'address', 'city', 'telephone_number', 'website', 'email', 'confirm_email',
                                         'password1', 'password2']):
             self.fields[field_name].help_text = None
             self.fields[field_name].label = label[i]
 
     class Meta:
         model = User
-        fields = ['name', 'address', 'city', 'telephone_number', 'email', 'confirm_email', 'password1', 'password2']
+        fields = ['name', 'address', 'city', 'telephone_number', 'website', 'email', 'confirm_email', 'password1', 'password2']
 
     def clean_confirm_email(self):
         email = self.cleaned_data.get("email")
@@ -130,9 +131,11 @@ class UsersUpdateForm(forms.ModelForm):
 
 class OfficeUpdateForm(forms.ModelForm):
 
+    website = forms.CharField(required=False)
+
     class Meta:
         model = Office
-        fields = ['name', 'address', 'city', 'telephone_number']
+        fields = ['name', 'address', 'city', 'telephone_number', 'website']
 
 
 class ProfileUpdateForm(forms.ModelForm):
