@@ -32,7 +32,6 @@ class Login(View):
         form = self.form_class(initial=self.initial)
         return render(request, self.template_name, {'form': form})
 
-    @csrf_protected_method
     def post(self, request):
         if request.method == 'POST':
             form = AuthenticationForm(request=request, data=request.POST)
