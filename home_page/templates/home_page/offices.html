@@ -1,5 +1,5 @@
 {% extends 'Physiotherapy_Management_System/base.html' %}
-
+{% load static %}
 {% block head %}
     <title>Fizjo-System - Gabinety</title>
 {% endblock head %}
@@ -9,10 +9,9 @@
             <h2>Zarejestrowane gabinety</h2>
             <hr>
             {% for office in offices %}
-                <div class="row">
-                    <div class="col-4">{{ office.name }}</div>
-                    <div class="col-4">{{ office.name }}</div>
-                    <div class="col-4">{{ office.name }}</div>
+                <div class="container-office">
+                <img src="{% static 'img/massage-599532_1920.jpg' %}" style="width:100%">
+                    <div class="center-office">{{ office.name }}</div>
                 </div>
                 <hr>
             {% endfor %}

@@ -19,7 +19,7 @@ class User(AbstractUser):
 
 class UserPatient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    telephone_number = models.CharField(max_length=9)
+    phone_number = models.CharField(max_length=9)
 
 
 class Patient(models.Model):
@@ -40,7 +40,7 @@ class Office(models.Model):
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
-    telephone_number = models.CharField(max_length=12)
+    phone_number = models.CharField(max_length=9)
     website = models.CharField(max_length=20)
 
 
