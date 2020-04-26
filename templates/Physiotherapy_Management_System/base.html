@@ -64,9 +64,15 @@
         </ul>
         {% if user.is_authenticated %}
             <ul class="navbar-nav ml-auto">
+            {% if user.is_patient %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'profile' %}">Profil</a>
+                    <a class="nav-link" href="{% url 'profile-patient' %}">Profil</a>
                 </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile-office' %}">Profil</a>
+                </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Wyloguj</a>
                 </li>
