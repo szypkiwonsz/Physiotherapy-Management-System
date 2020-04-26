@@ -5,7 +5,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.views.generic import TemplateView, CreateView
 
-from users.models import Office
+from users.models import Office, UserPatient
 from users.tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib import messages
@@ -50,6 +50,9 @@ class RegisterPatient(CreateView, SignUp):
 
     def form_valid(self, form):
         user = self.user_save(form, is_patient=True)
+        userpatient = UserPatient.objects.create(user=user)
+        userpatient.phone_number = form.cleaned_data.get('phone_number')
+        userpatient.save()
         current_site = get_current_site(self.request)
         patient_email = form.cleaned_data.get('email')
         self.send_email(user, current_site, patient_email)

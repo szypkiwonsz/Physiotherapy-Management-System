@@ -3,7 +3,8 @@ from users.views import signup, login, activate_account, password, profile
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('profile/', profile.Profile.as_view(), name='profile'),
+    path('profile/office/', profile.OfficeProfile.as_view(), name='profile-office'),
+    path('profile/patient/', profile.PatientProfile.as_view(), name='profile-patient'),
     path('login/', login.Login.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('signup/', signup.Register.as_view(), name='signup'),

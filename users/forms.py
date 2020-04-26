@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
 from django.contrib.auth.views import SetPasswordForm
 from users.widgets import MyClearableFileInput
-from .models import User, Patient, Profile, Office
+from .models import User, Patient, Profile, Office, UserPatient
 from django.utils.translation import gettext as _
 
 
@@ -22,12 +22,13 @@ class LoginForm(AuthenticationForm):
 class OfficeSignUpForm(UserCreationForm):
     error_messages = {
         'email_mismatch': _('Podane emaile nie zgadzają się.'),
+        'password_mismatch': _('Hasła nie pasują do siebie.'),
     }
 
     name = forms.CharField()
     address = forms.CharField()
     city = forms.CharField()
-    telephone_number = forms.CharField()
+    phone_number = forms.CharField()
     email = forms.CharField(widget=forms.EmailInput)
     confirm_email = forms.CharField(widget=forms.EmailInput)
     website = forms.CharField(required=False)
@@ -37,14 +38,14 @@ class OfficeSignUpForm(UserCreationForm):
 
         label = ['Nazwa gabinetu', 'Adres', 'Miasto', 'Numer telefonu', 'Strona internetowa', 'Adres email', 'Potwierdź adres email', 'Hasło',
                  'Potwierdź hasło']
-        for i, field_name in enumerate(['name', 'address', 'city', 'telephone_number', 'website', 'email', 'confirm_email',
+        for i, field_name in enumerate(['name', 'address', 'city', 'phone_number', 'website', 'email', 'confirm_email',
                                         'password1', 'password2']):
             self.fields[field_name].help_text = None
             self.fields[field_name].label = label[i]
 
     class Meta:
         model = User
-        fields = ['name', 'address', 'city', 'telephone_number', 'website', 'email', 'confirm_email', 'password1', 'password2']
+        fields = ['name', 'address', 'city', 'phone_number', 'website', 'email', 'confirm_email', 'password1', 'password2']
 
     def clean_confirm_email(self):
         email = self.cleaned_data.get("email")
@@ -60,22 +61,24 @@ class OfficeSignUpForm(UserCreationForm):
 class PatientSignUpForm(UserCreationForm):
     error_messages = {
         'email_mismatch': _('Podane emaile nie zgadzają się.'),
+        'password_mismatch': _('Hasła nie pasują do siebie.'),
     }
 
     email = forms.CharField(widget=forms.EmailInput)
     confirm_email = forms.CharField(widget=forms.EmailInput)
+    phone_number = forms.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         super(PatientSignUpForm, self).__init__(*args, **kwargs)
 
-        label = ['Adres email', 'Potwierdź adres email', 'Hasło', 'Potwierdź hasło']
-        for i, field_name in enumerate(['email', 'confirm_email', 'password1', 'password2']):
+        label = ['Numer telefonu', 'Adres email', 'Potwierdź adres email', 'Hasło', 'Potwierdź hasło']
+        for i, field_name in enumerate(['phone_number', 'email', 'confirm_email', 'password1', 'password2']):
             self.fields[field_name].help_text = None
             self.fields[field_name].label = label[i]
 
     class Meta:
         model = User
-        fields = ['email', 'confirm_email', 'password1', 'password2']
+        fields = ['phone_number', 'email', 'confirm_email', 'password1', 'password2']
 
     def clean_confirm_email(self):
         email = self.cleaned_data.get("email")
@@ -135,7 +138,16 @@ class OfficeUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Office
-        fields = ['name', 'address', 'city', 'telephone_number', 'website']
+        fields = ['name', 'address', 'city', 'phone_number', 'website']
+
+
+class PatientUpdateForm(forms.ModelForm):
+
+    phone_number = forms.CharField(required=False)
+
+    class Meta:
+        model = UserPatient
+        fields = ['phone_number']
 
 
 class ProfileUpdateForm(forms.ModelForm):
