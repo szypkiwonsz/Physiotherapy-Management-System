@@ -5,8 +5,31 @@
 {% block content %}
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
+        {{ patient.owner.city }}
             <h2>Pacjent {{ patient.first_name }} {{ patient.last_name }}</h2>
-        <hr>
+            <div class="right-button"><a href="{% url 'office-patient-change' patient.pk %}" class="btn btn-info"
+                                         role="button">Edytuj</a>
+                <a href="{% url 'office-patient-delete-confirm' patient.pk %}"
+                   class="btn btn-danger" role="button">Usuń</a></div>
+            <hr>
+            Imie: {{ patient.first_name }}<br>
+            Nazwisko: {{ patient.last_name }}<br>
+            Email: {{ patient.email }}<br>
+            {% if patient.address %}
+                Adres: {{ patient.address }}<br>
+            {% else %}
+                Adres: Brak danych<br>
+            {% endif %}
+            {% if patient.phone_number %}<br>
+                Numer telefonu: {{ patient.phone_number }}
+            {% else %}
+                Numer telefonu: Brak danych<br>
+            {% endif %}
+            {% if patient.pesel %}
+                Pesel: {{ patient.pesel }}
+            {% else %}
+                Pesel: Brak danych<br>
+            {% endif %}
         </div>
-    </div>
+        </div>
 {% endblock content %}

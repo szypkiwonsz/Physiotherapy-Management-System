@@ -7,8 +7,7 @@
         <div class="form">
             {% if patients %}
                 <h2>Wszyscy pacjenci:</h2>
-                <div class="right-button"><a href="{% url 'office-medical-history' %}" class="btn btn-secondary mr-1"
-                           role="button">Historie</a><a href="{% url 'office-patient-add' %}" class="btn btn-warning" role="button">Dodaj pacjenta</a></div>
+                <div class="right-button"><a href="{% url 'office-patient-add' %}" class="btn btn-warning" role="button">Dodaj pacjenta</a></div>
                 {% for patient in patients %}
                     <hr>
                     <a href="{% url 'office-patient-detail' patient.pk %}"

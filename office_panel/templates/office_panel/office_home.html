@@ -53,6 +53,8 @@
             <hr>
         {% if appointments %}
         <a href="{% url 'office-appointments' %}" class="btn btn-warning" role="button">Pokaż wszystkie wizyty</a>
+            {% else %}
+            (tutaj pojawią się wizyty, które umówią pacjenci do twojego gabinetu.)
         {% endif %}
         </div>
     </div>
@@ -67,7 +69,7 @@
                 <hr>
                 {{ medical_history.patient }}
                 {{ medical_history.patient.email }},
-                {{ medical_history.description }}
+                <div class="text-description">{{ medical_history.description }}</div>
                 <div class="right-button">
                     <a href="{% url 'office-medical-history-change' medical_history.pk %}" class="btn btn-info" role="button">Edytuj</a>
                     <a href="{% url 'office-medical-history-delete' medical_history.pk %}" class="btn btn-danger" role="button">Usuń</a>
