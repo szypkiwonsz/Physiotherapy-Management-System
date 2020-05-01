@@ -18,6 +18,7 @@
         {{ form.description|as_crispy_field }}
         {{ form.recommendations|as_crispy_field }}
         <button type="submit" class="btn btn-success">Zapisz</button>
+        <a href="{% url 'office-medical-history' %}" class="btn btn-outline-secondary" role="button">Powrót</a>
     </form>
     </div>
     </div>

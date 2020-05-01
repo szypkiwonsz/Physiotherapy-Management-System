@@ -5,9 +5,15 @@
 {% block content %}
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
-            <h2>Pacjent {{ patient.first_name }} {{ patient.last_name }}</h2>
+            <h2>Wizyta pacjenta {{ medicalhistory.patient.first_name }} {{ medicalhistory.patient.last_name }}</h2>
+            <div class="right-button"><a href="{% url 'office-medical-history-change' medicalhistory.pk %}" class="btn btn-info"
+                                         role="button">Edytuj</a>
+                <a href="{% url 'office-medical-history-delete' medicalhistory.pk %}"
+                   class="btn btn-danger" role="button">Usuń</a></div>
         <hr>
-            {{ medicalhistory.patient.email }}
+            Data dodania: {{ medicalhistory.date_selected|date:"d.m.Y" }}, o godz: {{ medicalhistory.date_selected|date:"H:i" }}<br>
+            Opis: {{ medicalhistory.description }}<br>
+            Zalecenia: {{ medicalhistory.recommendations }}<br>
         </div>
     </div>
 {% endblock content %}
