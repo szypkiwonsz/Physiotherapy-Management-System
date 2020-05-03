@@ -5,85 +5,113 @@
 {% block content %}
     <div class="container border rounded bg-light">
         <div class="form">
-        {% if patients %}
-            <h2>Ostatnio dodani pacjenci:</h2>
-        {% else %}
-            <h2>Nie masz żadnych pacjentów.</h2>
-        {% endif %}
+            {% if patients %}
+                <h2>Ostatnio dodani pacjenci:</h2>
+            {% else %}
+                <h2>Nie masz żadnych pacjentów.</h2>
+            {% endif %}
             {% for patient in patients %}
                 <hr>
-                <a href="{% url 'office-patient-detail' patient.pk %}"
-                   role="button">{{ patient.first_name }}
-                    {{ patient.last_name }}</a>,
-                {{ patient.email }}
+                <div class="text-description">
+                    <a href="{% url 'office-patient-detail' patient.pk %}"
+                       role="button">{{ patient.first_name }}
+                        {{ patient.last_name }}</a>,
+                    {{ patient.email }}
+                </div>
                 <div class="right-button">
                     <a href="{% url 'office-patient-change' patient.pk %}" class="btn btn-info" role="button">Edytuj</a>
                     <a href="{% url 'office-patient-delete-confirm' patient.pk %}" class="btn btn-danger" role="button">Usuń</a>
                 </div>
             {% endfor %}
             <hr>
-        {% if patients %}
-            <div>
-        <a href="{% url 'office-patients' %}" class="btn btn-warning" role="button">Pokaż wszystkich pacjentów</a>
-        <a href="{% url 'office-patient-add' %}" class="btn btn-secondary" role="button">Dodaj</a>
-            </div>
-        {% else %}
-        <a href="{% url 'office-patient-add' %}" class="btn btn-warning" role="button">Dodaj ich tutaj</a>
-        {% endif %}
+            {% if patients %}
+                <div>
+                    <a href="{% url 'office-patients' %}" class="btn btn-warning" role="button">Pokaż wszystkich
+                        pacjentów</a>
+                    <a href="{% url 'office-patient-add' %}" class="btn btn-secondary" role="button">Dodaj</a>
+                </div>
+            {% else %}
+                <a href="{% url 'office-patient-add' %}" class="btn btn-warning" role="button">Dodaj ich tutaj</a>
+            {% endif %}
         </div>
     </div>
 
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
-        {% if appointments %}
-            <h2>Ostatnio umówione wizyty:</h2>
-        {% else %}
-            <h2>Nie masz umówionych żadnych wizyt.</h2>
-        {% endif %}
+            {% if appointments %}
+                <h2>Ostatnio umówione wizyty:</h2>
+            {% else %}
+                <h2>Nie masz umówionych żadnych wizyt.</h2>
+            {% endif %}
             {% for appointment in appointments %}
                 <hr>
-                {{ appointment.owner }},
-                {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
-                {{ appointment.choice }}
+                <div class="text-description">
+                    {{ appointment.owner }},
+                    {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
+                    {{ appointment.choice }}
+                    <br>
+                    {% if appointment.confirmed %}
+                        [<span id="confirmed-color">Potwierdzona</span>]
+                    {% else %}
+                        [<span id="unconfirmed-color">Niepotwierdzona</span>]
+                    {% endif %}
+                </div>
                 <div class="right-button">
                     <a href="{% url 'office-appointment-change' appointment.pk %}" class="btn btn-info" role="button">Edytuj</a>
                     <a href="{% url 'office-appointment-delete' appointment.pk %}" class="btn btn-danger" role="button">Usuń</a>
                 </div>
             {% endfor %}
             <hr>
-        {% if appointments %}
-        <a href="{% url 'office-appointments' %}" class="btn btn-warning" role="button">Pokaż wszystkie wizyty</a>
+            {% if appointments %}
+                <a href="{% url 'office-appointments' %}" class="btn btn-warning" role="button">Pokaż wszystkie
+                    wizyty</a>
             {% else %}
-            (tutaj pojawią się wizyty, które umówią pacjenci do twojego gabinetu.)
-        {% endif %}
+                (tutaj pojawią się wizyty, które umówią pacjenci do twojego gabinetu.)
+            {% endif %}
         </div>
     </div>
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
-        {% if medical_histories %}
-            <h2>Ostatnio dodane historie:</h2>
-        {% else %}
-            <h2>Nie dodałeś żadnych historii.</h2>
-        {% endif %}
+            {% if medical_histories %}
+                <h2>Ostatnio dodane historie:</h2>
+            {% else %}
+                <h2>Nie dodałeś żadnych historii.</h2>
+            {% endif %}
             {% for medical_history in medical_histories %}
                 <hr>
-                {{ medical_history.patient }}
-                {{ medical_history.patient.email }},
-                <div class="text-description">{{ medical_history.description }}</div>
+                <a href="{% url 'office-medical-history-detail' medical_history.pk %}"
+                   role="button">{{ medical_history.patient }}</a> -
+                {{ medical_history.date_selected|date:"d.m.Y" }}, {{ medical_history.date_selected|date:"H:i" }}
+                {% if medical_history.appointment %}
+                    {{ medical_history.appointment.date|date:"d.m.Y" }},
+                    {{ medical_history.appointment.date|date:"H:i" }},
+                    <div class="text-description">{{ medical_history.appointment.choice }}</div>
+                {% endif %}
+                <div class="border-left rounded p-1 mt-3">Opis:
+                    <div class="text-description">{{ medical_history.description }}</div>
+                </div>
+                <div class="border-left rounded p-1 mt-3">Zalecenia:
+                    <div class="text-description">{{ medical_history.recommendations }}</div>
+                </div>
+
                 <div class="right-button">
-                    <a href="{% url 'office-medical-history-change' medical_history.pk %}" class="btn btn-info" role="button">Edytuj</a>
-                    <a href="{% url 'office-medical-history-delete' medical_history.pk %}" class="btn btn-danger" role="button">Usuń</a>
+                    <a href="{% url 'office-medical-history-change' medical_history.pk %}" class="btn btn-info"
+                       role="button">Edytuj</a>
+                    <a href="{% url 'office-medical-history-delete' medical_history.pk %}" class="btn btn-danger"
+                       role="button">Usuń</a>
                 </div>
             {% endfor %}
             <hr>
-        {% if appointments %}
-            <div>
-        <a href="{% url 'office-medical-history' %}" class="btn btn-warning" role="button">Pokaż wszystkie historie</a>
-        <a href="{% url 'office-make-medical-history' %}" class="btn btn-secondary" role="button">Dodaj</a>
-            </div>
+            {% if appointments %}
+                <div>
+                    <a href="{% url 'office-medical-history' %}" class="btn btn-warning" role="button">Pokaż wszystkie
+                        historie</a>
+                    <a href="{% url 'office-make-medical-history' %}" class="btn btn-secondary" role="button">Dodaj</a>
+                </div>
             {% else %}
-        <a href="{% url 'office-make-medical-history' %}" class="btn btn-warning" role="button">Dodaj je tutaj</a>
-        {% endif %}
+                <a href="{% url 'office-make-medical-history' %}" class="btn btn-warning" role="button">Dodaj je
+                    tutaj</a>
+            {% endif %}
         </div>
     </div>
 {% endblock content %}
