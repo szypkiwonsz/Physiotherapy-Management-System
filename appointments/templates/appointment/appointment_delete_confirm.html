@@ -1,0 +1,23 @@
+{% extends 'Physiotherapy_Management_System/base_panel_office.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block head %}
+    <title>Fizjo-System - Usuń Wizytę</title>
+{% endblock head %}
+
+{% block content %}
+    <div class="container border rounded bg-light">
+        <div class="form">
+            <h2 class="mb-3">Potwierdź odwołanie wizyty.</h2>
+            <hr>
+            <p class="lead">Jesteś pewny, że chcesz usunąc wizytę pacjenta: <strong>{{ appointment.name }}</strong>?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Tak, usuń</button>
+                <a href="{% url 'office-appointments' %}" class="btn btn-outline-secondary"
+                   role="button">Powrót</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
