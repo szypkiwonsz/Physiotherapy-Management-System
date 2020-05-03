@@ -48,8 +48,8 @@
                 <a class="nav-link" href="{% url 'offices' %}">Gabinety</a>
             </li>
             <li class="nav-item">
-                    <a class="nav-link" href="{% url 'help' %}">Pomoc</a>
-                </li>
+                <a class="nav-link" href="{% url 'help' %}">Pomoc</a>
+            </li>
 
             <!-- Dropdown -->
             {#            <li class="nav-item dropdown">#}
@@ -64,14 +64,14 @@
         </ul>
         {% if user.is_authenticated %}
             <ul class="navbar-nav ml-auto">
-            {% if user.is_patient %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'profile-patient' %}">Profil</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'profile-office' %}">Profil</a>
-                </li>
+                {% if user.is_patient %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile-patient' %}">Profil</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile-office' %}">Profil</a>
+                    </li>
                 {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Wyloguj</a>
