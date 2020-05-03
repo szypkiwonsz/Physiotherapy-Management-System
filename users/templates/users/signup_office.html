@@ -9,7 +9,7 @@
         <div class="form">
             <h2>Zarejestruj się jako gabinet</h2>
             <hr>
-            <form method="post" id="register-office">
+            <form method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <button type="submit" class="btn btn-success">Zarejestruj</button>

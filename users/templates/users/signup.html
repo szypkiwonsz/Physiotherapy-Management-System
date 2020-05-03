@@ -12,10 +12,12 @@
             <br>
             <div class="center-button">
                 <div class="image">
-                        <a href="{% url 'patient-signup' %}" role="button"><img
-                                src="{% static 'img/gabinet.jpg' %}" style="width:49.7%"></a>
-                        <a href="{% url 'office-signup' %}" role="button"><img
-                                src="{% static 'img/pacjent.jpg' %}" style="width:49.8%"></a>
+                    <a href="{% url 'signup-patient' %}" role="button"><img alt="pacjent"
+                                                                            src="{% static 'img/gabinet.jpg' %}"
+                                                                            style="width:49.7%"></a>
+                    <a href="{% url 'signup-office' %}" role="button"><img alt="gabinet"
+                                                                           src="{% static 'img/pacjent.jpg' %}"
+                                                                           style="width:49.8%"></a>
                 </div>
             </div>
             <div class="border-top pt-3 mt-4">
