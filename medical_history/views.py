@@ -1,10 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views import View
-
 from users.decorators import office_required
 from .models import MedicalHistory
 from .forms import MedicalHistoryForm
@@ -37,6 +35,7 @@ class MedicalHistoryDetailView(DetailView):
         return reverse('office-patient-change', kwargs={'pk': self.object.pk})
 
 
+@method_decorator([login_required, office_required], name='dispatch')
 class MedicalHistoryUpdateView(UpdateView):
     form_class = MedicalHistoryForm
     template_name = 'medical_history/medical_history_update_form.html'
@@ -60,6 +59,7 @@ class MedicalHistoryDetailView(DetailView):
         return reverse('office-patient-change', kwargs={'pk': self.object.pk})
 
 
+@method_decorator([login_required, office_required], name='dispatch')
 class MedicalHistoryDeleteView(DeleteView):
     form_class = MedicalHistoryForm
     template_name = 'medical_history/medical_history_delete_confirm.html'
