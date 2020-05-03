@@ -2,9 +2,9 @@ from django.contrib.auth import login
 from django.shortcuts import redirect
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
+from django.contrib import messages
 from users.models import User
 from users.tokens import account_activation_token
-from django.contrib import messages
 
 
 def activate(request, uidb64, token):
