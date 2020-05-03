@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -18,7 +17,7 @@ class AppointmentListView(View):
     template_name = 'patient_panel/appointments_upcoming.html'
 
     def get_queryset(self):
-        queryset = self.request.user.appointments.select_related('owner').order_by('date')\
+        queryset = self.request.user.appointments.select_related('owner').order_by('date') \
             .filter(date__gte=datetime.today())
         return queryset
 
@@ -35,7 +34,7 @@ class OldAppointmentListView(View):
     template_name = 'patient_panel/appointments_old.html'
 
     def get_queryset(self):
-        queryset = self.request.user.appointments.select_related('owner').order_by('date')\
+        queryset = self.request.user.appointments.select_related('owner').order_by('date') \
             .filter(date__lte=datetime.today())
         return queryset
 
