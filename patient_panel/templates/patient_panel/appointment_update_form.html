@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block head %}
-    <title>FIZJO-SYSTEM - Make an appointment</title>
+    <title>Fizjo-System - Edytuj Wizytę</title>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -18,20 +18,19 @@
 
 {% endblock head %}
 {% block content %}
-<div class="container">
-<div class="form">
-    <h2>Zmień datę wizyty</h2>
-    <h6>Twoja wizyta zmieni status na: <span id="unconfirmed-color">[niepotwierdzona]</span></h6>
-    <hr>
-    <form method="post" novalidate>
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" class="btn btn-success">Zapisz zmiany</button>
-    <a href="{% url 'patient-appointment-upcoming' %}" class="btn btn-outline-secondary" role="button">Powrót</a>
-{#        <a href="{% url 'pati' patient.pk %}" class="btn btn-danger float-right">Usuń</a>#}
-    </form>
-    <hr>
-    </div>
+    <div class="container border rounded bg-light">
+        <div class="form">
+            <h2>Zmień dane wizyty</h2>
+            <h6>Twoja wizyta zmieni status na: <span id="unconfirmed-color">[niepotwierdzona]</span></h6>
+            <hr>
+            <form method="post" action="." enctype="multipart/form-data" id="controlForm" novalidate>
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-success">Zapisz zmiany</button>
+                <a href="{% url 'patient-appointment-upcoming' %}" class="btn btn-outline-secondary" role="button">Powrót</a>
+            </form>
+            <hr>
+        </div>
     </div>
     <script src="{% static "appointments/datetimepicker.js" %}"></script>
 {% endblock content %}
