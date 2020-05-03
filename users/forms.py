@@ -1,9 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
 from django.contrib.auth.views import SetPasswordForm
+from django.utils.translation import gettext as _
 from users.widgets import MyClearableFileInput
 from .models import User, Patient, Profile, Office, UserPatient
-from django.utils.translation import gettext as _
 
 
 class LoginForm(AuthenticationForm):
@@ -36,7 +36,8 @@ class OfficeSignUpForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(OfficeSignUpForm, self).__init__(*args, **kwargs)
 
-        label = ['Nazwa gabinetu', 'Adres', 'Miasto', 'Numer telefonu', 'Strona internetowa', 'Adres email', 'Potwierdź adres email', 'Hasło',
+        label = ['Nazwa gabinetu', 'Adres', 'Miasto', 'Numer telefonu', 'Strona internetowa', 'Adres email',
+                 'Potwierdź adres email', 'Hasło',
                  'Potwierdź hasło']
         for i, field_name in enumerate(['name', 'address', 'city', 'phone_number', 'website', 'email', 'confirm_email',
                                         'password1', 'password2']):
@@ -45,7 +46,8 @@ class OfficeSignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['name', 'address', 'city', 'phone_number', 'website', 'email', 'confirm_email', 'password1', 'password2']
+        fields = ['name', 'address', 'city', 'phone_number', 'website', 'email', 'confirm_email', 'password1',
+                  'password2']
 
     def clean_confirm_email(self):
         email = self.cleaned_data.get("email")
@@ -92,7 +94,6 @@ class PatientSignUpForm(UserCreationForm):
 
 
 class PatientForm(forms.ModelForm):
-
     address = forms.CharField(required=False)
     pesel = forms.CharField(required=False)
     phone_number = forms.CharField(required=False)
@@ -133,7 +134,6 @@ class UsersUpdateForm(forms.ModelForm):
 
 
 class OfficeUpdateForm(forms.ModelForm):
-
     website = forms.CharField(required=False)
 
     class Meta:
@@ -142,8 +142,7 @@ class OfficeUpdateForm(forms.ModelForm):
 
 
 class PatientUpdateForm(forms.ModelForm):
-
-    phone_number = forms.CharField(required=False)
+    phone_number = forms.CharField(label='Numer telefonu', required=False)
 
     class Meta:
         model = UserPatient
