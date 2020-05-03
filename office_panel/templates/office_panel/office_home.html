@@ -93,7 +93,13 @@
                 <div class="border-left rounded p-1 mt-3">Zalecenia:
                     <div class="text-description">{{ medical_history.recommendations }}</div>
                 </div>
-
+                {% if medical_history.appointment %}
+                        <div class="mt-3">
+                        {{ medical_history.appointment.date|date:"d.m.Y" }},
+                        {{ medical_history.appointment.date|date:"H:i" }},
+                        {{ medical_history.appointment.choice }}
+                        </div>
+                    {% endif %}
                 <div class="right-button">
                     <a href="{% url 'office-medical-history-change' medical_history.pk %}" class="btn btn-info"
                        role="button">Edytuj</a>
