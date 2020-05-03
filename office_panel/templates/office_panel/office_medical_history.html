@@ -5,33 +5,41 @@
 {% block content %}
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
-        {% if medical_histories %}
-            <h2>Wszystkie historie medyczne</h2>
-            <div class="right-button"><a href="{% url 'office-make-medical-history' %}" class="btn btn-warning" role="button">Dodaj historię</a></div>
-            <hr>
-            {% for medical_history in medical_histories %}
-                <a href="{% url 'office-medical-history-detail' medical_history.pk %}"
-                   role="button">{{ medical_history.patient }}</a> -
-                {{ medical_history.date_selected|date:"d.m.Y" }}, {{ medical_history.date_selected|date:"H:i" }}
-                <div class="text-description">{{ medical_history.description }}</div>
-                {% if medical_history.appointment %}
-                {{ medical_history.appointment.date|date:"d.m.Y" }}, {{ medical_history.appointment.date|date:"H:i" }},
-                <div class="text-description">{{ medical_history.appointment.choice }}</div>
-                {% endif %}
-                <div class="right-button">
-                <a href="{% url 'office-medical-history-change' medical_history.pk %}" class="btn btn-info"
-                   role="button">Edytuj</a>
-                <a href="{% url 'office-medical-history-delete' medical_history.pk %}"
-                   class="btn btn-danger"
-                   role="button">Odwołaj</a>
-                </div>
+            {% if medical_histories %}
+                <div class="text-description"><h2>Wszystkie historie medyczne</h2></div>
+                <div class="right-button"><a href="{% url 'office-make-medical-history' %}" class="btn btn-warning"
+                                             role="button">Dodaj historię</a></div>
                 <hr>
-            {% endfor %}
-        {% else %}
-            <h2>Nie masz żadnych hisotrii wizyt pacjentów.</h2>
-            <hr>
-            <a href="{% url 'office-make-medical-history' %}" class="btn btn-warning" role="button">Dodaj historię</a>
-        {% endif %}
+                {% for medical_history in medical_histories %}
+                    <a href="{% url 'office-medical-history-detail' medical_history.pk %}"
+                       role="button">{{ medical_history.patient }}</a> -
+                    {{ medical_history.date_selected|date:"d.m.Y" }}, {{ medical_history.date_selected|date:"H:i" }}
+                    <div class="border-left rounded p-1 mt-3">Opis:
+                        <div class="text-description">{{ medical_history.description }}</div>
+                    </div>
+                    <div class="border-left rounded p-1 mt-3">Zalecenia:
+                        <div class="text-description">{{ medical_history.recommendations }}</div>
+                    </div>
+                    {% if medical_history.appointment %}
+                        {{ medical_history.appointment.date|date:"d.m.Y" }},
+                        {{ medical_history.appointment.date|date:"H:i" }},
+                        <div class="text-description">{{ medical_history.appointment.choice }}</div>
+                    {% endif %}
+                    <div class="right-button">
+                        <a href="{% url 'office-medical-history-change' medical_history.pk %}" class="btn btn-info"
+                           role="button">Edytuj</a>
+                        <a href="{% url 'office-medical-history-delete' medical_history.pk %}"
+                           class="btn btn-danger"
+                           role="button">Usuń</a>
+                    </div>
+                    <hr>
+                {% endfor %}
+            {% else %}
+                <h2>Nie masz żadnych historii wizyt pacjentów.</h2>
+                <hr>
+                <a href="{% url 'office-make-medical-history' %}" class="btn btn-warning" role="button">Dodaj
+                    historię</a>
+            {% endif %}
         </div>
     </div>
 {% endblock content %}
