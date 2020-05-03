@@ -30,7 +30,6 @@ class PatientListView(View):
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientCreateView(CreateView):
     form_class = PatientForm
-    # fields = ('first_name', 'last_name', 'email')
     template_name = 'office_panel/patient_add_form.html'
 
     def form_valid(self, form):
@@ -57,7 +56,6 @@ class PatientDetailView(DetailView):
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientUpdateView(UpdateView):
     form_class = PatientForm
-    # fields = ('first_name', 'last_name', 'email')
     template_name = 'office_panel/patient_update_form.html'
 
     def get_queryset(self):
