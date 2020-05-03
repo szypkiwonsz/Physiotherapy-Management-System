@@ -6,14 +6,17 @@
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
             {% if patients %}
-                <h2>Wszyscy pacjenci:</h2>
-                <div class="right-button"><a href="{% url 'office-patient-add' %}" class="btn btn-warning" role="button">Dodaj pacjenta</a></div>
+                <div class="text-description"><h2>Wszyscy pacjenci:</h2></div>
+                <div class="right-button"><a href="{% url 'office-patient-add' %}" class="btn btn-warning"
+                                             role="button">Dodaj pacjenta</a></div>
                 {% for patient in patients %}
                     <hr>
-                    <a href="{% url 'office-patient-detail' patient.pk %}"
-                   role="button">{{ patient.first_name }}
-                    {{ patient.last_name }}</a>,
-                    {{ patient.email }}
+                    <div class="text-description">
+                        <a href="{% url 'office-patient-detail' patient.pk %}"
+                           role="button">{{ patient.first_name }}
+                            {{ patient.last_name }}</a>,
+                        {{ patient.email }}
+                    </div>
                     <div class="right-button">
                         <a href="{% url 'office-patient-change' patient.pk %}" class="btn btn-info"
                            role="button">Edytuj</a>
