@@ -6,20 +6,20 @@
 {% block content %}
     <div class="container border rounded bg-light">
         <div class="form">
-        {% if offices %}
-            <h2>Zarejestrowane gabinety</h2>
-            <hr>
-            {% for office in offices %}
-                <div class="container-office">
-                <img src="{% static 'img/massage-599532_1920.jpg' %}" style="width:100%">
-                    <div class="center-office">{{ office.name }}</div>
-                </div>
+            {% if offices %}
+                <h2>Zarejestrowane gabinety</h2>
                 <hr>
-            {% endfor %}
-        {% else %}
-            <h2>Brak zarejestrowanych gabinetów</h2>
-        <hr>
-        {% endif %}
+                {% for office in offices %}
+                    <div class="container-office">
+                        <img src="{% static 'img/massage-599532_1920.jpg' %}" style="width:100%">
+                        <div class="center-office">{{ office.name }}</div>
+                    </div>
+                    <hr>
+                {% endfor %}
+            {% else %}
+                <h2>Brak zarejestrowanych gabinetów</h2>
+                <hr>
+            {% endif %}
         </div>
     </div>
 {% endblock content %}
