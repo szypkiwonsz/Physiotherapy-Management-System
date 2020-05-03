@@ -12,19 +12,20 @@ from users.decorators import office_required
 @method_decorator([login_required, office_required], name='dispatch')
 class AppointmentListView(View):
     model = Appointment
-    template_name = 'office_panel/office-appointments.html'
+    template_name = 'office_panel/office_appointments.html'
 
     def get(self, request):
         context = {
             'appointments': Appointment.objects.filter(office=self.request.user.id),
         }
-        return render(request, 'office_panel/office-appointments.html', context)
+        return render(request, 'office_panel/office_appointments.html', context)
 
 
+@method_decorator([login_required, office_required], name='dispatch')
 class AppointmentUpdateView(UpdateView):
     model = Appointment
     fields = ('date', 'confirmed')
-    template_name = 'office_panel/appointment_update_form.html'
+    template_name = 'appointment/appointment_update_form.html'
 
     def get_queryset(self):
         return Appointment.objects.filter(office=self.request.user.id)
@@ -33,9 +34,10 @@ class AppointmentUpdateView(UpdateView):
         return reverse('office-appointment-change', kwargs={'pk': self.object.pk})
 
 
+@method_decorator([login_required, office_required], name='dispatch')
 class AppointmentDeleteView(DeleteView):
     model = Appointment
-    template_name = 'office_panel/appointment_delete_confirm.html'
+    template_name = 'appointment/appointment_delete_confirm.html'
     success_url = reverse_lazy('office-appointments')
 
     def delete(self, request, *args, **kwargs):
