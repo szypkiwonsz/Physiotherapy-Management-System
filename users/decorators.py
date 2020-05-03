@@ -20,6 +20,7 @@ def office_required(function):
         return function(request, *args, **kwargs)
     return _function
 
+
 def login_required(function):
     def _function(request, *args, **kwargs):
         if not request.user.is_authenticated:
