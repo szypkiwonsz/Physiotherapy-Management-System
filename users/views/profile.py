@@ -5,7 +5,7 @@ from django.views import View
 from users.forms import ProfileUpdateForm, OfficeUpdateForm, UsersUpdateForm, PatientUpdateForm
 
 
-@method_decorator([login_required, office_required], name='dispatch')
+@method_decorator([login_required], name='dispatch')
 class OfficeProfile(View):
     template_name = 'users/profile.html'
 
@@ -40,7 +40,7 @@ class OfficeProfile(View):
         return render(request, self.template_name, context)
 
 
-@method_decorator([login_required, patient_required], name='dispatch')
+@method_decorator([login_required], name='dispatch')
 class PatientProfile(View):
     template_name = 'users/profile.html'
 
