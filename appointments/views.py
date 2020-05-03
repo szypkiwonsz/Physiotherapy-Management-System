@@ -52,6 +52,7 @@ class SelectOffice(View):
         return render(request, 'appointment/appointment_select_office.html', context)
 
 
+@method_decorator([login_required, patient_required], name='dispatch')
 class MakeAppointment(CreateView):
     form_class = AppointmentForm
     template_name = 'appointment/appointment_make_form.html'
