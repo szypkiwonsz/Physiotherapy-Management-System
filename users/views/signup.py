@@ -22,7 +22,7 @@ class SignUp:
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
         })
-        to_email = 'kacpersawicki321@gmail.com'
+        to_email = user_email
         email = EmailMessage(
             subject, message, to=[to_email]
         )
