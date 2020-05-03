@@ -4,8 +4,9 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.views import View
-from users.forms import LoginForm
 from django.views.decorators.csrf import csrf_protect
+from users.forms import LoginForm
+
 csrf_protected_method = method_decorator(csrf_protect)
 
 
@@ -15,11 +16,11 @@ class CheckUser(View):
     def get(request):
         if request.user.is_authenticated:
             if request.user.is_office:
-                return redirect('office-home')
+                return redirect('home-office')
             else:
-                return redirect('patient-home')
+                return redirect('home-patient')
         else:
-            messages.warning(request, "Musisz się zalogować, aby mieć dostęp do panelu.")
+            messages.warning(request, "Musisz się zalogować, aby mieć dostęp do tego panelu.")
             return redirect('login')
 
 
