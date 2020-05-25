@@ -1,10 +1,11 @@
 from django import forms
 
+from Physiotherapy_Management_System import settings
 from .models import Appointment
 
 
 class AppointmentForm(forms.ModelForm):
-    date = forms.DateTimeField(label='Data wizyty:', input_formats=['%d.%m.%Y %H:%M'],
+    date = forms.DateTimeField(label='Data wizyty:', input_formats=settings.DATE_INPUT_FORMATS,
                                widget=forms.TextInput(attrs={'autocomplete': 'off'}))
     name = forms.CharField(label='Imię')
     phone_number = forms.CharField(label='Numer telefonu')
