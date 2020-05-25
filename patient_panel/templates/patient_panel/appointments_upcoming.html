@@ -33,10 +33,7 @@
                 {% endfor %}
                 <hr>
             {% endif %}
-            {% if appointments %}
-                <a href="{% url 'patient-appointment-upcoming' %}" class="btn btn-warning" role="button">Pokaż wszystkie
-                    wizyty</a>
-            {% else %}
+            {% if not appointments %}
                 <hr>
                 <a href="{% url 'appointments-select' %}" class="btn btn-warning" role="button">Umów się na wizytę</a>
             {% endif %}
