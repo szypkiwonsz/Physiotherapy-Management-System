@@ -65,6 +65,18 @@ class AppointmentUpdateView(UpdateView):
     form_class = AppointmentForm
     template_name = 'patient_panel/appointment_update_form.html'
 
+    @staticmethod
+    def parse_db_time_string(time_string):
+        date = datetime.strptime(time_string.split('+')[0], '%Y-%m-%d %H:%M:%S')
+        return datetime.strftime(date, '%d.%m.%Y %H:%M')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        date = str(Appointment.objects.filter(id=self.object.pk).values_list('date').get()[0])
+        date_object = self.parse_db_time_string(date)
+        initial['date'] = date_object
+        return initial
+
     def get_queryset(self):
         return Appointment.objects.filter(owner=self.request.user.id)
 
