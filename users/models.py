@@ -28,8 +28,8 @@ class Patient(models.Model):
     last_name = models.CharField(max_length=40, unique=False, default='')
     email = models.EmailField(unique=True, default='')
     address = models.CharField(max_length=50)
-    pesel = models.CharField(max_length=11, unique=True)
-    phone_number = models.CharField(max_length=9, unique=True)
+    pesel = models.CharField(max_length=11)
+    phone_number = models.CharField(max_length=9)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
