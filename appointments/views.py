@@ -1,13 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import UpdateView, CreateView
-
-from .forms import AppointmentForm, AppointmentCancel
+from django.views.generic import CreateView
+from .forms import AppointmentForm
 from .models import Appointment
 from .methods import DateTime
 from django.core.mail import EmailMessage
@@ -28,7 +24,6 @@ class Appointments:
                                                                  DateTime.add_zero(date.year))
         email = EmailMessage(subject, message, to=[office_email])
         email.send()
-        # author_email = User.objects.filter(is_active=True).values_list('email', flat=True)
         subject = 'Your appointments on fizjo-med has been correctly arranged'
         message = 'You have been correctly arranged to visit for {}:{} on day {}.{}.{}. ' \
                   'If you want to cancel your visit, use the form on our website.'.format(DateTime.add_zero(date.hour),
