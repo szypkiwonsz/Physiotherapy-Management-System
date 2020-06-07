@@ -1,5 +1,5 @@
 # Physiotherapy-Management-System
-[**See Project Live Here**](https://allegro-special-offers.herokuapp.com/)
+[**See Project Live Here**](https://szypkiwonsz.pythonanywhere.com/)
 
 A web application built in Django that allows you to manage a physiotherapy room. It has many functionalities from the side of the office and patient panel, which are described below.
 
