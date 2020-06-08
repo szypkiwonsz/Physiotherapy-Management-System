@@ -42,7 +42,7 @@ Type "python manage.py runserver", to start the server
 
 ## Application Features
 
-From the patient's panel side
+From the patient panel side
 
 ```
 Arranging visits to registered offices
@@ -56,3 +56,32 @@ List of future and past visits with the option of editing or canceling them
 ```
 Displaying patient medical histories
 ```
+---
+
+From the office panel side
+
+```
+The ability to add patients
+```
+```
+Confirmation of appointments arranged by patients
+```
+```
+List of visits made by patients in the office
+```
+```
+Adding a medical history for any patient visit
+```
+---
+## Built With
+
+* [Python 3.8](https://www.python.org/) - The programming language used
+* [Django 3.0.4](https://www.djangoproject.com/) -  Web framework
+
+## Authors
+
+* **Jan Kacper Sawicki** - [szypkiwonsz](https://github.com/szypkiwonsz)
+
+## Acknowledgments
+
+* The project was made to better understand the Django framework
