@@ -128,6 +128,7 @@ a:hover, a:visited, a:link, a:active {
 
 #img-radius {
     border-radius: 10px;
+    width: 100%;
 }
 
 .text-description {
