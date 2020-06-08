@@ -39,3 +39,20 @@ Type "python manage.py migrate", to create database
 Type "python manage.py runserver", to start the server
 ```
 ---
+
+## Application Features
+
+From the patient's panel side
+
+```
+Arranging visits to registered offices
+```
+```
+Displaying of the medical offices assigned to the patient
+```
+```
+List of future and past visits with the option of editing or canceling them
+```
+```
+Displaying patient medical histories
+```
