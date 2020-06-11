@@ -11,7 +11,7 @@ class HelpView(TemplateView):
     template_name = 'home_page/help.html'
 
 
-class Offices(View):
+class OfficesView(View):
     model = Office
     template_name = 'home_page/offices.html'
 
