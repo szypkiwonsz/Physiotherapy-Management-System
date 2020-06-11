@@ -3,7 +3,7 @@ from office_panel.views import home, patient, appointment, medical_history
 from medical_history import views as medical_history_view
 
 urlpatterns = [
-    path('', home.PatientListView.as_view(), name='office-home'),
+    path('', home.OfficePanelView.as_view(), name='office-home'),
     path('patients/', patient.PatientListView.as_view(), name='office-patients'),
     path('patients/add/', patient.PatientCreateView.as_view(), name='office-patient-add'),
     path('patients/<int:pk>/', patient.PatientDetailView.as_view(), name='office-patient-detail'),
