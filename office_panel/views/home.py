@@ -9,7 +9,7 @@ from medical_history.models import MedicalHistory
 
 
 @method_decorator([login_required, office_required], name='dispatch')
-class PatientListView(View):
+class OfficePanelView(View):
     model = Patient
     template_name = 'office_panel/office_home.html'
 
