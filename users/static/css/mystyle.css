@@ -82,6 +82,13 @@
 
     .form {
         margin: 50px;
+
+    }
+
+    .right-button {
+        text-align: right;
+        margin-bottom: -7px;
+        margin-top: -30px;
     }
 }
 
@@ -134,6 +141,14 @@
 
     .form {
         margin: 30px;
+    }
+
+    .btn {
+        font-size: 12px;
+    }
+
+    .right-button {
+        text-align: left;
     }
 }
 
@@ -218,9 +233,14 @@ a:hover, a:visited, a:link, a:active {
     text-decoration: none;
 }
 
+.btn {
+    word-wrap: break-word;
+    white-space: normal;
+}
+
 .text-description {
     word-wrap: break-word;
-    margin-right: 200px;
+    white-space: normal;
 }
 
 .bcg-white {

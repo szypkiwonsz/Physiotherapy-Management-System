@@ -11,14 +11,14 @@
             <hr>
             <br>
             <div class="center-button">
-                <div class="image">
-                    <a href="{% url 'patient-signup' %}" role="button"><img alt="pacjent"
-                                                                            src="{% static 'img/gabinet.jpg' %}"
-                                                                            style="width:49.7%"></a>
-                    <a href="{% url 'office-signup' %}" role="button"><img alt="gabinet"
-                                                                           src="{% static 'img/pacjent.jpg' %}"
-                                                                           style="width:49.8%"></a>
-                </div>
+                <a href="{% url 'patient-signup' %}" id="image-patient" role="button">
+                    <div id="text-signup">PACJENT</div>
+                </a>
+            </div>
+            <div class="center-button">
+                <a href="{% url 'office-signup' %}" id="image-office" role="button">
+                    <div id="text-signup">GABINET</div>
+                </a>
             </div>
             <div class="border-top pt-3 mt-4">
                 <small class="text-muted">
