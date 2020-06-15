@@ -12,7 +12,7 @@
     <form method="post" id="register-office">{% csrf_token %}
         <div class="row">
             <div class="col">{{ form.patient|as_crispy_field }}</div>
-            <div class="col"><div class="float-right">Nie dodałeś jeszcze tego pacjenta?</div><br><a href="{% url 'office-patients' %}" class="btn btn-warning float-right mt-2" role="button">Dodaj go tutaj</a></div>
+            <div class="col"><div class="float-right" id="medical-history-add-question">Nie dodałeś jeszcze tego pacjenta?</div><br><a href="{% url 'office-patients' %}" class="btn btn-warning float-right mt-2" role="button">Dodaj go tutaj</a></div>
             </div>
         {{ form.appointment|as_crispy_field }}
         {{ form.description|as_crispy_field }}

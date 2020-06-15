@@ -90,6 +90,23 @@
         margin-bottom: -7px;
         margin-top: -30px;
     }
+
+    #office-image {
+        width:80%;
+        height:180px;
+    }
+
+    .offices-select-name {
+    border-color: lightgrey;;
+    margin-top: 70px;
+    /*margin-left: 120px;*/
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    /*padding: 10px;*/
+    color: black;
+    text-align: center;
+}
 }
 
 @media screen and (max-width: 1000px) {
@@ -149,7 +166,29 @@
 
     .right-button {
         text-align: left;
+        margin-top: 15px;
     }
+
+    #medical-history-add-question {
+        text-align: right;
+    }
+
+    #office-image {
+        width:100%;
+        height:120px;
+    }
+
+    .offices-select-name {
+    border-color: lightgrey;
+    margin-top: 45px;
+    /*margin-left: 120px;*/
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    /*padding: 10px;*/
+    color: black;
+    text-align: center;
+}
 }
 
 #confirmed-color {
@@ -216,17 +255,6 @@
     top: 25%;
     left: 30%;
     transform: translate(-50%, -50%);
-}
-
-.offices-select-name {
-    border-color: lightgrey;;
-    margin-top: 70px;
-    margin-left: 120px;
-    border-radius: 5px;
-    border-style: solid;
-    border-width: 1px;
-    padding: 10px;
-    color: black;
 }
 
 a:hover, a:visited, a:link, a:active {
