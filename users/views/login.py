@@ -24,7 +24,7 @@ class CheckUser(View):
             return redirect('login')
 
 
-class Login(View):
+class LoginView(View):
     form_class = LoginForm
     initial = {'form': 'form'}
     template_name = 'users/login.html'
