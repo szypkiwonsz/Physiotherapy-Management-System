@@ -5,34 +5,10 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView
 from .forms import AppointmentForm
 from .models import Appointment
-from .methods import DateTime
-from django.core.mail import EmailMessage
 from users.decorators import patient_required
 from django.views import View
 from users.models import Office
-
-
-class Appointments:
-    @staticmethod
-    def send_email(office_name, office_email, date, name):
-        subject = 'Appointment - {}'.format(office_name)
-        message = '{} was appointed for {}:{} on day {}.{}.{}. ' \
-                  'Confirm the visit in the admin panel.'.format(name, DateTime.add_zero(date.hour),
-                                                                 DateTime.add_zero(date.minute),
-                                                                 DateTime.add_zero(date.day),
-                                                                 DateTime.add_zero(date.month),
-                                                                 DateTime.add_zero(date.year))
-        email = EmailMessage(subject, message, to=[office_email])
-        email.send()
-        subject = 'Your appointments on fizjo-med has been correctly arranged'
-        message = 'You have been correctly arranged to visit for {}:{} on day {}.{}.{}. ' \
-                  'If you want to cancel your visit, use the form on our website.'.format(DateTime.add_zero(date.hour),
-                                                                                          DateTime.add_zero(date.minute),
-                                                                                          DateTime.add_zero(date.day),
-                                                                                          DateTime.add_zero(date.month),
-                                                                                          DateTime.add_zero(date.year))
-        email = EmailMessage(subject, message, to=[office_email])
-        email.send()
+from utils.send_email import appointment_confirmation_patient, appointment_confirmation_office
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
@@ -72,14 +48,20 @@ class MakeAppointment(CreateView):
         else:
             data = Appointment.objects.raw(f'select * FROM appointments_appointment where office_id = {id_office}')
             for i in data:
-                print(i.office_id)
                 if date == i.date:
-                    messages.warning(self.request, f'Wybrana data {date.day}.{date.month}.{date.year} {date.hour}:00 jest już zajęta.')
+                    messages.warning(
+                        self.request, f'Wybrana data {date.day}.{date.month}.{date.year} {date.hour}:00 '
+                        f'jest już zajęta.'
+                    )
                     return redirect('appointments-make-appointment', id_office)
         appointment = form.save(commit=False)
         appointment.author_id = self.request.user.id
         appointment.owner_id = id_owner
         appointment.office_id = id_office
         appointment.save()
+        office_email = appointment.office.user.email
+        patient_email = self.request.user.email
+        appointment_confirmation_office('Fizjo-Med', name, date, office_email)
+        appointment_confirmation_patient(date, patient_email)
         messages.warning(self.request, 'Poprawnie umówiono wizytę, ale oczekuje ona na potwierdzenie.')
         return redirect('patient-appointment-upcoming')
