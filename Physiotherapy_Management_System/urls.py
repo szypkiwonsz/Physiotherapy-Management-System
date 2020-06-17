@@ -9,7 +9,7 @@ urlpatterns = [
     path('panel/', login.CheckUser.as_view(), name='panel'),
     path('patient/', include('patient_panel.urls')),
     path('office/', include('office_panel.urls')),
-    path('account/', include('users.urls')),
+    path('accounts/', include('users.urls')),
     path('admin/', admin.site.urls),
 ]
 
