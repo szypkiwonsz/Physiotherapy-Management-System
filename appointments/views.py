@@ -16,7 +16,8 @@ class SelectOffice(View):
     model = Office
     template_name = 'appointment/appointment_select_office.html'
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         context = {
             'offices': Office.objects.all()
         }
