@@ -3,12 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from users.decorators import office_required
-from .models import MedicalHistory
-from .forms import MedicalHistoryForm
-
-# Create your views here.
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
+
+from users.decorators import office_required
+from .forms import MedicalHistoryForm
+from .models import MedicalHistory
 
 
 @method_decorator([login_required, office_required], name='dispatch')
