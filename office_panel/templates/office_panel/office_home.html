@@ -80,8 +80,10 @@
             {% for medical_history in medical_histories %}
                 <hr>
                 <a href="{% url 'office-medical-history-detail' medical_history.pk %}"
-                   role="button">{{ medical_history.patient }}</a> -
+                   role="button">Historia medyczna</a> -
                 {{ medical_history.date_selected|date:"d.m.Y" }}, {{ medical_history.date_selected|date:"H:i" }}
+                <div>Pacjent: <a href="{% url 'office-patient-detail' medical_history.patient.pk %}" role="button">
+                    {{ medical_history.patient }}</a></div>
                 {% if medical_history.appointment %}
                     {{ medical_history.appointment.date|date:"d.m.Y" }},
                     {{ medical_history.appointment.date|date:"H:i" }},
@@ -94,12 +96,12 @@
                     <div class="text-description">{{ medical_history.recommendations }}</div>
                 </div>
                 {% if medical_history.appointment %}
-                        <div class="mt-3">
+                    <div class="mt-3">
                         {{ medical_history.appointment.date|date:"d.m.Y" }},
                         {{ medical_history.appointment.date|date:"H:i" }},
                         {{ medical_history.appointment.choice }}
-                        </div>
-                    {% endif %}
+                    </div>
+                {% endif %}
                 <div class="right-button">
                     <a href="{% url 'office-medical-history-change' medical_history.pk %}" class="btn btn-info"
                        role="button">Edytuj</a>
