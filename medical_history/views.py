@@ -47,18 +47,6 @@ class MedicalHistoryUpdateView(UpdateView):
 
 
 @method_decorator([login_required, office_required], name='dispatch')
-class MedicalHistoryDetailView(DetailView):
-    form_class = MedicalHistoryForm
-    template_name = 'medical_history/medical_history_detail_form.html'
-
-    def get_queryset(self):
-        return MedicalHistory.objects.all()
-
-    def get_success_url(self):
-        return reverse('office-patient-change', kwargs={'pk': self.object.pk})
-
-
-@method_decorator([login_required, office_required], name='dispatch')
 class MedicalHistoryDeleteView(DeleteView):
     form_class = MedicalHistoryForm
     template_name = 'medical_history/medical_history_delete_confirm.html'
