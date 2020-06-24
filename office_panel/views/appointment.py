@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -5,6 +7,8 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import UpdateView, DeleteView
+
+from appointments.forms import AppointmentOfficeUpdateForm
 from appointments.models import Appointment
 from users.decorators import office_required
 
@@ -23,9 +27,20 @@ class AppointmentListView(View):
 
 @method_decorator([login_required, office_required], name='dispatch')
 class AppointmentUpdateView(UpdateView):
-    model = Appointment
-    fields = ('date', 'confirmed')
+    form_class = AppointmentOfficeUpdateForm
     template_name = 'appointment/appointment_update_form.html'
+
+    @staticmethod
+    def parse_db_time_string(time_string):
+        date = datetime.strptime(time_string.split('+')[0], '%Y-%m-%d %H:%M:%S')
+        return datetime.strftime(date, '%d.%m.%Y %H:%M')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        date = str(Appointment.objects.filter(id=self.object.pk).values_list('date').get()[0])
+        date_object = self.parse_db_time_string(date)
+        initial['date'] = date_object
+        return initial
 
     def get_queryset(self):
         return Appointment.objects.filter(office=self.request.user.id)
