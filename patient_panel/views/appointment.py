@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
@@ -76,6 +77,16 @@ class AppointmentUpdateView(UpdateView):
         date_object = self.parse_db_time_string(date)
         initial['date'] = date_object
         return initial
+
+    def form_valid(self, form):
+        appointment = Appointment.objects.get(pk=self.object.pk)
+        appointment.confirmed = False
+        appointment.date = form.cleaned_data['date']
+        appointment.name = form.cleaned_data['name']
+        appointment.phone_number = form.cleaned_data['phone_number']
+        appointment.choice = form.cleaned_data['choice']
+        appointment.save()
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_queryset(self):
         return Appointment.objects.filter(owner=self.request.user.id)
