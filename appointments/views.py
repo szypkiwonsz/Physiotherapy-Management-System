@@ -43,7 +43,7 @@ class MakeAppointment(CreateView):
 
         # Checks if first name is typed correctly without any numbers etc.
         elif name.isalpha() is not True:
-            messages.warning(self.request, f'Incorrect name.')
+            messages.warning(self.request, f'Nieprawidłowe imię.')
             return redirect('appointments-make-appointment', id_office)
 
         else:
