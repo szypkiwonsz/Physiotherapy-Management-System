@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.test import TestCase, Client
-from django.urls import reverse, reverse_lazy, resolve
+from django.urls import reverse
 from django.utils import timezone
 
 from appointments.models import Appointment
@@ -31,7 +31,7 @@ class TestAppointmentViews(TestCase):
             website='www.website.com'
         )
         self.appointment1 = Appointment.objects.create(
-            owner=self.office1,
+            owner=self.patient1,
             office=self.appointment_office1,
             date=datetime(2012, 1, 13, 16, 00, 00),
             name='name',
