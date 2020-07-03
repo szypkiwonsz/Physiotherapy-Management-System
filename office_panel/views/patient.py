@@ -21,8 +21,7 @@ class PatientListView(View):
 
     def get(self, request):
         context = {
-            'patients': self.get_queryset(),
-            'medical_history': MedicalHistory.objects.all()
+            'patients': self.get_queryset().order_by('-date_selected'),
         }
         return render(request, 'office_panel/office_patients.html', context)
 
