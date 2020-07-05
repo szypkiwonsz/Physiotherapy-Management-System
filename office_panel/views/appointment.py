@@ -20,7 +20,7 @@ class AppointmentListView(View):
 
     def get(self, request):
         context = {
-            'appointments': Appointment.objects.filter(office=self.request.user.id),
+            'appointments': Appointment.objects.filter(office=self.request.user.id).order_by('date'),
         }
         return render(request, 'office_panel/office_appointments.html', context)
 
