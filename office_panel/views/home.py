@@ -15,8 +15,9 @@ class OfficePanelView(View):
 
     def get(self, request):
         context = {
-            'patients': Patient.objects.filter(owner=self.request.user.id)[:5],
-            'appointments': Appointment.objects.filter(office=self.request.user.id)[:5],
-            'medical_histories': MedicalHistory.objects.filter(owner=self.request.user.id)[:5]
+            'patients': Patient.objects.filter(owner=self.request.user.id).order_by('-date_selected')[:5],
+            'appointments': Appointment.objects.filter(office=self.request.user.id).order_by('date')[:5],
+            'medical_histories': MedicalHistory.objects.filter(owner=self.request.user.id).order_by(
+                '-date_selected')[:5]
         }
         return render(request, 'office_panel/office_home.html', context)
