@@ -1,35 +1,23 @@
 {% extends 'Physiotherapy_Management_System/base_panel_office.html' %}
+{% load static %}
 {% block head %}
     <title>Fizjo-System - Pacjenci</title>
 {% endblock head %}
 {% block content %}
     <div class="container border rounded bg-light">
-        <div class="form">
-            {% if patients %}
-                <div class="text-description"><h2>Wszyscy pacjenci:</h2></div>
-                <div class="right-button"><a href="{% url 'office-patient-add' %}" class="btn btn-warning"
-                                             role="button">Dodaj pacjenta</a></div>
-                {% for patient in patients %}
-                    <hr>
-                    <div class="text-description">
-                        <a href="{% url 'office-patient-detail' patient.pk %}"
-                           role="button">{{ patient.first_name }}
-                            {{ patient.last_name }}</a>,
-                        {{ patient.email }}
-                    </div>
-                    <div class="right-button">
-                        <a href="{% url 'office-patient-change' patient.pk %}" class="btn btn-info"
-                           role="button">Edytuj</a>
-                        <a href="{% url 'office-patient-delete-confirm' patient.pk %}"
-                           class="btn btn-danger" role="button">Usuń</a>
-                    </div>
-                {% endfor %}
-                <hr>
-            {% else %}
-                <h2>Nie masz żadnych pacjentów.</h2>
-                <hr>
-                <a href="{% url 'office-patient-add' %}" class="btn btn-warning" role="button">Dodaj pacjenta</a>
-            {% endif %}
+
+        <div class="search">
+            <div class="form-group has-search">
+                <span class="fa fa-search form-control-feedback"></span>
+                <input id="user-input" placeholder="Wyszukaj po nazwisku" class="form-control">
+            </div>
+        </div>
+
+
+        <div class="form" id="replaceable-content">
+            {% include 'office_panel/office_patients_results_partial.html' %}
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static "js/search_office_patients.js" %}"></script>
 {% endblock content %}
