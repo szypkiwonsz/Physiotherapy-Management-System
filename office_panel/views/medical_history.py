@@ -19,7 +19,7 @@ class MedicalHistoryListView(View):
 
     def get(self, request):
         context = {
-            'medical_histories': MedicalHistory.objects.filter(owner=self.request.user.id),
+            'medical_histories': MedicalHistory.objects.filter(owner=self.request.user.id).order_by('-date_selected'),
         }
         return render(request, 'office_panel/office_medical_history.html', context)
 
