@@ -1,38 +1,21 @@
 {% extends 'Physiotherapy_Management_System/base_panel_office.html' %}
+{% load static %}
 {% block head %}
     <title>Fizjo-System - Wizyty</title>
 {% endblock %}
 {% block content %}
     <div class="container border rounded bg-light">
-        <div class="form">
-            {% if appointments %}
-                <h2>Wszystkie wizyty:</h2>
-                <hr>
-                {% for appointment in appointments %}
-                    <div class="text-description">
-                        {{ appointment.owner }},
-                        {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
-                        {{ appointment.choice }}
-                        <br>
-                        {% if appointment.confirmed %}
-                            [<span id="confirmed-color">Potwierdzona</span>]
-                        {% else %}
-                            [<span id="unconfirmed-color">Niepotwierdzona</span>]
-                        {% endif %}
-                    </div>
-                    <div class="right-button">
-                        <a href="{% url 'office-appointment-change' appointment.pk %}" class="btn btn-info"
-                           role="button">Edytuj</a>
-                        <a href="{% url 'office-appointment-delete' appointment.pk %}"
-                           class="btn btn-danger"
-                           role="button">Odwołaj</a>
-                    </div>
-                    <hr>
-                {% endfor %}
-            {% else %}
-                <h2>Nie masz umówionych żadnych wizyt.</h2>
-                <h6>(pacjent musi umówić wizytę w twoim gabinecie.)</h6>
-            {% endif %}
+
+        <div class="search">
+            <div class="form-group has-search">
+                <span class="fa fa-search form-control-feedback"></span>
+                <input id="user-input" placeholder="Wyszukaj po adresie email" class="form-control">
+            </div>
+        </div>
+        <div class="form" id="replaceable-content">
+            {% include 'office_panel/office_appointments_results_partial.html' %}
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static "js/search_office_appointments.js" %}"></script>
 {% endblock content %}
