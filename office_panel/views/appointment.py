@@ -2,7 +2,9 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -19,10 +21,26 @@ class AppointmentListView(View):
     template_name = 'office_panel/office_appointments.html'
 
     def get(self, request):
-        context = {
-            'appointments': Appointment.objects.filter(office=self.request.user.id).order_by('date'),
-        }
-        return render(request, 'office_panel/office_appointments.html', context)
+        url_parameter = request.GET.get('q')
+        if url_parameter:
+            ctx = {
+                'appointments': Appointment.objects.filter(
+                    office=self.request.user.id, owner__email__icontains=url_parameter).order_by('date'),
+            }
+        else:
+            ctx = {
+                'appointments': Appointment.objects.filter(office=self.request.user.id).order_by('date'),
+            }
+
+        if request.is_ajax():
+            html = render_to_string(
+                template_name='office_panel/office_appointments_results_partial.html',
+                context=ctx
+            )
+            data_dict = {"html_from_view": html}
+            return JsonResponse(data=data_dict, safe=False)
+
+        return render(request, 'office_panel/office_appointments.html', ctx)
 
 
 @method_decorator([login_required, office_required], name='dispatch')
