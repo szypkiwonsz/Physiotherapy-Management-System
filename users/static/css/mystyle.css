@@ -92,21 +92,28 @@
     }
 
     #office-image {
-        width:80%;
-        height:180px;
+        width: 80%;
+        height: 180px;
     }
 
     .offices-select-name {
-    border-color: lightgrey;;
-    margin-top: 70px;
-    /*margin-left: 120px;*/
-    border-radius: 5px;
-    border-style: solid;
-    border-width: 1px;
-    /*padding: 10px;*/
-    color: black;
-    text-align: center;
-}
+        border-color: lightgrey;;
+        margin-top: 70px;
+        /*margin-left: 120px;*/
+        border-radius: 5px;
+        border-style: solid;
+        border-width: 1px;
+        /*padding: 10px;*/
+        color: black;
+        text-align: center;
+    }
+
+    .search {
+        margin-top: 30px;
+        margin-bottom: -25px;
+        margin-left: 20px;
+        width: 31%;
+    }
 }
 
 @media screen and (max-width: 1000px) {
@@ -174,20 +181,26 @@
     }
 
     #office-image {
-        width:100%;
-        height:120px;
+        width: 100%;
+        height: 120px;
     }
 
     .offices-select-name {
-    border-color: lightgrey;
-    margin-top: 45px;
-    /*margin-left: 120px;*/
-    border-radius: 5px;
-    border-style: solid;
-    border-width: 1px;
-    /*padding: 10px;*/
-    color: black;
-    text-align: center;
+        border-color: lightgrey;
+        margin-top: 45px;
+        /*margin-left: 120px;*/
+        border-radius: 5px;
+        border-style: solid;
+        border-width: 1px;
+        /*padding: 10px;*/
+        color: black;
+        text-align: center;
+    }
+
+    .search {
+        margin-top: 30px;
+        margin-bottom: -10px;
+        width: 100%;
     }
 }
 
@@ -273,4 +286,38 @@ a:hover, a:visited, a:link, a:active {
 
 .bcg-white {
     background-color: #fdfdfd;
+}
+
+@keyframes blinker {
+    from {
+        opacity: 1.0;
+    }
+    to {
+        opacity: 0.0;
+    }
+}
+
+.blink {
+    text-decoration: blink;
+    animation-name: blinker;
+    animation-duration: 0.6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    animation-direction: alternate;
+}
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
 }
