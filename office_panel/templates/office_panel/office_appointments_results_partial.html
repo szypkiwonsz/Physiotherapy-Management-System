@@ -1,7 +1,7 @@
 {% if appointments %}
-    <h2>Wszystkie wizyty:</h2>
-    <hr>
+    <div class="text-description"><h2>Wszystkie wizyty:</h2></div>
     {% for appointment in appointments %}
+        <hr>
         <div class="text-description">
             {{ appointment.owner }},
             {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
@@ -20,8 +20,8 @@
                class="btn btn-danger"
                role="button">Odwołaj</a>
         </div>
-        <hr>
     {% endfor %}
+    <hr>
 {% else %}
     <h2>Nie masz umówionych żadnych wizyt.</h2>
     <hr>
