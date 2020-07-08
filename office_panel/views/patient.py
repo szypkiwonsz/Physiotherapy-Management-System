@@ -51,6 +51,8 @@ class PatientCreateView(CreateView):
     def form_valid(self, form):
         patient = form.save(commit=False)
         patient.owner = self.request.user
+        patient.first_name = form.cleaned_data['first_name'].capitalize()
+        patient.last_name = form.cleaned_data['last_name'].capitalize()
         patient.save()
         messages.success(self.request, 'Pacjent został dodany poprawnie.')
         return redirect('office-home')
