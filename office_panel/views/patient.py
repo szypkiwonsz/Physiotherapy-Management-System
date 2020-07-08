@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.utils.decorators import method_decorator
@@ -20,10 +22,25 @@ class PatientListView(View):
         return queryset
 
     def get(self, request):
-        context = {
-            'patients': self.get_queryset().order_by('-date_selected'),
-        }
-        return render(request, 'office_panel/office_patients.html', context)
+        url_parameter = request.GET.get('q')
+        if url_parameter:
+            ctx = {
+                'patients': self.get_queryset().order_by('-date_selected').filter(last_name__icontains=url_parameter),
+            }
+        else:
+            ctx = {
+                'patients': self.get_queryset().order_by('-date_selected'),
+            }
+
+        if request.is_ajax():
+            html = render_to_string(
+                template_name='office_panel/office_patients_results_partial.html',
+                context=ctx
+            )
+            data_dict = {"html_from_view": html}
+            return JsonResponse(data=data_dict, safe=False)
+
+        return render(request, 'office_panel/office_patients.html', ctx)
 
 
 @method_decorator([login_required, office_required], name='dispatch')
