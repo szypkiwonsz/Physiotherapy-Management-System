@@ -1,14 +1,14 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
-from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, View, UpdateView, DeleteView, DetailView
+
 from users.decorators import office_required
 from users.forms import PatientForm
-from medical_history.models import MedicalHistory
 from users.models import Patient
 
 
