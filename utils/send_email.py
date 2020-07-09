@@ -14,7 +14,7 @@ def appointment_confirmation_office(patient_name, date, office_email):
               f'{DateTime.add_zero(date.year)}.\n\n' \
               'Potwierdź wizytę pacjenta logując się do panelu swojego gabinetu.\n\n' \
               'Fizjo-System'
-    email = EmailMessage(subject, message, to=['kacpersawicki321@gmail.com'])
+    email = EmailMessage(subject, message, to=[office_email])
     email.send()
 
 
@@ -27,7 +27,7 @@ def appointment_confirmation_patient(patient_name, office_name, date, patient_em
               f'Potwierdzenie wizyty ze strony gabinetu otrzymasz w kolejnym mailu.\n\n' \
               'Jeśli chcesz odwołać wizytę, skorzystaj z opcji odwołaj znajdującej się w panelu pacjenta.\n\n' \
               'Fizjo-System'
-    email = EmailMessage(subject, message, to=['kacpersawicki321@gmail.com'])
+    email = EmailMessage(subject, message, to=[patient_email])
     email.send()
 
 
@@ -39,8 +39,7 @@ def activation_email(user, current_site, user_email):
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
         'token': account_activation_token.make_token(user),
     })
-    to_email = user_email
     email = EmailMessage(
-        subject, message, to=['kacpersawicki321@gmail.com']
+        subject, message, to=[user_email]
     )
     email.send()
