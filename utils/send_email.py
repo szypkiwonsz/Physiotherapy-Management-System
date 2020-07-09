@@ -7,27 +7,27 @@ from users.tokens import account_activation_token
 from utils.date_time import DateTime
 
 
-def appointment_confirmation_office(office_name, name, date, office_email):
-    subject = 'Appointment - {}'.format(office_name)
-    message = '{} was appointed for {}:{} on day {}.{}.{}. ' \
-              'Confirm the visit in the admin panel.'.format(
-                    name, DateTime.add_zero(date.hour),
-                    DateTime.add_zero(date.minute),
-                    DateTime.add_zero(date.day),
-                    DateTime.add_zero(date.month),
-                    DateTime.add_zero(date.year)
-                )
-    email = EmailMessage(subject, message, to=[office_email])
+def appointment_confirmation_office(patient_name, date, office_email):
+    subject = 'Fizjo-System - Nowa Wizyta'
+    message = f'\nPacjent {patient_name} umówił wizytę w twoim gabinecie na godzinę {DateTime.add_zero(date.hour)}:' \
+              f'{DateTime.add_zero(date.minute)} dnia {DateTime.add_zero(date.day)}.{DateTime.add_zero(date.month)}.' \
+              f'{DateTime.add_zero(date.year)}.\n\n' \
+              'Potwierdź wizytę pacjenta logując się do panelu swojego gabinetu.\n\n' \
+              'Fizjo-System'
+    email = EmailMessage(subject, message, to=['kacpersawicki321@gmail.com'])
     email.send()
 
 
-def appointment_confirmation_patient(date, patient_email):
-    subject = 'Your appointments on fizjo-med has been correctly arranged'
-    message = f'You have been correctly arranged to visit for {DateTime.add_zero(date.hour)}:' \
-        f'{DateTime.add_zero(date.minute)} on day {DateTime.add_zero(date.day)}.' \
-        f'{DateTime.add_zero(date.month)}.{DateTime.add_zero(date.year)}. ' \
-        'If you want to cancel your visit, use the form on our website.'
-    email = EmailMessage(subject, message, to=[patient_email])
+def appointment_confirmation_patient(patient_name, office_name, date, patient_email):
+    subject = 'Fizjo-System - Umówiono Wizytę'
+    message = f'\nWitaj {patient_name},\n\n' \
+              f'Twoja wizyta umówiona na godzinę {DateTime.add_zero(date.hour)}:' \
+              f'{DateTime.add_zero(date.minute)} dnia {DateTime.add_zero(date.day)}.{DateTime.add_zero(date.month)}.' \
+              f'{DateTime.add_zero(date.year)} w gabinecie {office_name} oczekuje na potwierdzenie.\n' \
+              f'Potwierdzenie wizyty ze strony gabinetu otrzymasz w kolejnym mailu.\n\n' \
+              'Jeśli chcesz odwołać wizytę, skorzystaj z opcji odwołaj znajdującej się w panelu pacjenta.\n\n' \
+              'Fizjo-System'
+    email = EmailMessage(subject, message, to=['kacpersawicki321@gmail.com'])
     email.send()
 
 
@@ -41,6 +41,6 @@ def activation_email(user, current_site, user_email):
     })
     to_email = user_email
     email = EmailMessage(
-        subject, message, to=[to_email]
+        subject, message, to=['kacpersawicki321@gmail.com']
     )
     email.send()
