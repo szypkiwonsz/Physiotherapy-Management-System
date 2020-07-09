@@ -2,6 +2,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+
 from users.tokens import account_activation_token
 from utils.date_time import DateTime
 
@@ -9,11 +10,13 @@ from utils.date_time import DateTime
 def appointment_confirmation_office(office_name, name, date, office_email):
     subject = 'Appointment - {}'.format(office_name)
     message = '{} was appointed for {}:{} on day {}.{}.{}. ' \
-              'Confirm the visit in the admin panel.'.format(name, DateTime.add_zero(date.hour),
-                                                             DateTime.add_zero(date.minute),
-                                                             DateTime.add_zero(date.day),
-                                                             DateTime.add_zero(date.month),
-                                                             DateTime.add_zero(date.year))
+              'Confirm the visit in the admin panel.'.format(
+                    name, DateTime.add_zero(date.hour),
+                    DateTime.add_zero(date.minute),
+                    DateTime.add_zero(date.day),
+                    DateTime.add_zero(date.month),
+                    DateTime.add_zero(date.year)
+                )
     email = EmailMessage(subject, message, to=[office_email])
     email.send()
 
