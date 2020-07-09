@@ -16,6 +16,7 @@ class PatientHome(View):
         context = {
             'offices': Office.objects.filter(user__patients__email=self.request.user)[:5],
             'appointments': Appointment.objects.filter(owner=self.request.user).order_by('date')[:5],
-            'medical_histories': MedicalHistory.objects.filter(patient__email=self.request.user)[:5]
+            'medical_histories': MedicalHistory.objects.filter(patient__email=self.request.user).order_by(
+                '-date_selected')[:5]
         }
         return render(request, 'patient_panel/patient_home.html', context)
