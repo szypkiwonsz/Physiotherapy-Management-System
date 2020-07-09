@@ -11,7 +11,7 @@ class MedicalHistoryListView(View):
     template_name = 'patient_panel/patient_medical_history.html'
 
     def get_queryset(self):
-        queryset = MedicalHistory.objects.filter(patient__email=self.request.user)
+        queryset = MedicalHistory.objects.filter(patient__email=self.request.user).order_by('-date_selected')
         return queryset
 
     def get(self, request):
