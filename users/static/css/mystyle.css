@@ -4,27 +4,22 @@
     background-image: url(../img/massage-599532_1920.jpg);
     -webkit-box-shadow: 0px 0px 0px black;
     -moz-box-shadow: 0px 0px 0px black;
+    border-radius: 0 !important;
 }
 
-.help {
-    text-shadow: 2px 2px #555555;
-    border-style: solid;
-    border-radius: 5px;
-    border-width: 1px;
-    padding: 10px;
-    color: white;
-    font-weight: 100;
-    font-size: 2.5vw;
+#button-help {
+    position: absolute;
+    left: 40%;
+    width: 20%;
+    font-weight: bold;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
 }
 
-.centered-left {
-    text-shadow: 1px 1px #555555;
-    border-radius: 10px;
-    border-width: 1px;
-    padding: 30px;
+.title {
     color: white;
     font-weight: lighter;
-    font-size: 3vw;
+    font-size: 1.2vw;
 }
 
 .center-button {
@@ -44,15 +39,11 @@
     }
 
     .centered-left {
+        padding-top: 30px;
+        color: white;
+        font-weight: lighter;
+        font-size: 3.2vw;
         margin-top: 100px;
-    }
-
-    .help {
-        align-items: center;
-        margin-left: 500px;
-        margin-right: 500px;
-        margin-top: 200px;
-        font-size: 24px;
     }
 
     #image-patient {
@@ -61,6 +52,11 @@
         background-size: cover;
         height: 200px;
         background-image: url(../img/signup_choice.JPG);
+    }
+
+    #button-help {
+        margin-top: -66.5px;
+        font-size: 14px;
     }
 
     #image-office {
@@ -118,24 +114,27 @@
 
 @media screen and (max-width: 1000px) {
     .jumbotron {
-        min-height: 520px;
+        min-height: 320px;
     }
 
     .centered-left {
-        margin-top: 100px;
-        font-size: 24px;
+        color: white;
+        font-weight: lighter;
+        margin-top: 70px;
+        font-size: 22px;
     }
 
-    .help {
-        align-items: center;
-        margin-left: 100px;
-        margin-right: 100px;
-        margin-top: 100px;
-        font-size: 24px;
+    .title {
+        font-size: 14px;
     }
 
     h2 {
         font-size: 24px;
+    }
+
+    #button-help {
+        margin-top: -61.5px;
+        font-size: 10px;
     }
 
     #image-patient {
@@ -202,6 +201,10 @@
         margin-bottom: -10px;
         width: 100%;
     }
+
+    .msg-mobile {
+        margin-bottom: 5px;
+    }
 }
 
 #confirmed-color {
@@ -212,16 +215,23 @@
     color: red;
 }
 
-#messages-office {
-    margin-top: -37px;
-}
-
 .left-side {
     margin-left: -15px;
 }
 
 .textxd {
     padding: 200px;
+}
+
+#messages-office {
+    margin-top: -37px;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+#uslugi {
+    padding-left: 10%;
+    padding-right: 10%;
 }
 
 #footer {
