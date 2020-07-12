@@ -1,5 +1,20 @@
-body {
+body, html {
     overflow-x: hidden;
+    max-width: 100%;
+}
+
+@media screen and (min-width: 1000px) {
+    #sidebar-wrapper {
+        border-right-width: 1px;
+        border-right-style: solid;
+        border-right-color: lightgray;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    #sidebar-wrapper {
+        margin-top: -5px;
+    }
 }
 
 .btn:focus {
