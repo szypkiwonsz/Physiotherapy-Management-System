@@ -62,7 +62,7 @@ class MakeAppointment(CreateView):
         appointment.save()
         office_email = appointment.office.user.email
         patient_email = self.request.user.email
-        appointment_confirmation_office('Fizjo-Med', name, date, office_email)
-        appointment_confirmation_patient(date, patient_email)
+        appointment_confirmation_office(name, date, office_email)
+        appointment_confirmation_patient(name,  appointment.office.name, date, patient_email)
         messages.warning(self.request, 'Poprawnie umówiono wizytę, ale oczekuje ona na potwierdzenie.')
         return redirect('patient-appointment-upcoming')
