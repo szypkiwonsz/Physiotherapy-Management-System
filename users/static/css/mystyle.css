@@ -110,6 +110,13 @@
         margin-left: 20px;
         width: 31%;
     }
+
+    .center-office {
+        text-align: center;
+        color: whitesmoke;
+        margin-bottom: 160px;
+        margin-top: -184px;
+    }
 }
 
 @media screen and (max-width: 1000px) {
@@ -133,7 +140,7 @@
     }
 
     #button-help {
-        margin-top: -61.5px;
+        margin-top: -61px;
         font-size: 10px;
     }
 
@@ -205,6 +212,15 @@
     .msg-mobile {
         margin-bottom: 5px;
     }
+
+    .center-office {
+        font-size: 14px;
+        text-align: center;
+        color: whitesmoke;
+        margin-bottom: 14%;
+        margin-top: -21%;
+        position: relative;
+    }
 }
 
 #confirmed-color {
@@ -237,13 +253,6 @@
 #footer {
     border-bottom-style: solid;
     border-width: 1px;
-}
-
-.center-office {
-    text-align: center;
-    color: whitesmoke;
-    margin-bottom: 160px;
-    margin-top: -184px;
 }
 
 .container-office {
