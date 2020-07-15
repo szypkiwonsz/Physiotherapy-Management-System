@@ -2,18 +2,54 @@
     text-align: center;
     background-size: cover;
     background-image: url(../img/massage-599532_1920.jpg);
-    -webkit-box-shadow: 0px 0px 0px black;
-    -moz-box-shadow: 0px 0px 0px black;
-    border-radius: 0 !important;
+    /*-webkit-box-shadow: 0px 0px 0px black;*/
+    /*-moz-box-shadow: 0px 0px 0px black;*/
+    border-radius: 0 0 20px 20px;
+    overflow: hidden;
+    -webkit-box-shadow: 0px 10px 44px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: 10px 10px 100px 0px rgba(0,0,0,0.75);
+box-shadow: 0px 10px 30px 0px rgba(0,0,0,0.75);
+}
+
+footer {
+    background-color: lightgray;
+    padding: 7px;
+    margin-bottom: -60px;
+    margin-top: 5px;
+    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+    -webkit-box-shadow: 0px 10px 44px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: 10px 10px 100px 0px rgba(0,0,0,0.75);
+box-shadow: 0px 10px 50px 0px rgba(0, 0, 0, 0.26);
+}
+
+.main {
+    margin-top: 15px;
+}
+
+/*#behind-jumbotron {*/
+/*    background-color: lightgray;*/
+/*}*/
+
+.ml13 {
+  text-transform: uppercase;
+  /*letter-spacing: 0.5em;*/
+}
+
+.ml13 .letter {
+  display: inline-block;
+  line-height: 1em;
 }
 
 #button-help {
     position: absolute;
     left: 40%;
     width: 20%;
+    color: #e7e7e7;
     font-weight: bold;
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
+    background: #0092ed;
 }
 
 .title {
@@ -30,6 +66,20 @@
     border-color: lightgrey;
     text-align: center;
     margin: 10px;
+}
+
+#home-about {
+    margin-top: -32px;
+    padding: 50px 20px 20px 20px;
+    /*background-color: lightgray;*/
+}
+
+p{
+    font-size: 13px;
+}
+
+#hr-about {
+    background-color: rgba(53, 168, 246, 0.6);
 }
 
 
@@ -117,11 +167,21 @@
         margin-bottom: 160px;
         margin-top: -184px;
     }
+
+    #nav-title {
+        font-size: 20px;
+        /*font-family: 'Bellota Text', serif;*/
+    }
 }
 
 @media screen and (max-width: 1000px) {
     .jumbotron {
         min-height: 320px;
+    }
+
+    #nav-title {
+        font-size: 20px;
+        /*font-family: 'Bellota Text', serif;*/
     }
 
     .centered-left {
@@ -140,7 +200,7 @@
     }
 
     #button-help {
-        margin-top: -61px;
+        margin-top: -472px;
         font-size: 10px;
     }
 
