@@ -2,8 +2,6 @@
     text-align: center;
     background-size: cover;
     background-image: url(../img/massage-599532_1920.jpg);
-    /*-webkit-box-shadow: 0px 0px 0px black;*/
-    /*-moz-box-shadow: 0px 0px 0px black;*/
     border-radius: 0 0 20px 20px;
     overflow: hidden;
     -webkit-box-shadow: 0px 10px 44px 0px rgba(0, 0, 0, 0.75);
@@ -11,29 +9,12 @@
     box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.75);
 }
 
-footer {
-    /*background-color: lightgray;*/
-    padding: 7px;
-    margin-bottom: -60px;
-    margin-top: 5px;
-    /*border-radius: 20px 20px 0 0;*/
-    /*    overflow: hidden;*/
-    /*    -webkit-box-shadow: 0px 10px 44px 0px rgba(0,0,0,0.75);*/
-    /*-moz-box-shadow: 10px 10px 100px 0px rgba(0,0,0,0.75);*/
-    /*box-shadow: 0px 10px 50px 0px rgba(0, 0, 0, 0.26);*/
-}
-
 .main {
     margin-top: 15px;
 }
 
-/*#behind-jumbotron {*/
-/*    background-color: lightgray;*/
-/*}*/
-
 .ml13 {
     text-transform: uppercase;
-    /*letter-spacing: 0.5em;*/
 }
 
 .ml13 .letter {
@@ -41,21 +22,28 @@ footer {
     line-height: 1em;
 }
 
-#button-help {
-    position: absolute;
-    left: 40%;
-    width: 20%;
-    color: #e7e7e7;
-    font-weight: bold;
-    border-bottom-left-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-    background: #0092ed;
+.ml15 {
+    text-transform: uppercase;
+}
+
+.ml15 .letter {
+    display: inline-block;
+    line-height: 1em;
+}
+
+.ml17 {
+    text-transform: uppercase;
+}
+
+.ml17 .letter {
+    display: inline-block;
+    line-height: 1em;
 }
 
 .title {
     color: white;
     font-weight: lighter;
-    font-size: 1.2vw;
+    font-size: 18px;
 }
 
 .center-button {
@@ -68,38 +56,43 @@ footer {
     margin: 10px;
 }
 
-#home-about {
-    margin-top: -32px;
-    padding: 50px 20px 20px 20px;
-    /*background-color: lightgray;*/
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    overflow: hidden;
-    -webkit-box-shadow: 0px 10px 5px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 0px 10px 5px 0px rgba(0, 0, 0, 0.75);
-    box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.15);
-}
-
-p {
-    font-size: 13px;
-}
-
-#hr-about {
-    background-color: rgba(53, 168, 246, 0.6);
-}
-
-
 @media screen and (min-width: 1000px) {
     .jumbotron {
         min-height: 700px;
+    }
+
+    .about-title {
+        font-size: 28px;
+    }
+
+    .about-text {
+        font-size: 16px;
+    }
+
+    footer {
+        padding: 15px;
+        margin-bottom: -60px;
+        margin-top: 5px;
+    }
+
+    #hr-about {
+        background-color: rgba(53, 168, 246, 0.6);
+        height: 0.1px;
+    }
+
+    #home-about {
+        margin-top: -10px;
+        margin-left: 15%;
+        margin-right: 15%;
+        padding: 50px 20px 20px 20px;
     }
 
     .centered-left {
         padding-top: 30px;
         color: white;
         font-weight: lighter;
-        font-size: 3.2vw;
-        margin-top: 100px;
+        font-size: 48px;
+        margin-top: 130px;
     }
 
     #image-patient {
@@ -108,11 +101,6 @@ p {
         background-size: cover;
         height: 200px;
         background-image: url(../img/signup_choice.JPG);
-    }
-
-    #button-help {
-        margin-top: -66.5px;
-        font-size: 14px;
     }
 
     #image-office {
@@ -176,7 +164,6 @@ p {
 
     #nav-title {
         font-size: 20px;
-        /*font-family: 'Bellota Text', serif;*/
     }
 }
 
@@ -185,9 +172,28 @@ p {
         min-height: 320px;
     }
 
+    .about-text {
+        font-size: 13px;
+    }
+
+    footer {
+        padding: 7px;
+        margin-bottom: -60px;
+        margin-top: 0;
+    }
+
+    #hr-about {
+        background-color: rgba(53, 168, 246, 0.6);
+        height: 0.1px;
+    }
+
+    #home-about {
+        margin-top: -32px;
+        padding: 50px 20px 20px 20px;
+    }
+
     #nav-title {
         font-size: 20px;
-        /*font-family: 'Bellota Text', serif;*/
     }
 
     .centered-left {
@@ -203,11 +209,6 @@ p {
 
     h2 {
         font-size: 24px;
-    }
-
-    #button-help {
-        margin-top: -472px;
-        font-size: 10px;
     }
 
     #image-patient {
@@ -260,11 +261,9 @@ p {
     .offices-select-name {
         border-color: lightgrey;
         margin-top: 45px;
-        /*margin-left: 120px;*/
         border-radius: 5px;
         border-style: solid;
         border-width: 1px;
-        /*padding: 10px;*/
         color: black;
         text-align: center;
     }
