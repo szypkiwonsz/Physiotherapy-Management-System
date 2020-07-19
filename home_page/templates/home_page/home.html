@@ -4,10 +4,26 @@
     <title>Fizjo-System</title>
 {% endblock %}
 {% block content %}
-    <div class="jumbotron">
-        <div class="centered-left">SYSTEM DLA GABINETÓW <br>I PACJENTÓW FIZJIOTERAPII</div>
-        <a href="{% url 'help' %}">
-            <div class="help">?</div>
-        </a>
+    <div class="container-flex" id="behind-jumbotron">
+        <div class="jumbotron">
+            <div class="centered-left">SYSTEM DLA GABINETÓW I<br>PACJENTÓW FIZJOTERAPII</div>
+            <div class="title">FIZJO-SYSTEM</div>
+        </div>
     </div>
+    <div class="container-flex" id="home-about">
+        <h5 class="ml13 about-title">DODAWANIE PACJENTÓW</h5>
+        <p class="ml14 about-text">ZAREJESTRUJ SWÓJ GABINET I DODAWAJ PACJENTÓW DO SWOJEJ PRYWATNEJ BAZY DANYCH.</p>
+        <hr id="hr-about">
+        <h5 class="text-right mt-5 ml15 about-title">UMAWIANIE WIZYT</h5>
+        <p class="text-right ml16 about-text">JAKO PACJENT MOŻESZ UMAWIAĆ WIZYTY DO ZAREJESTROWANYCH GABINETÓW.</p>
+        <hr id="hr-about">
+        <h5 class="mt-5 ml17 about-title">HISTORIA LECZENIA</h5>
+        <p class="ml18 about-text">PODAJ SWÓJ ADRES EMAIL PODCZAS WIZYTY, ABY MIEĆ WGLĄD DO SWOJEJ DOKUMENTACJI
+            MEDYCZNEJ.</p>
+        <hr id="hr-about">
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static "js/falling_letters.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/moving_letters.js" %}"></script>
 {% endblock %}
