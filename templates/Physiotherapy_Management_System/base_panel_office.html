@@ -21,7 +21,7 @@
 </head>
 <body>
 <!--Navbar-->
-<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+<nav class="navbar navbar-expand-lg navbar-dark primary-color msg-mobile">
 
     <!-- Navbar brand -->
     <a class="navbar-brand" href="{% url 'home' %}">Fizjo-System</a>
@@ -64,7 +64,7 @@
 <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
-    <div class="bg-light border-right" id="sidebar-wrapper">
+    <div class="bg-light" id="sidebar-wrapper">
         {#      <div class="sidebar-heading">Start Bootstrap </div>#}
         <div class="list-group list-group-flush">
             <a href="{% url 'office-home' %}" class="list-group-item list-group-item-action bg-light">Panel Główny</a>
@@ -89,10 +89,9 @@
                         class="navbar-toggler-icon my-toggler bg-light"></span></button>
             {% endif %}
             {% if messages %}
+
+
                 <div class="container" id="messages-office">
-
-
-                <div class="container" id="uslugi">
                     {% for message in messages %}
                         <div class="alert alert-{{ message.tags }} text-center">
                             {{ message }}
@@ -100,16 +99,16 @@
                     {% endfor %}
                 </div>
             {% endif %}
-            </div>
-            {% block content %}{% endblock content %}
-            <footer>
-                <p class="main">
-                    2020 © JK Sawicki | Wszystkie prawa zastrzeżone
-                </p>
-            </footer>
         </div>
+        {% block content %}{% endblock content %}
+        <footer>
+            <p class="main">
+                2020 © JK Sawicki | Wszystkie prawa zastrzeżone
+            </p>
+        </footer>
     </div>
-    <!-- /#page-content-wrapper -->
+</div>
+<!-- /#page-content-wrapper -->
 
 </div>
 <!-- /#wrapper -->
