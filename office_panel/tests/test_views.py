@@ -389,7 +389,7 @@ class TestPatientViews(TestCase):
         })
         office_patient2 = Patient.objects.get(id=2)
         self.assertEquals(response.status_code, 302)
-        self.assertEquals(office_patient2.first_name, 'firstname')
+        self.assertEquals(office_patient2.first_name, 'Firstname')
 
     def test_patient_detail_GET_no_logged_in(self):
         response = self.client.get(self.detail_patient_url)
