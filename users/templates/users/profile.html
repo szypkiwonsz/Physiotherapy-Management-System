@@ -9,30 +9,30 @@
         <div class="form">
             <h2>Twój Profil</h2>
             <hr>
-            </div>
+        </div>
     </div>
-            <div class="container border rounded bg-light mb-3 pt-2">
-                <img class="mt-1 rounded-circle avatar p-2 border border-secondary" src="{{ user.profile.image.url }}">
-                <div class="mt-2">{{ user.email }}</div>
-                <hr>
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="csrfmiddlewaretoken" value="pHK2CZzBB323BM2Nq7DE2sxnQoBG1jPl"
-                           disabled="">
-                    {{ p_form|crispy }}
-            </div>
-            <div class="container border rounded bg-light p-3 mb-3">
-                {{ o_form|crispy }}
-                <button type="submit" class="btn btn-success">Zmień</button>
-            </div>
-            <div class="container border rounded bg-light p-3 mb-3">
-                {{ u_form|crispy }}
-                <button type="submit" class="btn btn-success">Zmień</button>
-            </div>
-            <div class="container border rounded bg-light p-3">
-                Hasło
-                <hr>
-                <span class="p-2">Aby zmienić hasło, skorzystaj z formularza - zapomniałem hasła, dostępnego na stronie logowania.</span>
-            </div>
+    <div class="container border rounded bg-light mb-3 pt-2">
+        <img class="mt-1 rounded-circle avatar p-2 border border-secondary" src="{{ user.profile.image.url }}">
+        <div class="mt-2">{{ user.email }}</div>
+        <hr>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="csrfmiddlewaretoken" value="pHK2CZzBB323BM2Nq7DE2sxnQoBG1jPl"
+                   disabled="">
+            {{ p_form|crispy }}
+    </div>
+    <div class="container border rounded bg-light p-3 mb-3">
+        {{ o_form|crispy }}
+        <button type="submit" class="btn btn-success">Zmień</button>
+    </div>
+    <div class="container border rounded bg-light p-3 mb-3">
+        {{ u_form|crispy }}
+        <button type="submit" class="btn btn-success">Zmień</button>
+    </div>
+    <div class="container border rounded bg-light p-3">
+        Hasło
+        <hr>
+        <span class="p-2">Aby zmienić hasło, skorzystaj z formularza - zapomniałem hasła, dostępnego na stronie logowania.</span>
+    </div>
 
 {% endblock content %}
