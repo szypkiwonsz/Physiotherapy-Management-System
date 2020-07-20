@@ -36,6 +36,11 @@ class Patient(models.Model):
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
+    def save(self, *args, **kwargs):
+        self.first_name = self.first_name.capitalize()
+        self.last_name = self.last_name.capitalize()
+        super(Patient, self).save(*args, **kwargs)
+
 
 class Office(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
