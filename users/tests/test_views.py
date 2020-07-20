@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from users.models import User, Profile, Office
+from users.models import User, Profile, Office, UserPatient
 
 
 class TestLoginViews(TestCase):
@@ -85,6 +85,9 @@ class TestProfileViews(TestCase):
             phone_number='000000000',
             website='www.website.com'
         )
+        self.patient_user_patient1 = UserPatient.objects.create(
+            user=self.patient1
+        )
 
     def test_office_profile_GET_not_logged_in(self):
         response = self.client.get(self.office_profile_url)
@@ -102,3 +105,45 @@ class TestProfileViews(TestCase):
         response = self.client.get(self.office_profile_url)
 
         self.assertEquals(response.status_code, 200)
+
+    def test_office_profile_POST(self):
+        self.client.login(username='office@gmail.com', password='officepassword')
+        url = reverse('profile-office')
+        response = self.client.post(url, {
+            'name': self.office_user_office1.name,
+            'address': self.office_user_office1.address,
+            'city': self.office_user_office1.city,
+            'phone_number': self.office_user_office1.phone_number,
+            'website': 'www.newwebsite.com',
+            'email': self.office_user_office1.user.email
+        })
+        office_update = User.objects.get(id=2)
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(office_update.office.website, 'www.newwebsite.com')
+
+    def test_patient_profile_GET_not_logged_in(self):
+        response = self.client.get(self.patient_profile_url)
+
+        self.assertEquals(response.status_code, 302)
+
+    def test_patient_profile_GET_logged_as_patient(self):
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        response = self.client.get(self.patient_profile_url)
+
+        self.assertEquals(response.status_code, 200)
+
+    def test_patient_profile_GET_logged_as_office(self):
+        self.client.login(username='office@gmail.com', password='officepassword')
+        response = self.client.get(self.patient_profile_url)
+
+        self.assertEquals(response.status_code, 302)
+
+    def test_patient_profile_POST(self):
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        url = reverse('profile-patient')
+        response = self.client.post(url, {
+            'email': 'newpatientemail@gmail.com'
+        })
+        patient_update = User.objects.get(id=1)
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(patient_update.email, 'newpatientemail@gmail.com')
