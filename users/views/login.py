@@ -1,10 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
-from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_protect
+
 from users.forms import LoginForm
 
 csrf_protected_method = method_decorator(csrf_protect)
