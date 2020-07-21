@@ -28,11 +28,15 @@ class RegisterPatient(CreateView, SignUp):
     form_class = PatientSignUpForm
     template_name = 'users/signup_patient.html'
 
-    def form_valid(self, form):
-        user = self.user_save(form, is_patient=True)
+    @staticmethod
+    def create_patient(form, user):
         user_patient = UserPatient.objects.create(user=user)
         user_patient.phone_number = form.cleaned_data.get('phone_number')
         user_patient.save()
+
+    def form_valid(self, form):
+        user = self.user_save(form, is_patient=True)
+        self.create_patient(form, user)
         current_site = get_current_site(self.request)
         patient_email = form.cleaned_data.get('email')
         activation_email(user, current_site, patient_email)
@@ -44,13 +48,17 @@ class RegisterOffice(CreateView, SignUp):
     form_class = OfficeSignUpForm
     template_name = 'users/signup_office.html'
 
-    def form_valid(self, form):
-        user = self.user_save(form, is_office=True)
+    @staticmethod
+    def create_office(form, user):
         office = Office.objects.create(user=user)
         office.name = form.cleaned_data.get('name')
         office.address = form.cleaned_data.get('address')
         office.city = form.cleaned_data.get('city')
         office.save()
+
+    def form_valid(self, form):
+        user = self.user_save(form, is_office=True)
+        self.create_office(form, user)
         current_site = get_current_site(self.request)
         office_email = form.cleaned_data.get('email')
         activation_email(user, current_site, office_email)
