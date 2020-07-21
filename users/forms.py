@@ -1,9 +1,11 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import SetPasswordForm
 from django.utils.translation import gettext as _
+
+from office_panel.models import Patient
 from users.widgets import MyClearableFileInput
-from .models import User, Patient, Profile, Office, UserPatient
+from .models import User, Profile, Office, UserPatient
 
 
 class LoginForm(AuthenticationForm):
