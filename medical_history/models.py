@@ -1,8 +1,9 @@
 from django.db import models
 from django.utils import timezone
 
-from users.models import User, Patient
 from appointments.models import Appointment
+from office_panel.models import Patient
+from users.models import User
 
 
 # Create your models here.
@@ -13,4 +14,3 @@ class MedicalHistory(models.Model):
     description = models.TextField()
     recommendations = models.TextField()
     date_selected = models.DateTimeField(default=timezone.now)
-
