@@ -6,7 +6,8 @@ from django.utils import timezone
 
 from appointments.models import Appointment
 from medical_history.models import MedicalHistory
-from users.models import User, Patient, Office
+from office_panel.models import Patient
+from users.models import User, Office
 
 
 class TestAppointmentViews(TestCase):
