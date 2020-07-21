@@ -1,7 +1,10 @@
+import random
+
 from django.db import models
 from django.utils import timezone
-from users.models import User, Patient, Office
-import random
+
+from office_panel.models import Patient
+from users.models import User, Office
 
 
 def random_string():
