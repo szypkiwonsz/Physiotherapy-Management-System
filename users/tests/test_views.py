@@ -93,18 +93,21 @@ class TestProfileViews(TestCase):
         response = self.client.get(self.office_profile_url)
 
         self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed('users/profile.html')
 
     def test_office_profile_GET_logged_as_patient(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.get(self.office_profile_url)
 
         self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed('users/profile.html')
 
     def test_office_profile_GET_logged_as_office(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.get(self.office_profile_url)
 
         self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('users/profile.html')
 
     def test_office_profile_POST(self):
         self.client.login(username='office@gmail.com', password='officepassword')
@@ -125,18 +128,21 @@ class TestProfileViews(TestCase):
         response = self.client.get(self.patient_profile_url)
 
         self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed('users/profile.html')
 
     def test_patient_profile_GET_logged_as_patient(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.get(self.patient_profile_url)
 
         self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('users/profile.html')
 
     def test_patient_profile_GET_logged_as_office(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.get(self.patient_profile_url)
 
         self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed('users/profile.html')
 
     def test_patient_profile_POST(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
@@ -147,3 +153,95 @@ class TestProfileViews(TestCase):
         patient_update = User.objects.get(id=1)
         self.assertEquals(response.status_code, 302)
         self.assertEquals(patient_update.email, 'newpatientemail@gmail.com')
+
+
+class TestSignupViews(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.signup_url = reverse('signup')
+        self.office_signup_url = reverse('office-signup')
+        self.patient_signup_url = reverse('patient-signup')
+
+    def test_register_GET_not_logged_in(self):
+        response = self.client.get(self.signup_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('users/signup.html')
+
+    def test_register_GET_logged_as_patient(self):
+        response = self.client.get(self.signup_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('users/signup.html')
+
+    def test_register_GET_logged_as_office(self):
+        response = self.client.get(self.signup_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('users/signup.html')
+
+    def test_register_office_GET_not_logged_in(self):
+        response = self.client.get(self.office_signup_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('users/signup_office.html')
+
+    def test_register_office_GET_logged_as_patient(self):
+        response = self.client.get(self.office_signup_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('users/signup_office.html')
+
+    def test_register_office_GET_logged_as_office(self):
+        response = self.client.get(self.office_signup_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('users/signup_office.html')
+
+    def test_register_office_POST(self):
+        url = reverse('office-signup')
+        response = self.client.post(url, {
+            'name': 'name',
+            'address': 'address',
+            'city': 'city',
+            'phone_number': '000000000',
+            'email': 'random_office_email@gmail.com',
+            'confirm_email': 'random_office_email@gmail.com',
+            'password1': 'random_password',
+            'password2': 'random_password'
+        })
+        office_user = User.objects.get(id=1)
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(office_user.email, 'random_office_email@gmail.com')
+        self.assertEquals(office_user.office.name, 'name')
+
+    def test_register_patient_GET_not_logged_in(self):
+        response = self.client.get(self.patient_signup_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('users/signup_patient.html')
+
+    def test_register_patient_GET_logged_as_patient(self):
+        response = self.client.get(self.patient_signup_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('users/signup_patient.html')
+
+    def test_register_patient_GET_logged_as_office(self):
+        response = self.client.get(self.patient_signup_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('users/signup_patient.html')
+
+    def test_register_patient_POST(self):
+        url = reverse('patient-signup')
+        response = self.client.post(url, {
+            'email': 'random_patient_email@gmail.com',
+            'confirm_email': 'random_patient_email@gmail.com',
+            'password1': 'random_password',
+            'password2': 'random_password'
+        })
+        patient_user = User.objects.get(id=1)
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(patient_user.email, 'random_patient_email@gmail.com')
