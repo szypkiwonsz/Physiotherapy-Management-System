@@ -7,9 +7,9 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, View, UpdateView, DeleteView, DetailView
 
+from office_panel.models import Patient
 from users.decorators import office_required
 from users.forms import PatientForm
-from users.models import Patient
 
 
 @method_decorator([login_required, office_required], name='dispatch')
