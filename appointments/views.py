@@ -1,33 +1,34 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView
-from .forms import AppointmentForm
-from .models import Appointment
-from users.decorators import patient_required
 from django.views import View
+from django.views.generic import CreateView
+
+from users.decorators import patient_required
 from users.models import Office
 from utils.send_email import appointment_confirmation_patient, appointment_confirmation_office
+from .forms import AppointmentForm
+from .models import Appointment
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class SelectOffice(View):
     model = Office
-    template_name = 'appointment/appointment_select_office.html'
+    template_name = 'appointments/patient_appointment_select_office.html'
 
     @staticmethod
     def get(request):
         context = {
             'offices': Office.objects.all()
         }
-        return render(request, 'appointments/appointment_select_office.html', context)
+        return render(request, 'appointments/patient_appointment_select_office.html', context)
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class MakeAppointment(CreateView):
     form_class = AppointmentForm
-    template_name = 'appointments/appointment_make_form.html'
+    template_name = 'appointments/patient_appointment_make_form.html'
 
     def form_valid(self, form):
         date = form.cleaned_data.get('date')
@@ -52,7 +53,7 @@ class MakeAppointment(CreateView):
                 if date == i.date:
                     messages.warning(
                         self.request, f'Wybrana data {date.day}.{date.month}.{date.year} {date.hour}:00 '
-                        f'jest już zajęta.'
+                                      f'jest już zajęta.'
                     )
                     return redirect('appointments-make-appointment', id_office)
         appointment = form.save(commit=False)
@@ -63,6 +64,6 @@ class MakeAppointment(CreateView):
         office_email = appointment.office.user.email
         patient_email = self.request.user.email
         appointment_confirmation_office(name, date, office_email)
-        appointment_confirmation_patient(name,  appointment.office.name, date, patient_email)
+        appointment_confirmation_patient(name, appointment.office.name, date, patient_email)
         messages.warning(self.request, 'Poprawnie umówiono wizytę, ale oczekuje ona na potwierdzenie.')
         return redirect('patient-appointment-upcoming')
