@@ -21,13 +21,13 @@ class SelectOffice(View):
         context = {
             'offices': Office.objects.all()
         }
-        return render(request, 'appointment/appointment_select_office.html', context)
+        return render(request, 'appointments/appointment_select_office.html', context)
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class MakeAppointment(CreateView):
     form_class = AppointmentForm
-    template_name = 'appointment/appointment_make_form.html'
+    template_name = 'appointments/appointment_make_form.html'
 
     def form_valid(self, form):
         date = form.cleaned_data.get('date')
