@@ -18,7 +18,7 @@ from users.decorators import office_required
 @method_decorator([login_required, office_required], name='dispatch')
 class AppointmentListView(View):
     model = Appointment
-    template_name = 'office_panel/office_appointments.html'
+    template_name = 'appointments/office_appointments.html'
 
     def get(self, request):
         url_parameter = request.GET.get('q')
@@ -34,19 +34,19 @@ class AppointmentListView(View):
 
         if request.is_ajax():
             html = render_to_string(
-                template_name='office_panel/office_appointments_results_partial.html',
+                template_name='appointments/office_appointments_results_partial.html',
                 context=ctx
             )
             data_dict = {"html_from_view": html}
             return JsonResponse(data=data_dict, safe=False)
 
-        return render(request, 'office_panel/office_appointments.html', ctx)
+        return render(request, self.template_name, ctx)
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class AppointmentUpdateView(UpdateView):
     form_class = AppointmentOfficeUpdateForm
-    template_name = 'appointments/appointment_update_form.html'
+    template_name = 'appointments/office_appointment_update_form.html'
 
     @staticmethod
     def parse_db_time_string(time_string):
@@ -70,7 +70,7 @@ class AppointmentUpdateView(UpdateView):
 @method_decorator([login_required, office_required], name='dispatch')
 class AppointmentDeleteView(DeleteView):
     model = Appointment
-    template_name = 'appointments/appointment_delete_confirm.html'
+    template_name = 'appointments/office_appointment_delete_confirm.html'
     success_url = reverse_lazy('office-appointments')
 
     def delete(self, request, *args, **kwargs):
