@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -7,8 +8,9 @@ from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DeleteView, UpdateView
-from appointments.models import Appointment
+
 from appointments.forms import AppointmentForm
+from appointments.models import Appointment
 from users.decorators import patient_required
 
 
@@ -26,13 +28,13 @@ class AppointmentListView(View):
         context = {
             'appointments': self.get_queryset(),
         }
-        return render(request, 'patient_panel/appointments_upcoming.html', context)
+        return render(request, 'appointments/patient_appointments_upcoming.html', context)
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class OldAppointmentListView(View):
     model = Appointment
-    template_name = 'patient_panel/appointments_old.html'
+    template_name = 'appointments/patient_appointments_old.html'
 
     def get_queryset(self):
         queryset = self.request.user.appointments.select_related('owner').order_by('date') \
@@ -43,13 +45,13 @@ class OldAppointmentListView(View):
         context = {
             'appointments': self.get_queryset(),
         }
-        return render(request, 'patient_panel/appointments_old.html', context)
+        return render(request, 'appointments/patient_appointments_old.html', context)
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class AppointmentCancelView(DeleteView):
     model = Appointment
-    template_name = 'patient_panel/appointment_cancel_confirm.html'
+    template_name = 'appointments/patient_appointment_cancel_confirm.html'
     success_url = reverse_lazy('patient-appointment-upcoming')
 
     def delete(self, request, *args, **kwargs):
@@ -64,7 +66,7 @@ class AppointmentCancelView(DeleteView):
 @method_decorator([login_required, patient_required], name='dispatch')
 class AppointmentUpdateView(UpdateView):
     form_class = AppointmentForm
-    template_name = 'patient_panel/appointment_update_form.html'
+    template_name = 'appointments/patient_appointment_update_form.html'
 
     @staticmethod
     def parse_db_time_string(time_string):
