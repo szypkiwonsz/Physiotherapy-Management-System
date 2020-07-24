@@ -1,25 +1,27 @@
 from django import forms
+from django.utils.translation import gettext as _
 
 from Physiotherapy_Management_System import settings
 from .models import Appointment
 
 
-class AppointmentForm(forms.ModelForm):
+class AppointmentPatientMakeForm(forms.ModelForm):
     date = forms.DateTimeField(
         label='Data wizyty:',
         input_formats=settings.DATE_INPUT_FORMATS,
         widget=forms.TextInput(attrs={'autocomplete': 'off'})
     )
     name = forms.CharField(label='Imię')
-    phone_number = forms.CharField(label='Numer telefonu')
-    choice = ['Konsultacja', 'Terapia manualna i indywidualna', 'Masaż', 'Fala uderzeniowa']
-
+    phone_number = forms.CharField(label='Numer telefonu', min_length=9, error_messages={
+        'min_length': _('Numer powinien zawierać 9 cyfr.'),
+    })
+    choices = ['Konsultacja', 'Terapia manualna i indywidualna', 'Masaż', 'Fala uderzeniowa']
     choice = forms.ChoiceField(
         label='Usługa',
-        choices=[(choice[0], choice[0]),
-                 (choice[1], choice[1]),
-                 (choice[2], choice[2]),
-                 (choice[3], choice[3])]
+        choices=[(choices[0], choices[0]),
+                 (choices[1], choices[1]),
+                 (choices[2], choices[2]),
+                 (choices[3], choices[3])]
     )
 
     class Meta:
@@ -33,12 +35,8 @@ class AppointmentOfficeUpdateForm(forms.ModelForm):
         input_formats=settings.DATE_INPUT_FORMATS,
         widget=forms.TextInput(attrs={'autocomplete': 'off'})
     )
-    confirmed = forms.BooleanField(required=False)
+    confirmed = forms.BooleanField(required=False, label='Potwierdzona')
 
     class Meta:
         model = Appointment
         fields = ['date', 'confirmed']
-
-
-class AppointmentCancel(forms.Form):
-    key = forms.CharField(label='Podaj numer wizyty aby potwierdzić odwołanie wizyty.')
