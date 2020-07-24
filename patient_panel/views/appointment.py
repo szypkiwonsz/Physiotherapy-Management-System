@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DeleteView, UpdateView
 
-from appointments.forms import AppointmentForm
+from appointments.forms import AppointmentPatientMakeForm
 from appointments.models import Appointment
 from users.decorators import patient_required
 
@@ -65,7 +65,7 @@ class AppointmentCancelView(DeleteView):
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class AppointmentUpdateView(UpdateView):
-    form_class = AppointmentForm
+    form_class = AppointmentPatientMakeForm
     template_name = 'appointments/patient_appointment_update_form.html'
 
     @staticmethod
