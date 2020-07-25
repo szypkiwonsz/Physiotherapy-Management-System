@@ -33,41 +33,41 @@ class TestViews(TestCase):
         response = self.client.get(self.select_office_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'appointments/patient_appointment_select_office.html')
+        self.assertTemplateNotUsed(response, 'appointments/patient/appointment_select_office.html')
 
     def test_select_office_GET_logged_as_patient(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.get(self.select_office_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'appointments/patient_appointment_select_office.html')
+        self.assertTemplateUsed(response, 'appointments/patient/appointment_select_office.html')
 
     def test_select_office_GET_logged_as_office(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.get(self.select_office_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'appointments/patient_appointment_select_office.html')
+        self.assertTemplateNotUsed(response, 'appointments/patient/appointment_select_office.html')
 
     def test_make_appointment_create_GET_not_logged_in(self):
         response = self.client.get(self.make_appointment_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'appointments/patient_appointment_make_form.html')
+        self.assertTemplateNotUsed(response, 'appointments/patient/appointment_make_form.html')
 
     def test_make_appointment_create_GET_logged_as_patient(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.get(self.make_appointment_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'appointments/patient_appointment_make_form.html')
+        self.assertTemplateUsed(response, 'appointments/patient/appointment_make_form.html')
 
     def test_make_appointment_create_GET_logged_as_office(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.get(self.make_appointment_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'appointments/patient_appointment_make_form.html')
+        self.assertTemplateNotUsed(response, 'appointments/patient/appointment_make_form.html')
 
     def test_make_appointment_create_POST(self):
         url = reverse('appointments-make-appointment', args=[1])
