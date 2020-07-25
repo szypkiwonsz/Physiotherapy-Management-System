@@ -28,7 +28,7 @@ class AppointmentListView(View):
         context = {
             'appointments': self.get_queryset(),
         }
-        return render(request, 'appointments/patient_appointments_upcoming.html', context)
+        return render(request, 'appointments/patient/appointments_upcoming.html', context)
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
@@ -45,13 +45,13 @@ class OldAppointmentListView(View):
         context = {
             'appointments': self.get_queryset(),
         }
-        return render(request, 'appointments/patient_appointments_old.html', context)
+        return render(request, 'appointments/patient/appointments_old.html', context)
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class AppointmentCancelView(DeleteView):
     model = Appointment
-    template_name = 'appointments/patient_appointment_cancel_confirm.html'
+    template_name = 'appointments/patient/appointment_cancel_confirm.html'
     success_url = reverse_lazy('patient-appointment-upcoming')
 
     def delete(self, request, *args, **kwargs):
@@ -66,7 +66,7 @@ class AppointmentCancelView(DeleteView):
 @method_decorator([login_required, patient_required], name='dispatch')
 class AppointmentUpdateView(UpdateView):
     form_class = AppointmentPatientMakeForm
-    template_name = 'appointments/patient_appointment_update_form.html'
+    template_name = 'appointments/patient/appointment_update_form.html'
 
     @staticmethod
     def parse_db_time_string(time_string):
