@@ -15,7 +15,7 @@ from .models import Appointment
 @method_decorator([login_required, patient_required], name='dispatch')
 class SelectOffice(View):
     model = Office
-    template_name = 'appointments/patient_appointment_select_office.html'
+    template_name = 'appointments/patient/appointment_select_office.html'
 
     def get(self, request):
         context = {
@@ -27,7 +27,7 @@ class SelectOffice(View):
 @method_decorator([login_required, patient_required], name='dispatch')
 class MakeAppointment(CreateView):
     form_class = AppointmentPatientMakeForm
-    template_name = 'appointments/patient_appointment_make_form.html'
+    template_name = 'appointments/patient/appointment_make_form.html'
 
     def get_owner_id(self):
         return self.request.user.id
