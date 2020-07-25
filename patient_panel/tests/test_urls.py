@@ -1,24 +1,6 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from patient_panel.views import home, appointment, offices, medical_history
-
-
-class TestPatientAppointmentUrls(SimpleTestCase):
-    def test_appointment_list_url_resolves(self):
-        url = reverse('patient-appointment-upcoming')
-        self.assertEquals(resolve(url).func.view_class, appointment.AppointmentListView)
-
-    def test_old_appointment_list_url_resolves(self):
-        url = reverse('patient-appointment-old')
-        self.assertEquals(resolve(url).func.view_class, appointment.OldAppointmentListView)
-
-    def test_appointment_update_url_resolves(self):
-        url = reverse('patient-appointment-change', args=[1])
-        self.assertEquals(resolve(url).func.view_class, appointment.AppointmentUpdateView)
-
-    def test_appointment_cancel_url_resolves(self):
-        url = reverse('patient-appointment-cancel', args=[1])
-        self.assertEquals(resolve(url).func.view_class, appointment.AppointmentCancelView)
+from patient_panel.views import home, offices, medical_history
 
 
 class TestPatientHomeUrls(SimpleTestCase):
