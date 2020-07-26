@@ -2,8 +2,8 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView, UpdateView, CreateView, ListView
@@ -11,7 +11,7 @@ from django.views.generic import DeleteView, UpdateView, CreateView, ListView
 from appointments.forms import AppointmentPatientMakeForm
 from appointments.models import Appointment
 from users.decorators import patient_required
-from users.models import Office
+from users.models import Office, User
 from utils.send_email import appointment_confirmation_patient, appointment_confirmation_office
 
 
@@ -26,6 +26,15 @@ class SelectOffice(ListView):
 class MakeAppointment(CreateView):
     form_class = AppointmentPatientMakeForm
     template_name = 'appointments/patient/appointment_make_form.html'
+
+    def get(self, request, *args, **kwargs):
+        id_office = self.get_office_id()
+        user = User.objects.get(id=id_office)
+        if user.is_patient:
+            return HttpResponse(status=404)
+        else:
+            context = {'form': self.form_class}
+            return render(request, self.template_name, context)
 
     def get_owner_id(self):
         return self.request.user.id
