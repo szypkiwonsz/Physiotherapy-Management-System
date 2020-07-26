@@ -12,7 +12,7 @@ from users.decorators import office_required
 @method_decorator([login_required, office_required], name='dispatch')
 class OfficePanelView(View):
     model = Patient
-    template_name = 'office_panel/office_home.html'
+    template_name = 'office_panel/home.html'
 
     def get(self, request):
         context = {
@@ -21,4 +21,4 @@ class OfficePanelView(View):
             'medical_histories': MedicalHistory.objects.filter(owner=self.request.user.id).order_by(
                 '-date_selected')[:5]
         }
-        return render(request, 'office_panel/office_home.html', context)
+        return render(request, self.template_name, context)

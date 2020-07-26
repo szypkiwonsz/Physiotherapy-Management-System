@@ -15,7 +15,7 @@ from users.forms import PatientForm
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientListView(View):
     form_class = PatientForm
-    template_name = 'office_panel/office_patients.html'
+    template_name = 'office_panel/patient/patients.html'
 
     def get_queryset(self):
         queryset = self.request.user.patients.select_related('owner')
@@ -34,19 +34,19 @@ class PatientListView(View):
 
         if request.is_ajax():
             html = render_to_string(
-                template_name='office_panel/office_patients_results_partial.html',
+                template_name='office_panel/patient/patients_results_partial.html',
                 context=ctx
             )
             data_dict = {"html_from_view": html}
             return JsonResponse(data=data_dict, safe=False)
 
-        return render(request, 'office_panel/office_patients.html', ctx)
+        return render(request, self.template_name, ctx)
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientCreateView(CreateView):
     form_class = PatientForm
-    template_name = 'office_panel/patient_add_form.html'
+    template_name = 'office_panel/patient/patient_add_form.html'
 
     def form_valid(self, form):
         patient = form.save(commit=False)
@@ -59,7 +59,7 @@ class PatientCreateView(CreateView):
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientDetailView(DetailView):
     form_class = PatientForm
-    template_name = 'office_panel/patient_detail_form.html'
+    template_name = 'office_panel/patient/patient_detail_form.html'
 
     def get_queryset(self):
         patients = Patient.objects.all()
@@ -72,7 +72,7 @@ class PatientDetailView(DetailView):
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientUpdateView(UpdateView):
     form_class = PatientForm
-    template_name = 'office_panel/patient_update_form.html'
+    template_name = 'office_panel/patient/patient_update_form.html'
 
     def get_queryset(self):
         return self.request.user.patients.all()
@@ -84,7 +84,7 @@ class PatientUpdateView(UpdateView):
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientDeleteView(DeleteView):
     form_class = PatientForm
-    template_name = 'office_panel/patient_delete_confirm.html'
+    template_name = 'office_panel/patient/patient_delete_confirm.html'
     success_url = reverse_lazy('office-patients')
 
     def delete(self, request, *args, **kwargs):
