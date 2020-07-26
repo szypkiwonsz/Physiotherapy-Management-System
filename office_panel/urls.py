@@ -1,6 +1,5 @@
-from django.urls import path
-from office_panel.views import home, patient, medical_history
-from appointments.views import office
+from django.urls import path, include
+from office_panel.views import home, patient
 
 urlpatterns = [
     path('', home.OfficePanelView.as_view(), name='office-home'),
@@ -9,12 +8,6 @@ urlpatterns = [
     path('patients/<int:pk>/', patient.PatientDetailView.as_view(), name='office-patient-detail'),
     path('patients/<int:pk>/update/', patient.PatientUpdateView.as_view(), name='office-patient-change'),
     path('patients/<int:pk>/delete/', patient.PatientDeleteView.as_view(), name='office-patient-delete-confirm'),
-    path('medical_history/', medical_history.MedicalHistoryListView.as_view(), name='office-medical-history'),
-    path('medical_history/<int:pk>/', medical_history.MedicalHistoryDetailView.as_view(),
-         name='office-medical-history-detail'),
-    path('medical_history/add/', medical_history.MakeMedicalHistory.as_view(), name='office-make-medical-history'),
-    path('medical_history/<int:pk>/update/', medical_history.MedicalHistoryUpdateView.as_view(),
-         name='office-medical-history-change'),
-    path('medical_history/<int:pk>/delete/', medical_history.MedicalHistoryDeleteView.as_view(),
-         name='office-medical-history-delete')
+    path('medical_history/', include('medical_history.urls.office')),
+    path('appointments/', include('appointments.urls.office')),
 ]
