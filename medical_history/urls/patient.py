@@ -1,4 +1,5 @@
 from django.urls import path
+
 from medical_history.views import patient
 
 urlpatterns = [

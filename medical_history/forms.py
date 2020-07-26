@@ -1,6 +1,7 @@
 from django import forms
-from .models import MedicalHistory
+
 from appointments.models import Appointment
+from .models import MedicalHistory
 
 
 class MedicalHistoryForm(forms.ModelForm):
