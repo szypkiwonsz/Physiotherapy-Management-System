@@ -1,8 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from django.utils import timezone
 
-from medical_history.models import MedicalHistory
 from office_panel.models import Patient
 from users.models import User
 
@@ -23,21 +21,21 @@ class TestHomeViews(TestCase):
         response = self.client.get(self.office_home_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'office_panel/office_home.html')
+        self.assertTemplateNotUsed(response, 'office_panel/home.html')
 
     def test_office_home_GET_logged_as_patient(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.get(self.office_home_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'office_panel/office_home.html')
+        self.assertTemplateNotUsed(response, 'office_panel/home.html')
 
     def test_office_home_GET_logged_as_office(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.get(self.office_home_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'office_panel/office_home.html')
+        self.assertTemplateUsed(response, 'office_panel/home.html')
 
 
 class TestPatientViews(TestCase):
@@ -65,41 +63,41 @@ class TestPatientViews(TestCase):
         response = self.client.get(self.patient_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'office_panel/office_patients.html')
+        self.assertTemplateNotUsed(response, 'office_panel/patient/patients.html')
 
     def test_patient_list_GET_logged_as_patient(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.get(self.patient_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'office_panel/office_patients.html')
+        self.assertTemplateNotUsed(response, 'office_panel/patient/patients.html')
 
     def test_patient_list_GET_logged_as_office(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.get(self.patient_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'office_panel/office_patients.html')
+        self.assertTemplateUsed(response, 'office_panel/patient/patients.html')
 
     def test_patient_create_GET_not_logged_in(self):
         response = self.client.get(self.create_patient_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'office_panel/patient_add_form.html')
+        self.assertTemplateNotUsed(response, 'office_panel/patient/patient_add_form.html')
 
     def test_patient_create_GET_logged_as_patient(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.get(self.create_patient_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'office_panel/patient_add_form.html')
+        self.assertTemplateNotUsed(response, 'office_panel/patient/patient_add_form.html')
 
     def test_patient_create_GET_logged_as_office(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.get(self.create_patient_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'office_panel/patient_add_form.html')
+        self.assertTemplateUsed(response, 'office_panel/patient/patient_add_form.html')
 
     def test_patient_create_POST(self):
         self.client.login(username='office@gmail.com', password='officepassword')
@@ -117,41 +115,41 @@ class TestPatientViews(TestCase):
         response = self.client.get(self.detail_patient_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'office_panel/patient_detail_form.html')
+        self.assertTemplateNotUsed(response, 'office_panel/patient/patient_detail_form.html')
 
     def test_patient_detail_GET_logged_as_patient(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.get(self.detail_patient_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'office_panel/patient_detail_form.html')
+        self.assertTemplateNotUsed(response, 'office_panel/patient/patient_detail_form.html')
 
     def test_patient_detail_GET_logged_as_office(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.get(self.detail_patient_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'office_panel/patient_detail_form.html')
+        self.assertTemplateUsed(response, 'office_panel/patient/patient_detail_form.html')
 
     def test_patient_update_GET_no_logged_in(self):
         response = self.client.get(self.update_patient_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'office_panel/patient_update_form.html')
+        self.assertTemplateNotUsed(response, 'office_panel/patient/patient_update_form.html')
 
     def test_patient_update_GET_logged_as_patient(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.get(self.update_patient_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'office_panel/patient_update_form.html')
+        self.assertTemplateNotUsed(response, 'office_panel/patient/patient_update_form.html')
 
     def test_patient_update_GET_logged_as_office(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.get(self.update_patient_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'office_panel/patient_update_form.html')
+        self.assertTemplateUsed(response, 'office_panel/patient/patient_update_form.html')
 
     def test_patient_update_POST(self):
         url = reverse('office-patient-change', args=[1])
@@ -169,21 +167,21 @@ class TestPatientViews(TestCase):
         response = self.client.get(self.delete_patient_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'office_panel/patient_delete_confirm.html')
+        self.assertTemplateNotUsed(response, 'office_panel/patient/patient_delete_confirm.html')
 
     def test_patient_delete_GET_logged_as_patient(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.get(self.delete_patient_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'office_panel/patient_delete_confirm.html')
+        self.assertTemplateNotUsed(response, 'office_panel/patient/patient_delete_confirm.html')
 
     def test_patient_delete_GET_logged_as_office(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.get(self.delete_patient_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'office_panel/patient_delete_confirm.html')
+        self.assertTemplateUsed(response, 'office_panel/patient/patient_delete_confirm.html')
 
     def test_patient_delete_POST(self):
         url = reverse('office-patient-delete-confirm', args=[1])
