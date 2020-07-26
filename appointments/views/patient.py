@@ -3,12 +3,10 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
-from django.views import View
-from django.views.generic import CreateView
-from django.views.generic import DeleteView, UpdateView
+from django.views.generic import DeleteView, UpdateView, CreateView, ListView
 
 from appointments.forms import AppointmentPatientMakeForm
 from appointments.models import Appointment
@@ -18,15 +16,10 @@ from utils.send_email import appointment_confirmation_patient, appointment_confi
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
-class SelectOffice(View):
+class SelectOffice(ListView):
     model = Office
     template_name = 'appointments/patient/appointment_select_office.html'
-
-    def get(self, request):
-        context = {
-            'offices': Office.objects.all()
-        }
-        return render(request, self.template_name, context)
+    context_object_name = 'offices'
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
@@ -83,37 +76,27 @@ class MakeAppointment(CreateView):
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
-class AppointmentListView(View):
+class AppointmentListView(ListView):
     model = Appointment
     template_name = 'appointments/patient/appointments_upcoming.html'
+    context_object_name = 'appointments'
 
     def get_queryset(self):
         queryset = self.request.user.appointments.select_related('owner').order_by('date') \
             .filter(date__gte=datetime.today())
         return queryset
 
-    def get(self, request):
-        context = {
-            'appointments': self.get_queryset(),
-        }
-        return render(request, self.template_name, context)
-
 
 @method_decorator([login_required, patient_required], name='dispatch')
-class OldAppointmentListView(View):
+class OldAppointmentListView(ListView):
     model = Appointment
     template_name = 'appointments/patient/appointments_old.html'
+    context_object_name = 'appointments'
 
     def get_queryset(self):
         queryset = self.request.user.appointments.select_related('owner').order_by('date') \
             .filter(date__lte=datetime.today())
         return queryset
-
-    def get(self, request):
-        context = {
-            'appointments': self.get_queryset(),
-        }
-        return render(request, self.template_name, context)
 
 
 @method_decorator([login_required, patient_required], name='dispatch')

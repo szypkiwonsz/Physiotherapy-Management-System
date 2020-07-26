@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView, ListView
 
 from users.models import Office
 
@@ -12,12 +12,7 @@ class HelpView(TemplateView):
     template_name = 'home_page/help.html'
 
 
-class OfficesView(View):
+class OfficesView(ListView):
     model = Office
     template_name = 'home_page/offices.html'
-
-    def get(self, request):
-        context = {
-            'offices': Office.objects.all()
-        }
-        return render(request, self.template_name, context)
+    context_object_name = 'offices'
