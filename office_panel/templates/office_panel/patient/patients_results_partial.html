@@ -5,9 +5,10 @@
     {% for patient in patients %}
         <hr>
         <div class="text-description">
-            <a href="{% url 'office-patient-detail' patient.pk %}"
-               role="button">{{ patient.first_name }}
-                {{ patient.last_name }}</a>,
+            <a href="{% url 'office-patient-detail' patient.pk %}" role="button">
+                {{ patient.first_name }}
+                {{ patient.last_name }}
+            </a>,
             {{ patient.email }}
         </div>
         <div class="right-button">
