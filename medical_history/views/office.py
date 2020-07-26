@@ -4,8 +4,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views import View
-from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, View
 
 from medical_history.forms import MedicalHistoryForm
 from medical_history.models import MedicalHistory
@@ -15,19 +14,19 @@ from users.decorators import office_required
 @method_decorator([login_required, office_required], name='dispatch')
 class MedicalHistoryListView(View):
     model = MedicalHistory
-    template_name = 'office_panel/office_medical_history.html'
+    template_name = 'medical_history/office/medical_history.html'
 
     def get(self, request):
         context = {
             'medical_histories': MedicalHistory.objects.filter(owner=self.request.user.id).order_by('-date_selected'),
         }
-        return render(request, 'office_panel/office_medical_history.html', context)
+        return render(request, self.template_name, context)
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class MakeMedicalHistory(CreateView):
     form_class = MedicalHistoryForm
-    template_name = 'medical_history/medical_history_add_form.html'
+    template_name = 'medical_history/office/medical_history_add_form.html'
 
     def form_valid(self, form):
         post = form.save(commit=False)
@@ -39,7 +38,7 @@ class MakeMedicalHistory(CreateView):
 @method_decorator([login_required, office_required], name='dispatch')
 class MedicalHistoryDetailView(DetailView):
     form_class = MedicalHistory
-    template_name = 'medical_history/medical_history_detail_form.html'
+    template_name = 'medical_history/office/medical_history_detail_form.html'
 
     def get_queryset(self):
         return MedicalHistory.objects.all()
@@ -51,7 +50,7 @@ class MedicalHistoryDetailView(DetailView):
 @method_decorator([login_required, office_required], name='dispatch')
 class MedicalHistoryUpdateView(UpdateView):
     form_class = MedicalHistoryForm
-    template_name = 'medical_history/medical_history_update_form.html'
+    template_name = 'medical_history/office/medical_history_update_form.html'
 
     def get_queryset(self):
         return MedicalHistory.objects.filter(owner=self.request.user.id)
@@ -63,7 +62,7 @@ class MedicalHistoryUpdateView(UpdateView):
 @method_decorator([login_required, office_required], name='dispatch')
 class MedicalHistoryDeleteView(DeleteView):
     form_class = MedicalHistoryForm
-    template_name = 'medical_history/medical_history_delete_confirm.html'
+    template_name = 'medical_history/office/medical_history_delete_confirm.html'
     success_url = reverse_lazy('office-medical-history')
 
     def delete(self, request, *args, **kwargs):
