@@ -1,12 +1,12 @@
 {% extends 'Physiotherapy_Management_System/base_panel_office.html' %}
 {% block head %}
-    <title>Fizjo-System - Panel Gabinetu</title>
+    <title>Fizjo-System - Historia Medyczna</title>
 {% endblock head %}
 {% block content %}
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
-        <h2>Historia medyczna pacjenta {{ medicalhistory.patient }}</h2>
-        <div class="right-button"><a href="{% url 'office-medical-history-change' medicalhistory.pk %}"
+            <h2>Historia medyczna pacjenta {{ medicalhistory.patient }}</h2>
+            <div class="right-button"><a href="{% url 'office-medical-history-change' medicalhistory.pk %}"
                                          class="btn btn-info"
                                          role="button">Edytuj</a>
                 <a href="{% url 'office-medical-history-delete' medicalhistory.pk %}"

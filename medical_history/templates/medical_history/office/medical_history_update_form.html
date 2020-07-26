@@ -2,19 +2,20 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block head %}
-    <title>Fizjo-System - Edytuj Wizytę</title>
+    <title>Fizjo-System - Edytuj Historię</title>
 {% endblock head %}
 {% block content %}
     <div class="container">
         <div class="form">
-                <h2>Edytuj historię medyczną pacjenta: {{ medical_history.patient }}</h2>
+            <h2>Edytuj historię medyczną pacjenta: {{ medical_history.patient }}</h2>
             <hr>
             <form method="post" novalidate>
                 {% csrf_token %}
                 {{ form|crispy }}
                 <button type="submit" class="btn btn-success">Zapisz zmiany</button>
                 <a href="{% url 'office-medical-history' %}" class="btn btn-outline-secondary" role="button">Powrót</a>
-                        <a href="{% url 'office-medical-history-delete' medicalhistory.pk %}" class="btn btn-danger float-right">Usuń</a>
+                <a href="{% url 'office-medical-history-delete' medicalhistory.pk %}"
+                   class="btn btn-danger float-right">Usuń</a>
             </form>
             <hr>
         </div>
