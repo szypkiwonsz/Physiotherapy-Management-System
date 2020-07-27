@@ -1,4 +1,5 @@
 from django.urls import path, include
+
 from office_panel.views import home, patient
 
 urlpatterns = [
