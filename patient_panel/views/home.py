@@ -1,11 +1,12 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
 from django.views import View
-from users.models import Office
+
 from appointments.models import Appointment
 from medical_history.models import MedicalHistory
 from users.decorators import patient_required
+from users.models import Office
 
 
 @method_decorator([login_required, patient_required], name='dispatch')

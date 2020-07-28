@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
-from users.models import Office
+
 from users.decorators import login_required, patient_required
+from users.models import Office
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
