@@ -20,4 +20,4 @@ class PatientHome(View):
             'medical_histories': MedicalHistory.objects.filter(patient__email=self.request.user).order_by(
                 '-date_selected')[:5]
         }
-        return render(request, 'patient_panel/patient_home.html', context)
+        return render(request, self.template_name, context)

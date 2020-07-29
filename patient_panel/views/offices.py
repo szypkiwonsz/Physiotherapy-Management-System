@@ -19,4 +19,4 @@ class OfficesListView(View):
         context = {
             'offices': self.get_queryset(),
         }
-        return render(request, 'patient_panel/patient_office.html', context)
+        return render(request, self.template_name, context)
