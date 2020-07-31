@@ -1,9 +1,10 @@
+from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, CreateView
-from django.contrib import messages
-from users.models import Office, UserPatient
+
 from users.forms import OfficeSignUpForm, PatientSignUpForm
+from users.models import Office, UserPatient
 from utils.send_email import activation_email
 
 
