@@ -20,21 +20,21 @@ class TestHomeViews(TestCase):
         response = self.client.get(self.home_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'patient_panel/patient_home.html')
+        self.assertTemplateNotUsed(response, 'patient_panel/home.html')
 
     def test_home_GET_logged_as_office(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.get(self.home_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'patient_panel/patient_home.html')
+        self.assertTemplateNotUsed(response, 'patient_panel/home.html')
 
     def test_home_GET_logged_as_patient(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.get(self.home_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'patient_panel/patient_home.html')
+        self.assertTemplateUsed(response, 'patient_panel/home.html')
 
 
 class TestOfficesViews(TestCase):
@@ -53,18 +53,18 @@ class TestOfficesViews(TestCase):
         response = self.client.get(self.patient_offices_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'patient_panel/patient_office.html')
+        self.assertTemplateNotUsed(response, 'patient_panel/offices.html')
 
     def test_offices_GET_logged_as_office(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.get(self.patient_offices_url)
 
         self.assertEquals(response.status_code, 302)
-        self.assertTemplateNotUsed(response, 'patient_panel/patient_office.html')
+        self.assertTemplateNotUsed(response, 'patient_panel/offices.html')
 
     def test_offices_GET_logged_as_patient(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.get(self.patient_offices_url)
 
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'patient_panel/patient_office.html')
+        self.assertTemplateUsed(response, 'patient_panel/offices.html')

@@ -9,7 +9,7 @@ from users.models import Office
 @method_decorator([login_required, patient_required], name='dispatch')
 class OfficesListView(View):
     model = Office
-    template_name = 'patient_panel/patient_office.html'
+    template_name = 'patient_panel/offices.html'
 
     def get_queryset(self):
         queryset = Office.objects.filter(user__patients__email=self.request.user)

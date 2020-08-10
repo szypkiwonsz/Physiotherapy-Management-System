@@ -11,7 +11,7 @@ from users.models import Office
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class PatientHome(View):
-    template_name = 'patient_panel/patient_home.html'
+    template_name = 'patient_panel/home.html'
 
     def get(self, request):
         context = {
