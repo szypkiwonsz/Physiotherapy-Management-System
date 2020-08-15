@@ -1,8 +1,9 @@
-from django.contrib import admin
-from django.urls import path, include
-from users.views import login
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import path, include
+
+from users.views import login
 
 urlpatterns = [
     path('', include('home_page.urls')),
