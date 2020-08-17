@@ -4,37 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     {% block head %}{% endblock head %}
-
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <!-- Navigation Bar CSS -->
     <link rel="stylesheet" type="text/css" href="{% static "css/navbar.css" %}">
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="{% static "css/mystyle.css" %}">
 </head>
 <body>
-<!--Navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark primary-color">
-
-    <!-- Navbar brand -->
     <a class="navbar-brand" id="nav-title" href="{% url 'home' %}">Fizjo-System</a>
-
-    <!-- Collapse button -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
             aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-
-    <!-- Collapsible content -->
     <div class="collapse navbar-collapse" id="basicExampleNav">
-
-        <!-- Links -->
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'home' %}">Strona Główna
@@ -89,17 +73,12 @@
         </div>
     {% endif %}
 </div>
-
 {% block content %}{% endblock content %}
-
 <footer>
     <p class="main">
         2020 © JK Sawicki | Wszystkie prawa zastrzeżone
     </p>
 </footer>
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -107,7 +86,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
-
 <script src="{% static "js/navbar.js" %}"></script>
 </body>
 </html>
