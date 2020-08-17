@@ -1,7 +1,11 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from users.models import User, Profile, Office, UserPatient
+from users.models import User, Office, UserPatient
+
+
+# class TestActivateViews(TestCase):
+#     pass
 
 
 class TestLoginViews(TestCase):
@@ -63,6 +67,36 @@ class TestLoginViews(TestCase):
             'password': 'wrong_password'
         })
         self.assertEquals(response.status_code, 200)
+
+
+class TestPasswordViews(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.password_reset_url = reverse('password_reset')
+        self.password_reset_done_url = reverse('password_reset_done')
+        self.password_reset_complete_url = reverse('password_reset_complete')
+
+    def test_password_reset_url_GET(self):
+        response = self.client.get(self.password_reset_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('registration/password_reset_form.html')
+
+    # def test_password_reset_confirm_url_GET(self):
+    #     pass
+
+    def test_password_reset_done_url_GET(self):
+        response = self.client.get(self.password_reset_done_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('registration/password_reset_dont.html')
+
+    def test_password_reset_complete_url_GET(self):
+        response = self.client.get(self.password_reset_complete_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed('registration/password_reset_complete.html')
 
 
 class TestProfileViews(TestCase):

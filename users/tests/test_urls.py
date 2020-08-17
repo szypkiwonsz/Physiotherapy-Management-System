@@ -1,12 +1,12 @@
+from django.contrib.auth import views as auth_views
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from users.views import signup, login, activate_account, password, profile
+
+from users.views import signup, login, profile
 
 
-# class TestActivateAccountUrls(SimpleTestCase):
-#     def test_activate_account_url_resolves(self):
-#         url = reverse('activate')
-#         self.assertEquals(resolve(url).func.view_class, activate_account.activate())
+# class TestActivateUrls(SimpleTestCase):
+#     pass
 
 
 class TestLoginUrls(SimpleTestCase):
@@ -14,11 +14,22 @@ class TestLoginUrls(SimpleTestCase):
         url = reverse('login')
         self.assertEquals(resolve(url).func.view_class, login.LoginView)
 
-# ''' TOKEN!!! '''
-# class TestPasswordUrls(SimpleTestCase):
-#     def test_new_password_confirm_url_resolves(self):
-#         url = reverse('password_reset_confirm')
-#         self.assertEquals(resolve(url).func.view_class, password.NewPasswordResetConfirmView)
+
+class TestPasswordUrls(SimpleTestCase):
+    def test_password_reset_url_resolves(self):
+        url = reverse('password_reset')
+        self.assertEquals(resolve(url).func.view_class, auth_views.PasswordResetView)
+
+    def test_password_reset_done_resolves(self):
+        url = reverse('password_reset_done')
+        self.assertEquals(resolve(url).func.view_class, auth_views.PasswordResetDoneView)
+
+    def test_password_reset_complete_resolves(self):
+        url = reverse('password_reset_complete')
+        self.assertEquals(resolve(url).func.view_class, auth_views.PasswordResetCompleteView)
+
+    # def test_password_reset_confirm_resolves(self):
+    #     pass
 
 
 class TestProfileUrls(SimpleTestCase):
