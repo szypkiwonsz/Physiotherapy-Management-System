@@ -36,16 +36,13 @@ class LoginView(View):
 
     @csrf_protected_method
     def post(self, request):
-        if request.method == 'POST':
-            form = AuthenticationForm(request=request, data=request.POST)
-            if form.is_valid():
-                email = form.cleaned_data.get('username')
-                password = form.cleaned_data.get('password')
-                user = authenticate(email=email, password=password)
-                if user is not None:
-                    login(request, user)
-                    messages.info(request, f"Poprawnie zalogowałeś się.")
-                    return redirect('panel')
-        else:
-            form = AuthenticationForm()
+        form = AuthenticationForm(request=request, data=request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(email=email, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"Poprawnie zalogowałeś się.")
+                return redirect('panel')
         return render(request, self.template_name, {'form': form})
