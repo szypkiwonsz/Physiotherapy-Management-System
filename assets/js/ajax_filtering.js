@@ -1,7 +1,8 @@
 const user_input = $("#user-input")
 const search_icon = $('#search-icon')
 const artists_div = $('#replaceable-content')
-const endpoint = '/office/patients/'
+const endpoint = $("#endpoint").attr("value")
+const page_number = $("#page").attr("value")
 const delay_by_in_ms = 700
 let scheduled_function = false
 
@@ -24,7 +25,8 @@ let ajax_call = function (endpoint, request_parameters) {
 user_input.on('keyup', function () {
 
     const request_parameters = {
-        q: $(this).val() // value of user_input: the HTML element with ID user-input
+        q: $(this).val(), // value of user_input: the HTML element with ID user-input
+        page: page_number
     }
 
     // start animating the search icon with the CSS class
