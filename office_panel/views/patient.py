@@ -1,36 +1,47 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, View, UpdateView, DeleteView, DetailView
+from django.views.generic import CreateView, View, UpdateView, DeleteView, DetailView, ListView
 
 from office_panel.models import Patient
 from users.decorators import office_required
 from users.forms import PatientForm
-
+from utils.paginate import paginate
 
 @method_decorator([login_required, office_required], name='dispatch')
-class PatientListView(View):
-    form_class = PatientForm
+class PatientListView(ListView):
+    model = Patient
     template_name = 'office_panel/patient/patients.html'
+    paginate_by = 2
 
     def get_queryset(self):
         queryset = self.request.user.patients.select_related('owner')
         return queryset
 
-    def get(self, request):
-        url_parameter = request.GET.get('q')
-        if url_parameter:
+    def get(self, request, **kwargs):
+        url_without_parameters = str(request.get_full_path()).split('?')[0]
+        url_parameter_q = request.GET.get('q')
+        if url_parameter_q:
             ctx = {
-                'patients': self.get_queryset().order_by('-date_selected').filter(last_name__icontains=url_parameter),
+                'patients': self.get_queryset().order_by('-date_selected').filter(last_name__icontains=url_parameter_q),
             }
         else:
+
             ctx = {
                 'patients': self.get_queryset().order_by('-date_selected'),
             }
+
+        paginated_patients = paginate(request, ctx['patients'], 2)
+
+        ctx = {
+            'patients': paginated_patients,
+            'endpoint': url_without_parameters
+        }
 
         if request.is_ajax():
             html = render_to_string(
