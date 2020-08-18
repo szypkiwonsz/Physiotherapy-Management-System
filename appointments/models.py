@@ -1,13 +1,12 @@
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 
 from office_panel.models import Patient
 from users.models import User, Office
 
-from django.core.validators import RegexValidator
-
 numeric = RegexValidator('^[0-9]*$', 'Jako numer telefonu, możesz podać jedynie cyfry.')
-alphanumeric = RegexValidator('^[a-zA-Z]+$', 'Twoje imię nie może zawierać cyfr.')
+alphanumeric = RegexValidator('^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]*$', 'Twoje imię nie może zawierać cyfr.')
 
 
 # Create your models here.
