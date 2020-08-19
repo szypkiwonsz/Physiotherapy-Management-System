@@ -33,13 +33,12 @@ class AppointmentListView(View):
             ctx = {
                 'appointments': Appointment.objects.filter(office=self.request.user.id).order_by('date'),
             }
+            paginated_appointments = paginate(request, ctx['appointments'], 2)
 
-        paginated_appointments = paginate(request, ctx['appointments'], 2)
-
-        ctx = {
-            'appointments': paginated_appointments,
-            'endpoint': url_without_parameters
-        }
+            ctx = {
+                'appointments': paginated_appointments,
+                'endpoint': url_without_parameters
+            }
 
         if request.is_ajax():
             html = render_to_string(
