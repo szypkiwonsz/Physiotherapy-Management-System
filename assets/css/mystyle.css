@@ -35,6 +35,10 @@
     text-transform: uppercase;
 }
 
+.d-flex {
+    overflow-y: hidden;
+}
+
 .ml17 .letter {
     display: inline-block;
     line-height: 1em;
@@ -241,6 +245,10 @@
     }
 
     .btn {
+        font-size: 12px;
+    }
+
+    .page-link {
         font-size: 12px;
     }
 

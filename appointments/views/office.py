@@ -13,6 +13,7 @@ from django.views.generic import UpdateView, DeleteView
 from appointments.forms import AppointmentOfficeUpdateForm
 from appointments.models import Appointment
 from users.decorators import office_required
+from utils.paginate import paginate
 
 
 @method_decorator([login_required, office_required], name='dispatch')
@@ -21,15 +22,22 @@ class AppointmentListView(View):
     template_name = 'appointments/office/appointments.html'
 
     def get(self, request):
-        url_parameter = request.GET.get('q')
-        if url_parameter:
+        url_without_parameters = str(request.get_full_path()).split('?')[0]
+        url_parameter_q = request.GET.get('q')
+        if url_parameter_q:
             ctx = {
                 'appointments': Appointment.objects.filter(
-                    office=self.request.user.id, owner__email__icontains=url_parameter).order_by('date'),
+                    office=self.request.user.id, owner__email__icontains=url_parameter_q).order_by('date'),
             }
         else:
             ctx = {
                 'appointments': Appointment.objects.filter(office=self.request.user.id).order_by('date'),
+            }
+            paginated_appointments = paginate(request, ctx['appointments'], 2)
+
+            ctx = {
+                'appointments': paginated_appointments,
+                'endpoint': url_without_parameters
             }
 
         if request.is_ajax():

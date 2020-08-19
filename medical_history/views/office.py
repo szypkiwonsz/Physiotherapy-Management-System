@@ -1,7 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, View
@@ -9,6 +11,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView, DetailView,
 from medical_history.forms import MedicalHistoryForm
 from medical_history.models import MedicalHistory
 from users.decorators import office_required
+from utils.paginate import paginate
 
 
 @method_decorator([login_required, office_required], name='dispatch')
@@ -17,10 +20,36 @@ class MedicalHistoryListView(View):
     template_name = 'medical_history/office/medical_history.html'
 
     def get(self, request):
-        context = {
-            'medical_histories': MedicalHistory.objects.filter(owner=self.request.user.id).order_by('-date_selected'),
-        }
-        return render(request, self.template_name, context)
+        url_without_parameters = str(request.get_full_path()).split('?')[0]
+        url_parameter_q = request.GET.get('q')
+        if url_parameter_q:
+            ctx = {
+                'medical_histories': MedicalHistory.objects.filter(
+                    owner=self.request.user.id, patient__last_name__icontains=url_parameter_q).order_by(
+                    '-date_selected'
+                ),
+            }
+        else:
+            ctx = {
+                'medical_histories': MedicalHistory.objects.filter(owner=self.request.user.id).order_by(
+                    '-date_selected'
+                ),
+            }
+            paginated_medical_histories = paginate(request, ctx['medical_histories'], 2)
+
+            ctx = {
+                'medical_histories': paginated_medical_histories,
+                'endpoint': url_without_parameters
+            }
+
+        if request.is_ajax():
+            html = render_to_string(
+                template_name='medical_history/office/medical_history_results_partial.html',
+                context=ctx
+            )
+            data_dict = {"html_from_view": html}
+            return JsonResponse(data=data_dict, safe=False)
+        return render(request, self.template_name, ctx)
 
 
 @method_decorator([login_required, office_required], name='dispatch')

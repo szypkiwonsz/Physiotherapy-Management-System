@@ -155,6 +155,16 @@ class TestPatientAppointmentViews(TestCase):
             confirmed=False,
             choice='Konsultacja'
         )
+        self.appointment2 = Appointment.objects.create(
+            owner=self.patient1,
+            office=self.appointment_office1,
+            date=datetime(2018, 1, 13, 16, 00, 00),
+            name='name',
+            date_selected=datetime(2018, 1, 13, 23, 51, 34),
+            phone_number='000000000',
+            confirmed=False,
+            choice='Konsultacja'
+        )
 
     def test_select_office_GET_not_logged_in(self):
         response = self.client.get(self.select_office_url)
@@ -205,10 +215,22 @@ class TestPatientAppointmentViews(TestCase):
             'phone_number': '000000000',
             'choice': 'Konsultacja'
         })
-        appointment2 = Appointment.objects.get(id=2)
+        appointment2 = Appointment.objects.get(id=3)
         self.assertEquals(appointment2.date, datetime(1998, 2, 17, 17, 00, 00, tzinfo=UTC))
         self.assertEquals(appointment2.office_id, 2)
         self.assertEquals(appointment2.confirmed, False)
+
+    def test_make_appointment_create_date_taken_POST(self):
+        url = reverse('appointments-make-appointment', args=[2])
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        response = self.client.post(url, {
+            'date': '13.01.2012 16:00',
+            'name': 'name',
+            'phone_number': '000000000',
+            'choice': 'Konsultacja'
+        })
+        with self.assertRaises(Appointment.DoesNotExist):
+            Appointment.objects.get(id=3)
 
     def test_upcoming_appointment_list_GET_not_logged_in(self):
         response = self.client.get(self.upcoming_appointments_list_url)
@@ -283,6 +305,20 @@ class TestPatientAppointmentViews(TestCase):
         self.assertEquals(response.status_code, 302)
         self.assertEquals(appointment_update.confirmed, False)
         self.assertEquals(appointment_update.phone_number, '111111111')
+
+    def test_update_appointment_date_taken_POST(self):
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        url = reverse('patient-appointment-change', args=[1])
+        response = self.client.post(url, {
+            'date': '13.01.2018 16:00',
+            'name': self.appointment1.name,
+            'phone_number': '111111111',
+            'choice': self.appointment1.choice
+        })
+        appointment_update = Appointment.objects.get(id=1)
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(appointment_update.confirmed, False)
+        self.assertEquals(appointment_update.phone_number, '000000000')
 
     def test_delete_appointment_GET_not_logged_in(self):
         response = self.client.get(self.delete_appointment_url)
