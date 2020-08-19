@@ -35,6 +35,10 @@
     text-transform: uppercase;
 }
 
+.d-flex {
+    overflow-y: hidden;
+}
+
 .ml17 .letter {
     display: inline-block;
     line-height: 1em;
