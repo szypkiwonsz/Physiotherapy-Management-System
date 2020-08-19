@@ -14,3 +14,9 @@ class MedicalHistory(models.Model):
     description = models.TextField()
     recommendations = models.TextField()
     date_selected = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'{self.patient.first_name} {self.patient.last_name}'
+
+    class Meta:
+        verbose_name_plural = 'Medical Histories'

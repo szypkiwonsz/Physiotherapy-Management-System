@@ -21,6 +21,12 @@ class UserPatient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     phone_number = models.CharField(max_length=9)
 
+    def __str__(self):
+        return self.user.email
+
+    class Meta:
+        verbose_name_plural = 'UserPatient'
+
 
 class Office(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -30,13 +36,16 @@ class Office(models.Model):
     phone_number = models.CharField(max_length=9)
     website = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.user.email
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return self.user.email
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
