@@ -1,17 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, View, UpdateView, DeleteView, DetailView, ListView
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
 
 from office_panel.models import Patient
 from users.decorators import office_required
 from users.forms import PatientForm
 from utils.paginate import paginate
+
 
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientListView(ListView):
@@ -35,13 +35,12 @@ class PatientListView(ListView):
             ctx = {
                 'patients': self.get_queryset().order_by('-date_selected'),
             }
+            paginated_patients = paginate(request, ctx['patients'], 2)
 
-        paginated_patients = paginate(request, ctx['patients'], 2)
-
-        ctx = {
-            'patients': paginated_patients,
-            'endpoint': url_without_parameters
-        }
+            ctx = {
+                'patients': paginated_patients,
+                'endpoint': url_without_parameters
+            }
 
         if request.is_ajax():
             html = render_to_string(
