@@ -1,0 +1,45 @@
+{% if offices %}
+    <h2>Wszystkie gabinety:</h2>
+    {% for office in offices %}
+        <hr>
+        {{ office.name }}
+    {% endfor %}
+    <hr>
+{% else %}
+    <h2>Nie jesteś zarejestrowany w żadnym gabinecie.</h2>
+    <p>(gabinet musi dodać Cię do swojej bazy)</p>
+    <hr>
+    <a href="{% url 'appointments-select' %}" class="btn btn-warning" role="button">Umów się na wizytę</a>
+{% endif %}
+<div id="endpoint" value="{{ endpoint }}"></div>
+{% if offices.has_other_pages %}
+    <ul class="pagination">
+        {% if offices.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ offices.previous_page_number }}">&laquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1">&laquo;</a>
+            </li>
+        {% endif %}
+        {% for i in offices.paginator.page_range %}
+            {% if offices.number == i %}
+                <div id="page" value="{{ i }}"></div>
+                <li class="page-item active"><a class="page-link">{{ i }} <span class="sr-only">(current)</span></a>
+                </li>
+            {% else %}
+                <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if offices.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ offices.next_page_number }}">&raquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link">&raquo;</a>
+            </li>
+        {% endif %}
+    </ul>
+{% endif %}
