@@ -2,8 +2,10 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView, UpdateView, CreateView, ListView
@@ -12,6 +14,8 @@ from appointments.forms import AppointmentPatientMakeForm
 from appointments.models import Appointment
 from users.decorators import patient_required
 from users.models import Office, User
+from utils.date_time import DateTime
+from utils.paginate import paginate
 from utils.send_email import appointment_confirmation_patient, appointment_confirmation_office
 
 
@@ -44,32 +48,26 @@ class MakeAppointment(CreateView):
         office_id = int(''.join(i for i in url if i.isdigit()))
         return office_id
 
-    def appointment_wrong_date(self):
-        messages.warning(self.request, 'Wybierz poprawną godzinę.')
-        return redirect('appointments-make-appointment', self.id_office)
-
-    def appointment_date_taken(self, date, id_office):
+    def appointment_date_taken(self, date):
         messages.warning(
-            self.request, f'Wybrana data {date.day}.{date.month}.{date.year} {date.hour}:00 '
-                          f'jest już zajęta.'
+            self.request,
+            f'Wybrana data {DateTime.add_zero(date.day)}.{DateTime.add_zero(date.month)}.{date.year} {date.hour}:00 '
+            f'jest już zajęta.'
         )
-        return redirect('appointments-make-appointment', id_office)
 
     def form_valid(self, form):
         date = form.cleaned_data.get('date')
         name = form.cleaned_data.get('name')
-
         id_owner = self.get_owner_id()
         id_office = self.get_office_id()
-
         if date.hour == 0:
-            self.appointment_wrong_date()
+            messages.warning(self.request, 'Wybierz poprawną godzinę.')
+            return redirect('appointments-make-appointment', id_office)
         else:
-            data = Appointment.objects.raw(f'SELECT * FROM appointments_appointment WHERE office_id={id_office}')
-            for i in data:
-                if date == i.date:
-                    self.appointment_date_taken(date, id_office)
-
+            appointment = Appointment.objects.filter(date=date)
+            if appointment:
+                self.appointment_date_taken(date)
+                return redirect('appointments-make-appointment', id_office)
         appointment = form.save(commit=False)
         appointment.owner_id = id_owner
         appointment.office_id = id_office
@@ -94,6 +92,33 @@ class AppointmentListView(ListView):
         queryset = self.request.user.appointments.select_related('owner').order_by('date') \
             .filter(date__gte=datetime.today())
         return queryset
+
+    def get(self, request, **kwargs):
+        url_without_parameters = str(request.get_full_path()).split('?')[0]
+        url_parameter_q = request.GET.get('q')
+        if url_parameter_q:
+            ctx = {
+                'appointments': self.get_queryset().filter(office__name__icontains=url_parameter_q),
+            }
+        else:
+            ctx = {
+                'appointments': self.get_queryset(),
+            }
+            paginated_appointments = paginate(request, ctx['appointments'], 2)
+
+            ctx = {
+                'appointments': paginated_appointments,
+                'endpoint': url_without_parameters
+            }
+
+        if request.is_ajax():
+            html = render_to_string(
+                template_name='appointments/patient/appointments_upcoming_results_partial.html',
+                context=ctx
+            )
+            data_dict = {"html_from_view": html}
+            return JsonResponse(data=data_dict, safe=False)
+        return render(request, self.template_name, ctx)
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
@@ -128,6 +153,13 @@ class AppointmentUpdateView(UpdateView):
     form_class = AppointmentPatientMakeForm
     template_name = 'appointments/patient/appointment_update_form.html'
 
+    def appointment_date_taken(self, date):
+        messages.warning(
+            self.request,
+            f'Wybrana data {DateTime.add_zero(date.day)}.{DateTime.add_zero(date.month)}.{date.year} {date.hour}:00 '
+            f'jest już zajęta.'
+        )
+
     @staticmethod
     def parse_db_time_string(time_string):
         date = datetime.strptime(time_string.split('+')[0], '%Y-%m-%d %H:%M:%S')
@@ -144,6 +176,17 @@ class AppointmentUpdateView(UpdateView):
         appointment = Appointment.objects.get(pk=self.object.pk)
         appointment.confirmed = False
         appointment.date = form.cleaned_data['date']
+        id_appointment = appointment.pk
+        if appointment.date.hour == 0:
+            self.appointment_wrong_date()
+        else:
+            try:
+                appointment_check = Appointment.objects.get(date=appointment.date)
+            except ObjectDoesNotExist:
+                appointment_check = None
+            if appointment_check and appointment_check.pk != id_appointment:
+                self.appointment_date_taken(appointment.date)
+                return redirect('patient-appointment-change', id_appointment)
         appointment.name = form.cleaned_data['name']
         appointment.phone_number = form.cleaned_data['phone_number']
         appointment.choice = form.cleaned_data['choice']
