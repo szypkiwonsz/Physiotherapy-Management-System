@@ -35,13 +35,12 @@ class MedicalHistoryListView(View):
                     '-date_selected'
                 ),
             }
+            paginated_medical_histories = paginate(request, ctx['medical_histories'], 2)
 
-        paginated_medical_histories = paginate(request, ctx['medical_histories'], 2)
-
-        ctx = {
-            'medical_histories': paginated_medical_histories,
-            'endpoint': url_without_parameters
-        }
+            ctx = {
+                'medical_histories': paginated_medical_histories,
+                'endpoint': url_without_parameters
+            }
 
         if request.is_ajax():
             html = render_to_string(
