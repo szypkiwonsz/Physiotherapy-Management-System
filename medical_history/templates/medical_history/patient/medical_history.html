@@ -1,33 +1,20 @@
 {% extends 'base/base_panel_patient.html' %}
+{% load static %}
 {% block head %}
     <title>Fizjo-System - Historie Medyczne</title>
 {% endblock head %}
 {% block content %}
     <div class="container border rounded bg-light">
-        <div class="form">
-            {% if medical_histories %}
-                <h2>Wszystkie historie medyczne:</h2>
-                {% for medical_history in medical_histories %}
-                    <hr>
-                    Data dodania: {{ medical_history.date_selected|date:"d.m.Y" }}, o godz:
-                    {{ medical_history.date_selected|date:"H:i" }}<br>
-                    {% if medical_history.appointment %}
-                        {{ medical_history.appointment.date|date:"d.m.Y" }},
-                        {{ medical_history.appointment.date|date:"H:i" }},
-                        <div class="text-description">{{ medical_history.appointment.choice }}</div>
-                    {% endif %}
-                    <div class="border-left rounded p-1 mt-3">Opis:
-                        <div class="text-description">{{ medical_history.description }}</div>
-                    </div>
-                    <div class="border-left rounded p-1 mt-3">Zalecenia:
-                        <div class="text-description">{{ medical_history.recommendations }}</div>
-                    </div>
-                {% endfor %}
-                <hr>
-            {% else %}
-                <h2>Nie masz żadnych historii medycznych.</h2>
-                <hr>
-            {% endif %}
+        <div class="search">
+            <div class="form-group has-search">
+                <span class="fa fa-search form-control-feedback"></span>
+                <input id="user-input" placeholder="Wyszukaj po nazwie gabinetu" class="form-control">
+            </div>
+        </div>
+        <div class="form" id="replaceable-content">
+            {% include 'medical_history/patient/medical_history_results_partial.html' %}
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static "js/ajax_filtering.js" %}"></script>
 {% endblock content %}
