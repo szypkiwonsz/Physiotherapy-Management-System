@@ -1,9 +1,8 @@
 from django.contrib import admin
 
-from office_panel.models import Patient
-from .models import User, Office, Profile
+from .models import User, Office, Profile, UserPatient
 
 admin.site.register(User)
-admin.site.register(Patient)
+admin.site.register(UserPatient)
 admin.site.register(Office)
 admin.site.register(Profile)
