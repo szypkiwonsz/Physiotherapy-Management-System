@@ -3,7 +3,6 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import SetPasswordForm
 from django.utils.translation import gettext as _
 
-from office_panel.models import Patient
 from users.widgets import MyClearableFileInput
 from .models import User, Profile, Office, UserPatient
 
@@ -30,7 +29,9 @@ class OfficeSignUpForm(UserCreationForm):
     name = forms.CharField()
     address = forms.CharField()
     city = forms.CharField()
-    phone_number = forms.CharField()
+    phone_number = forms.CharField(min_length=9, error_messages={
+        'min_length': _('Numer powinien zawierać 9 cyfr.'),
+    })
     email = forms.CharField(widget=forms.EmailInput)
     confirm_email = forms.CharField(widget=forms.EmailInput)
     website = forms.CharField(required=False)
@@ -70,7 +71,9 @@ class PatientSignUpForm(UserCreationForm):
 
     email = forms.CharField(widget=forms.EmailInput)
     confirm_email = forms.CharField(widget=forms.EmailInput)
-    phone_number = forms.CharField(required=False)
+    phone_number = forms.CharField(required=False, min_length=9, error_messages={
+        'min_length': _('Numer powinien zawierać 9 cyfr.')
+    })
 
     def __init__(self, *args, **kwargs):
         super(PatientSignUpForm, self).__init__(*args, **kwargs)
@@ -93,24 +96,6 @@ class PatientSignUpForm(UserCreationForm):
                 code='email_mismatch',
             )
         return confirm_email
-
-
-class PatientForm(forms.ModelForm):
-    address = forms.CharField(required=False)
-    pesel = forms.CharField(required=False)
-    phone_number = forms.CharField(required=False)
-
-    def __init__(self, *args, **kwargs):
-        super(PatientForm, self).__init__(*args, **kwargs)
-
-        label = ['Imię', 'Nazwisko', 'Adres email', 'Adres zamieszkania', 'Pesel', 'Numer telefonu']
-        for i, field_name in enumerate(['first_name', 'last_name', 'email', 'address', 'pesel', 'phone_number']):
-            self.fields[field_name].help_text = None
-            self.fields[field_name].label = label[i]
-
-    class Meta:
-        model = Patient
-        fields = ['first_name', 'last_name', 'email', 'address', 'pesel', 'phone_number']
 
 
 class NewSetPasswordForm(SetPasswordForm):
@@ -137,7 +122,9 @@ class UsersUpdateForm(forms.ModelForm):
 
 class OfficeUpdateForm(forms.ModelForm):
     website = forms.CharField(required=False)
-    phone_number = forms.CharField()
+    phone_number = forms.CharField(min_length=9, error_messages={
+        'min_length': _('Numer powinien zawierać 9 cyfr.')
+    })
 
     def __init__(self, *args, **kwargs):
         super(OfficeUpdateForm, self).__init__(*args, **kwargs)
@@ -153,7 +140,9 @@ class OfficeUpdateForm(forms.ModelForm):
 
 
 class PatientUpdateForm(forms.ModelForm):
-    phone_number = forms.CharField(label='Numer telefonu', required=False)
+    phone_number = forms.CharField(label='Numer telefonu', required=False, min_length=9, error_messages={
+        'min_length': _('Numer powinien zawierać 9 cyfr.')
+    })
 
     class Meta:
         model = UserPatient
