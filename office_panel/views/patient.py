@@ -7,9 +7,9 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
 
+from office_panel.forms import PatientForm
 from office_panel.models import Patient
 from users.decorators import office_required
-from users.forms import PatientForm
 from utils.paginate import paginate
 
 
