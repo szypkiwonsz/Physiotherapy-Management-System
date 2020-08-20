@@ -10,8 +10,8 @@ class User(AbstractUser):
 
     username = models.CharField(max_length=40, unique=False, default='')
     email = models.EmailField(unique=True, error_messages={
-        'unique': _("Użytkownik z takim adresem email już istnieje."),
-    }, )
+        'unique': _("Użytkownik z takim adresem email już istnieje.")
+    })
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -31,9 +31,11 @@ class UserPatient(models.Model):
 class Office(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=50)
-    address = models.CharField(max_length=100)
+    address = models.CharField(max_length=100, unique=True)
     city = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=9)
+    phone_number = models.CharField(max_length=9, unique=True, error_messages={
+        'unique': _("Użytkownik z takim numerem telefonu już istnieje.")
+    })
     website = models.CharField(max_length=20)
 
     def __str__(self):

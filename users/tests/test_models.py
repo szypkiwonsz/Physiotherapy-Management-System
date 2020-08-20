@@ -1,7 +1,7 @@
 from PIL import Image
 from django.test import TestCase
 
-from users.models import User, UserPatient, Office, Profile
+from users.models import User, UserPatient, Office
 
 
 class TestUserPatientModels(TestCase):
