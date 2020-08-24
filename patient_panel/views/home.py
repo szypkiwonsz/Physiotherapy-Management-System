@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -16,7 +18,8 @@ class PatientHome(View):
     def get(self, request):
         context = {
             'offices': Office.objects.filter(user__patients__email=self.request.user)[:5],
-            'appointments': Appointment.objects.filter(owner=self.request.user).order_by('date')[:5],
+            'appointments': Appointment.objects.filter(owner=self.request.user).order_by('date').filter(
+                date__gte=datetime.today())[:5],
             'medical_histories': MedicalHistory.objects.filter(patient__email=self.request.user).order_by(
                 '-date_selected')[:5]
         }
