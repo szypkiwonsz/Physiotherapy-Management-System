@@ -19,12 +19,8 @@ class Patient(models.Model):
         'unique': _("Pacjent z takim adresem email już istnieje.")
     })
     address = models.CharField(max_length=50)
-    pesel = models.CharField(max_length=11, validators=[numeric_pesel], unique=True, error_messages={
-        'unique': _("Pacjent z takim numerem pesel już istnieje.")
-    })
-    phone_number = models.CharField(max_length=9, validators=[numeric_phone_number], unique=True, error_messages={
-        'unique': _("Pacjent z takim numerem telefonu już istnieje.")
-    })
+    pesel = models.CharField(max_length=11, validators=[numeric_pesel])
+    phone_number = models.CharField(max_length=9, validators=[numeric_phone_number])
     date_selected = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
