@@ -30,7 +30,7 @@ class MedicalHistoryListView(ListView):
             ctx = {
                 'medical_histories': self.get_queryset(),
             }
-            paginated_medical_histories = paginate(request, ctx['medical_histories'], 2)
+            paginated_medical_histories = paginate(request, ctx['medical_histories'], 10)
 
             ctx = {
                 'medical_histories': paginated_medical_histories,
