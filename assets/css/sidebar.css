@@ -11,12 +11,6 @@ body, html {
     }
 }
 
-@media screen and (max-width: 1000px) {
-    #sidebar-wrapper {
-        margin-top: -5px;
-    }
-}
-
 .btn:focus {
     box-shadow: none !important;
 }
