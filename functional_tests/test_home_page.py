@@ -24,7 +24,7 @@ class TestHomePageNotLoggedIn(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[2]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -39,7 +39,7 @@ class TestHomePageNotLoggedIn(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[3]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -54,7 +54,7 @@ class TestHomePageNotLoggedIn(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[4]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -69,7 +69,7 @@ class TestHomePageNotLoggedIn(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[2]/li[1]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -84,7 +84,7 @@ class TestHomePageNotLoggedIn(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[2]/li[2]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -115,7 +115,7 @@ class TestHomePageLoggedAsPatient(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[2]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -134,7 +134,7 @@ class TestHomePageLoggedAsPatient(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[3]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -153,7 +153,7 @@ class TestHomePageLoggedAsPatient(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[4]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -172,7 +172,7 @@ class TestHomePageLoggedAsPatient(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[2]/li[1]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -191,7 +191,7 @@ class TestHomePageLoggedAsPatient(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[2]/li[2]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -222,7 +222,7 @@ class TestHomePageLoggedAsOffice(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[2]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -241,7 +241,7 @@ class TestHomePageLoggedAsOffice(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[3]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -260,7 +260,7 @@ class TestHomePageLoggedAsOffice(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[4]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -279,7 +279,7 @@ class TestHomePageLoggedAsOffice(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[2]/li[1]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -298,7 +298,7 @@ class TestHomePageLoggedAsOffice(StaticLiveServerTestCase):
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[2]/li[2]/a').click()
         self.assertEquals(
             self.browser.current_url,
