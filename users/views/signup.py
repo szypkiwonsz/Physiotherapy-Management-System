@@ -55,6 +55,7 @@ class RegisterOffice(CreateView, SignUp):
         office.name = form.cleaned_data.get('name')
         office.address = form.cleaned_data.get('address')
         office.city = form.cleaned_data.get('city')
+        office.phone_number = form.cleaned_data.get('phone_number')
         office.save()
 
     def form_valid(self, form):
