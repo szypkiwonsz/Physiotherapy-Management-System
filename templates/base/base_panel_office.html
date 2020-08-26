@@ -14,7 +14,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark primary-color msg-mobile">
-    <a class="navbar-brand" href="{% url 'home' %}">Fizjo-System</a>
+    <a class="navbar-brand" href="{% url 'home_page:home' %}">Fizjo-System</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
             aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -23,11 +23,11 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 {% if user.is_patient %}
-                    <a class="nav-link" href="{% url 'patient-home' %}">Panel pacjenta
+                    <a class="nav-link" href="{% url 'patient_panel:home' %}">Panel pacjenta
                         <span class="sr-only">(current)</span>
                     </a>
                 {% else %}
-                    <a class="nav-link" href="{% url 'office-home' %}">Panel gabinetu
+                    <a class="nav-link" href="{% url 'office_panel:home' %}">Panel gabinetu
                         <span class="sr-only">(current)</span>
                     </a>
                 {% endif %}
@@ -35,7 +35,7 @@
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'profile-office' %}">Profil</a>
+                <a class="nav-link" href="{% url 'users:office_profile' %}">Profil</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'logout' %}">Wyloguj</a>
@@ -46,11 +46,14 @@
 <div class="d-flex" id="wrapper">
     <div class="bg-light" id="sidebar-wrapper">
         <div class="list-group list-group-flush">
-            <a href="{% url 'office-home' %}" class="list-group-item list-group-item-action bg-light">Panel Główny</a>
-            <a href="{% url 'office-patients' %}" class="list-group-item list-group-item-action bg-light">Pacjenci</a>
-            <a href="{% url 'office-appointments' %}" class="list-group-item list-group-item-action bg-light">Wizyty</a>
-            <a href="{% url 'office-medical-history' %}" class="list-group-item list-group-item-action bg-light">Historie
-                Medyczne</a>
+            <a href="{% url 'office_panel:home' %}" class="list-group-item list-group-item-action
+            bg-light">Panel Główny</a>
+            <a href="{% url 'office_panel:patients' %}" class="list-group-item list-group-item-action
+            bg-light">Pacjenci</a>
+            <a href="{% url 'office_panel:appointments:list' %}" class="list-group-item list-group-item-action
+            bg-light">Wizyty</a>
+            <a href="{% url 'office_panel:medical_history:list' %}" class="list-group-item list-group-item-action
+            bg-light">Historie Medyczne</a>
         </div>
     </div>
     <div id="page-content-wrapper">
