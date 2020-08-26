@@ -172,6 +172,10 @@
 }
 
 @media screen and (max-width: 1000px) {
+    .d-flex {
+        margin-top: -5px;
+    }
+
     .jumbotron {
         min-height: 320px;
     }

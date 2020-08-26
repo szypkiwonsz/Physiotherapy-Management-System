@@ -29,7 +29,7 @@ class OfficesListView(View):
             ctx = {
                 'offices': self.get_queryset(),
             }
-            paginated_offices = paginate(request, ctx['offices'], 2)
+            paginated_offices = paginate(request, ctx['offices'], 10)
 
             ctx = {
                 'offices': paginated_offices,

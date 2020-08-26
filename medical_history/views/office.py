@@ -35,7 +35,7 @@ class MedicalHistoryListView(View):
                     '-date_selected'
                 ),
             }
-            paginated_medical_histories = paginate(request, ctx['medical_histories'], 2)
+            paginated_medical_histories = paginate(request, ctx['medical_histories'], 10)
 
             ctx = {
                 'medical_histories': paginated_medical_histories,

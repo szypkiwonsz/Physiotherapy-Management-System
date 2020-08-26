@@ -104,7 +104,7 @@ class AppointmentListView(ListView):
             ctx = {
                 'appointments': self.get_queryset(),
             }
-            paginated_appointments = paginate(request, ctx['appointments'], 2)
+            paginated_appointments = paginate(request, ctx['appointments'], 10)
 
             ctx = {
                 'appointments': paginated_appointments,

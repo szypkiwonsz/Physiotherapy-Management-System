@@ -33,7 +33,7 @@ class AppointmentListView(View):
             ctx = {
                 'appointments': Appointment.objects.filter(office=self.request.user.id).order_by('date'),
             }
-            paginated_appointments = paginate(request, ctx['appointments'], 2)
+            paginated_appointments = paginate(request, ctx['appointments'], 10)
 
             ctx = {
                 'appointments': paginated_appointments,

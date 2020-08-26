@@ -35,7 +35,7 @@ class PatientListView(ListView):
             ctx = {
                 'patients': self.get_queryset().order_by('-date_selected'),
             }
-            paginated_patients = paginate(request, ctx['patients'], 2)
+            paginated_patients = paginate(request, ctx['patients'], 10)
 
             ctx = {
                 'patients': paginated_patients,
