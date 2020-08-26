@@ -13,25 +13,25 @@
             {% for patient in patients %}
                 <hr>
                 <div class="text-description">
-                    <a href="{% url 'office-patient-detail' patient.pk %}"
+                    <a href="{% url 'office_panel:patient_detail' patient.pk %}"
                        role="button">{{ patient.first_name }}
                         {{ patient.last_name }}</a>,
                     {{ patient.email }}
                 </div>
                 <div class="right-button">
-                    <a href="{% url 'office-patient-change' patient.pk %}" class="btn btn-info" role="button">Edytuj</a>
-                    <a href="{% url 'office-patient-delete-confirm' patient.pk %}" class="btn btn-danger" role="button">Usuń</a>
+                    <a href="{% url 'office_panel:patient_update' patient.pk %}" class="btn btn-info" role="button">Edytuj</a>
+                    <a href="{% url 'office_panel:patient_delete' patient.pk %}" class="btn btn-danger" role="button">Usuń</a>
                 </div>
             {% endfor %}
             <hr>
             {% if patients %}
                 <div>
-                    <a href="{% url 'office-patients' %}" class="btn btn-warning" role="button">Pokaż wszystkich
+                    <a href="{% url 'office_panel:patients' %}" class="btn btn-warning" role="button">Pokaż wszystkich
                         pacjentów</a>
-                    <a href="{% url 'office-patient-add' %}" class="btn btn-secondary" role="button">Dodaj</a>
+                    <a href="{% url 'office_panel:patient_add' %}" class="btn btn-secondary" role="button">Dodaj</a>
                 </div>
             {% else %}
-                <a href="{% url 'office-patient-add' %}" class="btn btn-warning" role="button">Dodaj ich tutaj</a>
+                <a href="{% url 'office_panel:patient_add' %}" class="btn btn-warning" role="button">Dodaj ich tutaj</a>
             {% endif %}
         </div>
     </div>
@@ -57,13 +57,16 @@
                     {% endif %}
                 </div>
                 <div class="right-button">
-                    <a href="{% url 'office-appointment-change' appointment.pk %}" class="btn btn-info" role="button">Edytuj</a>
-                    <a href="{% url 'office-appointment-delete' appointment.pk %}" class="btn btn-danger" role="button">Usuń</a>
+                    <a href="{% url 'office_panel:appointments:update' appointment.pk %}" class="btn btn-info"
+                       role="button">Edytuj</a>
+                    <a href="{% url 'office_panel:appointments:delete' appointment.pk %}" class="btn btn-danger"
+                       role="button">Usuń</a>
                 </div>
             {% endfor %}
             <hr>
             {% if appointments %}
-                <a href="{% url 'office-appointments' %}" class="btn btn-warning" role="button">Pokaż wszystkie
+                <a href="{% url 'office_panel:appointments:list' %}" class="btn btn-warning" role="button">Pokaż
+                    wszystkie
                     wizyty</a>
             {% else %}
                 (tutaj pojawią się wizyty, które umówią pacjenci do twojego gabinetu.)
@@ -79,11 +82,13 @@
             {% endif %}
             {% for medical_history in medical_histories %}
                 <hr>
-                <a href="{% url 'office-medical-history-detail' medical_history.pk %}"
+                <a href="{% url 'office_panel:medical_history:detail' medical_history.pk %}"
                    role="button">Historia medyczna</a> -
                 {{ medical_history.date_selected|date:"d.m.Y" }}, {{ medical_history.date_selected|date:"H:i" }}
-                <div>Pacjent: <a href="{% url 'office-patient-detail' medical_history.patient.pk %}" role="button">
-                    {{ medical_history.patient }}</a></div>
+                <div>
+                    Pacjent: <a href="{% url 'office_panel:patient_detail' medical_history.patient.pk %}"
+                                role="button">{{ medical_history.patient }}</a>
+                </div>
                 {% if medical_history.appointment %}
                     {{ medical_history.appointment.date|date:"d.m.Y" }},
                     {{ medical_history.appointment.date|date:"H:i" }},
@@ -103,22 +108,23 @@
                     </div>
                 {% endif %}
                 <div class="right-button">
-                    <a href="{% url 'office-medical-history-change' medical_history.pk %}" class="btn btn-info"
-                       role="button">Edytuj</a>
-                    <a href="{% url 'office-medical-history-delete' medical_history.pk %}" class="btn btn-danger"
-                       role="button">Usuń</a>
+                    <a href="{% url 'office_panel:medical_history:update' medical_history.pk %}"
+                       class="btn btn-info" role="button">Edytuj</a>
+                    <a href="{% url 'office_panel:medical_history:delete' medical_history.pk %}"
+                       class="btn btn-danger" role="button">Usuń</a>
                 </div>
             {% endfor %}
             <hr>
             {% if medical_histories %}
                 <div>
-                    <a href="{% url 'office-medical-history' %}" class="btn btn-warning" role="button">Pokaż wszystkie
-                        historie</a>
-                    <a href="{% url 'office-make-medical-history' %}" class="btn btn-secondary" role="button">Dodaj</a>
+                    <a href="{% url 'office_panel:medical_history:list' %}" class="btn btn-warning"
+                       role="button">Pokaż wszystkie historie</a>
+                    <a href="{% url 'office_panel:medical_history:make' %}" class="btn btn-secondary"
+                       role="button">Dodaj</a>
                 </div>
             {% else %}
-                <a href="{% url 'office-make-medical-history' %}" class="btn btn-warning" role="button">Dodaj je
-                    tutaj</a>
+                <a href="{% url 'office_panel:medical_history:make' %}" class="btn btn-warning"
+                   role="button">Dodaj je tutaj</a>
             {% endif %}
         </div>
     </div>

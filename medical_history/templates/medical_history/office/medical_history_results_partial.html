@@ -1,13 +1,13 @@
 {% if medical_histories %}
     <div class="text-description"><h2>Wszystkie historie medyczne</h2></div>
-    <div class="right-button"><a href="{% url 'office-make-medical-history' %}" class="btn btn-warning"
+    <div class="right-button"><a href="{% url 'office_panel:medical_history:make' %}" class="btn btn-warning"
                                  role="button">Dodaj historię</a></div>
     <hr>
     {% for medical_history in medical_histories %}
-        <a href="{% url 'office-medical-history-detail' medical_history.pk %}"
+        <a href="{% url 'office_panel:medical_history:detail' medical_history.pk %}"
            role="button">Historia medyczna</a> -
         {{ medical_history.date_selected|date:"d.m.Y" }}, {{ medical_history.date_selected|date:"H:i" }}
-        <div>Pacjent: <a href="{% url 'office-patient-detail' medical_history.patient.pk %}" role="button">
+        <div>Pacjent: <a href="{% url 'office_panel:patient_detail' medical_history.patient.pk %}" role="button">
             {{ medical_history.patient }}</a></div>
         <div class="border-left rounded p-1 mt-3">Opis:
             <div class="text-description">{{ medical_history.description }}</div>
@@ -23,9 +23,9 @@
             </div>
         {% endif %}
         <div class="right-button">
-            <a href="{% url 'office-medical-history-change' medical_history.pk %}" class="btn btn-info"
+            <a href="{% url 'office_panel:medical_history:update' medical_history.pk %}" class="btn btn-info"
                role="button">Edytuj</a>
-            <a href="{% url 'office-medical-history-delete' medical_history.pk %}"
+            <a href="{% url 'office_panel:medical_history:delete' medical_history.pk %}"
                class="btn btn-danger"
                role="button">Usuń</a>
         </div>
@@ -34,37 +34,38 @@
 {% else %}
     <h2>Nie masz żadnych historii wizyt pacjentów.</h2>
     <hr>
-    <a href="{% url 'office-make-medical-history' %}" class="btn btn-warning" role="button">Dodaj
+    <a href="{% url 'office_panel:medical_history:make' %}" class="btn btn-warning" role="button">Dodaj
         historię</a>
 {% endif %}
 <div id="endpoint" value="{{ endpoint }}"></div>
 {% if medical_histories.has_other_pages %}
-  <ul class="pagination">
-    {% if medical_histories.has_previous %}
-      <li class="page-item">
-          <a class="page-link" href="?page={{ medical_histories.previous_page_number }}">&laquo;</a>
-      </li>
-    {% else %}
-      <li class="page-item disabled">
-        <a class="page-link" tabindex="-1">&laquo;</a>
-      </li>
-    {% endif %}
-    {% for i in medical_histories.paginator.page_range %}
-      {% if medical_histories.number == i %}
-          <div id="page" value="{{ i }}"></div>
-          <li class="page-item active"><a class="page-link">{{ i }} <span class="sr-only">(current)</span></a></li>
-      {% else %}
-        <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-      {% endif %}
-    {% endfor %}
-    {% if medical_histories.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ medical_histories.next_page_number }}">&raquo;</a>
-        </li>
-    {% else %}
-      <li class="page-item disabled">
-            <a class="page-link">&raquo;</a>
-        </li>
-    {% endif %}
-  </ul>
+    <ul class="pagination">
+        {% if medical_histories.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ medical_histories.previous_page_number }}">&laquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1">&laquo;</a>
+            </li>
+        {% endif %}
+        {% for i in medical_histories.paginator.page_range %}
+            {% if medical_histories.number == i %}
+                <div id="page" value="{{ i }}"></div>
+                <li class="page-item active"><a class="page-link">{{ i }} <span class="sr-only">(current)</span></a>
+                </li>
+            {% else %}
+                <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if medical_histories.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ medical_histories.next_page_number }}">&raquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link">&raquo;</a>
+            </li>
+        {% endif %}
+    </ul>
 {% endif %}

@@ -17,9 +17,9 @@ class CheckUser(View):
     def get(request):
         if request.user.is_authenticated:
             if request.user.is_office:
-                return redirect('office-home')
+                return redirect('office_panel:home')
             else:
-                return redirect('patient-home')
+                return redirect('patient_panel:home')
         else:
             messages.warning(request, "Musisz się zalogować, aby mieć dostęp do tego panelu.")
             return redirect('login')

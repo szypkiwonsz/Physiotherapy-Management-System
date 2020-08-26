@@ -13,8 +13,8 @@
                 {{ form|crispy }}
                 <hr>
                 <button type="submit" class="btn btn-success">Zapisz zmiany</button>
-                <a href="{% url 'office-patients' %}" class="btn btn-outline-secondary" role="button">Powrót</a>
-                <a href="{% url 'office-patient-delete-confirm' patient.pk %}"
+                <a href="{% url 'office_panel:patients' %}" class="btn btn-outline-secondary" role="button">Powrót</a>
+                <a href="{% url 'office_panel:patient_delete' patient.pk %}"
                    class="btn btn-danger float-right">Usuń</a>
             </form>
         </div>

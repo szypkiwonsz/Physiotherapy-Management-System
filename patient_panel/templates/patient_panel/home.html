@@ -18,9 +18,11 @@
             {% endif %}
             <hr>
             {% if offices %}
-                <a href="{% url 'patient-offices' %}" class="btn btn-warning" role="button">Pokaż wszystkie gabinety</a>
+                <a href="{% url 'patient_panel:offices' %}" class="btn btn-warning" role="button">Pokaż wszystkie
+                    gabinety</a>
             {% else %}
-                <a href="{% url 'appointments-select' %}" class="btn btn-warning" role="button">Umów się na wizytę</a>
+                <a href="{% url 'patient_panel:appointments:select' %}" class="btn btn-warning" role="button">Umów się
+                    na wizytę</a>
             {% endif %}
         </div>
     </div>
@@ -44,17 +46,19 @@
                     {% endif %}
                 </div>
                 <div class="right-button">
-                    <a href="{% url 'patient-appointment-change' appointment.pk %}" class="btn btn-info" role="button">Edytuj</a>
-                    <a href="{% url 'patient-appointment-cancel' appointment.pk %}" class="btn btn-danger"
+                    <a href="{% url 'patient_panel:appointments:update' appointment.pk %}" class="btn btn-info"
+                       role="button">Edytuj</a>
+                    <a href="{% url 'patient_panel:appointments:delete' appointment.pk %}" class="btn btn-danger"
                        role="button">Odwołaj</a>
                 </div>
             {% endfor %}
             <hr>
             {% if appointments %}
-                <a href="{% url 'patient-appointment-upcoming' %}" class="btn btn-warning" role="button">Pokaż wszystkie
-                    wizyty</a>
+                <a href="{% url 'patient_panel:appointments:upcoming' %}" class="btn btn-warning"
+                   role="button">Pokaż wszystkie wizyty</a>
             {% else %}
-                <a href="{% url 'appointments-select' %}" class="btn btn-warning" role="button">Umów się na wizytę</a>
+                <a href="{% url 'patient_panel:appointments:select' %}" class="btn btn-warning"
+                   role="button">Umów się na wizytę</a>
             {% endif %}
         </div>
     </div>
@@ -85,10 +89,11 @@
             {% endfor %}
             <hr>
             {% if medical_histories %}
-                <a href="{% url 'patient-medical-history' %}" class="btn btn-warning" role="button">Pokaż wszystkie
-                    wizyty</a>
+                <a href="{% url 'patient_panel:medical_history:list' %}" class="btn btn-warning"
+                   role="button">Pokaż wszystkie wizyty</a>
             {% else %}
-                <a href="{% url 'appointments-select' %}" class="btn btn-warning" role="button">Umów się na wizytę</a>
+                <a href="{% url 'patient_panel:appointments:select' %}" class="btn btn-warning"
+                   role="button">Umów się na wizytę</a>
             {% endif %}
         </div>
     </div>
