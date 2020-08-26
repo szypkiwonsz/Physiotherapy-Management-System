@@ -30,14 +30,17 @@ class TestNavigationBar(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
+        sleep(0.5)
         try:
             self.browser.find_element_by_xpath('//*[@id="navbarDropdownMenuLink"]').click()
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[2]/div/a[1]').click()
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="navbarDropdownMenuLink"]').click()
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[2]/div/a[1]').click()
         self.assertEquals(
             self.browser.current_url,
@@ -52,12 +55,14 @@ class TestNavigationBar(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
         try:
             self.browser.find_element_by_xpath('//*[@id="navbarDropdownMenuLink"]').click()
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[2]/div/a[2]').click()
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="navbarDropdownMenuLink"]').click()
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[2]/div/a[2]').click()
         self.assertEquals(
             self.browser.current_url,
@@ -70,14 +75,17 @@ class TestNavigationBar(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
+        sleep(0.5)
         try:
             self.browser.find_element_by_xpath('//*[@id="navbarDropdownMenuLink"]').click()
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[2]/div/a[3]').click()
         except ElementNotInteractableException:
             # Mobile version
             self.browser.find_element_by_xpath('/html/body/nav/button').click()
-            sleep(0.2)
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="navbarDropdownMenuLink"]').click()
+            sleep(0.5)
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[2]/div/a[3]').click()
         self.assertEquals(
             self.browser.current_url,
@@ -114,6 +122,7 @@ class TestHomeNoData(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
+        sleep(0.5)
         self.browser.find_element_by_xpath('/html/body/div[2]/div/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -138,6 +147,7 @@ class TestHomeNoData(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
+        sleep(0.5)
         self.browser.find_element_by_xpath('/html/body/div[3]/div/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -162,6 +172,7 @@ class TestHomeNoData(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
+        sleep(0.5)
         self.browser.find_element_by_xpath('/html/body/div[4]/div/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -232,6 +243,7 @@ class TestHome(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
+        sleep(0.5)
         self.browser.find_element_by_xpath('/html/body/div[2]/div/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -256,6 +268,7 @@ class TestHome(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
+        sleep(0.5)
         self.browser.find_element_by_xpath('/html/body/div[3]/div/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -264,11 +277,13 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_edit_appointment_button_redirects_to_update_appointment(self):
         self.browser.get(self.live_server_url + reverse('login'))
+        update_appointment_url = self.live_server_url + reverse(
+            'patient-appointment-change', args=[self.appointment1.pk]
+        )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        sleep(2)
-        update_appointment_url = self.live_server_url + reverse('patient-appointment-change', args=[3])
+        sleep(0.5)
         self.browser.find_element_by_xpath('/html/body/div[3]/div/div[2]/a[1]').click()
         self.assertEquals(
             self.browser.current_url,
@@ -277,10 +292,13 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_delete_appointment_button_redirects_to_confirm_delete(self):
         self.browser.get(self.live_server_url + reverse('login'))
+        cancel_appointment_url = self.live_server_url + reverse(
+            'patient-appointment-cancel', args=[self.appointment1.pk]
+        )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        cancel_appointment_url = self.live_server_url + reverse('patient-appointment-cancel', args=[2])
+        sleep(0.5)
         self.browser.find_element_by_xpath('/html/body/div[3]/div/div[2]/a[2]').click()
         self.assertEquals(
             self.browser.current_url,
@@ -305,6 +323,7 @@ class TestHome(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
+        sleep(0.5)
         self.browser.find_element_by_xpath('/html/body/div[4]/div/a').click()
         self.assertEquals(
             self.browser.current_url,
