@@ -63,7 +63,7 @@ class PatientCreateView(CreateView):
         patient.owner = self.request.user
         patient.save()
         messages.success(self.request, 'Pacjent został dodany poprawnie.')
-        return redirect('office-home')
+        return redirect('office_panel:home')
 
 
 @method_decorator([login_required, office_required], name='dispatch')
@@ -76,7 +76,7 @@ class PatientDetailView(DetailView):
         return patients
 
     def get_success_url(self):
-        return reverse('office-patient-change', kwargs={'pk': self.object.pk})
+        return reverse('office_panel:patient_update', kwargs={'pk': self.object.pk})
 
 
 @method_decorator([login_required, office_required], name='dispatch')
@@ -88,14 +88,14 @@ class PatientUpdateView(UpdateView):
         return self.request.user.patients.all()
 
     def get_success_url(self):
-        return reverse('office-patient-change', kwargs={'pk': self.object.pk})
+        return reverse('office_panel:patient_update', kwargs={'pk': self.object.pk})
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientDeleteView(DeleteView):
     form_class = PatientForm
     template_name = 'office_panel/patient/patient_delete_confirm.html'
-    success_url = reverse_lazy('office-patients')
+    success_url = reverse_lazy('office_panel:patients')
 
     def delete(self, request, *args, **kwargs):
         patient = self.get_object()
