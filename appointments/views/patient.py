@@ -62,12 +62,12 @@ class MakeAppointment(CreateView):
         id_office = self.get_office_id()
         if date.hour == 0:
             messages.warning(self.request, 'Wybierz poprawną godzinę.')
-            return redirect('appointments-make-appointment', id_office)
+            return redirect('patient_panel:appointments:make', id_office)
         else:
             appointment = Appointment.objects.filter(date=date)
             if appointment:
                 self.appointment_date_taken(date)
-                return redirect('appointments-make-appointment', id_office)
+                return redirect('patient_panel:appointments:make', id_office)
         appointment = form.save(commit=False)
         appointment.owner_id = id_owner
         appointment.office_id = id_office
@@ -79,7 +79,7 @@ class MakeAppointment(CreateView):
         appointment_confirmation_patient(name, appointment.office.name, date, patient_email)
 
         messages.warning(self.request, 'Poprawnie umówiono wizytę, ale oczekuje ona na potwierdzenie.')
-        return redirect('patient-appointment-upcoming')
+        return redirect('patient_panel:appointments:upcoming')
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
@@ -137,7 +137,7 @@ class OldAppointmentListView(ListView):
 class AppointmentCancelView(DeleteView):
     model = Appointment
     template_name = 'appointments/patient/appointment_cancel_confirm.html'
-    success_url = reverse_lazy('patient-appointment-upcoming')
+    success_url = reverse_lazy('patient_panel:appointments:upcoming')
 
     def delete(self, request, *args, **kwargs):
         appointment = self.get_object()
@@ -186,7 +186,7 @@ class AppointmentUpdateView(UpdateView):
                 appointment_check = None
             if appointment_check and appointment_check.pk != id_appointment:
                 self.appointment_date_taken(appointment.date)
-                return redirect('patient-appointment-change', id_appointment)
+                return redirect('office_panel:appointments:update', id_appointment)
         appointment.name = form.cleaned_data['name']
         appointment.phone_number = form.cleaned_data['phone_number']
         appointment.choice = form.cleaned_data['choice']
@@ -197,4 +197,4 @@ class AppointmentUpdateView(UpdateView):
         return Appointment.objects.filter(owner=self.request.user.id)
 
     def get_success_url(self):
-        return reverse('patient-appointment-change', kwargs={'pk': self.object.pk})
+        return reverse('office_panel:appointments:update', kwargs={'pk': self.object.pk})
