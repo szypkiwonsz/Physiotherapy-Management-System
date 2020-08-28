@@ -143,13 +143,13 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'panel'
 
+DATE_INPUT_FORMATS = ['%d.%m.%Y %H:%M']
+DATE_FORMAT = ['%d.%m.%Y %H:%M']
+
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'kacpersawicki321@gmail.com'
-EMAIL_HOST_PASSWORD = 'aqoywqbvjjcnlyxq'
+EMAIL_HOST = 'host'
+EMAIL_HOST_USER = 'host_user'
+EMAIL_HOST_PASSWORD = 'host_password'
 EMAIL_PORT = 587
-
-DATE_INPUT_FORMATS = ['%d.%m.%Y %H:%M']
-DATE_FORMAT = ['%d.%m.%Y %H:%M']
