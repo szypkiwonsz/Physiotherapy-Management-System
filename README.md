@@ -64,7 +64,7 @@ How to run tests
 Do the same as for running the project
 ```
 ```
-Download the [chromedriver.exe](https://chromedriver.chromium.org/downloads/) suitable for your version of Chrome browser
+Download the chromedriver.exe from https://chromedriver.chromium.org/downloads/
 ```
 ```
 Move the downloaded file to "Physiotherapy_Management_System\functional_tests>"
