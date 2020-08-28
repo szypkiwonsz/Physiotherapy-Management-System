@@ -3,6 +3,8 @@
 
 A web application built in Django that allows you to manage a physiotherapy office. It has many functionalities from the side of the office and patient panel, which are described below.
 
+Technologies used: Python, Django, HTML, CSS, Bootstrap, JavaScript, jQuery, AJAX, Unit Tests, Selenium (Functional Tests)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine.
@@ -60,7 +62,7 @@ Type "python manage.py runserver", to start the server
 
 ## Application Features
 ```
-The patient can see the information entered into the system by the office if the office adds a patient with the same email.
+The patient can see the information from the office if the office adds a patient with the same email.
 ```
 ```
 Visibility of registered offices
@@ -68,9 +70,7 @@ Visibility of registered offices
 ```
 Possibility to register as a patient or office
 ```
-```
-Password reminder
-```
+---
 
 From the patient panel side
 
