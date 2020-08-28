@@ -52,7 +52,7 @@ class TestOfficeMedicalHistory(StaticLiveServerTestCase):
 
     def test_add_medical_history_button_redirects_to_add_medical_history(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        medical_history_add_url = self.live_server_url + reverse('office-make-medical-history')
+        medical_history_add_url = self.live_server_url + reverse('office_panel:medical_history:make')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -68,7 +68,7 @@ class TestOfficeMedicalHistory(StaticLiveServerTestCase):
     def test_medical_history_edit_button_redirects_to_edit_medical_history(self):
         self.browser.get(self.live_server_url + reverse('login'))
         medical_history_edit_url = self.live_server_url + reverse(
-            'office-medical-history-change', args=[self.medical_history1.pk]
+            'office_panel:medical_history:update', args=[self.medical_history1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
@@ -85,7 +85,7 @@ class TestOfficeMedicalHistory(StaticLiveServerTestCase):
     def test_medical_history_delete_button_redirects_to_delete_medical_history(self):
         self.browser.get(self.live_server_url + reverse('login'))
         medical_history_delete_url = self.live_server_url + reverse(
-            'office-medical-history-delete', args=[self.medical_history1.pk]
+            'office_panel:medical_history:delete', args=[self.medical_history1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
@@ -102,7 +102,7 @@ class TestOfficeMedicalHistory(StaticLiveServerTestCase):
     def test_medical_history_detail_redirects_to_medical_history_detail(self):
         self.browser.get(self.live_server_url + reverse('login'))
         medical_history_detail_url = self.live_server_url + reverse(
-            'office-medical-history-detail', args=[self.medical_history1.pk]
+            'office_panel:medical_history:detail', args=[self.medical_history1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
@@ -118,7 +118,9 @@ class TestOfficeMedicalHistory(StaticLiveServerTestCase):
 
     def test_patient_detail_redirects_to_patient_detail(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        patient_detail_url = self.live_server_url + reverse('office-patient-detail', args=[self.office_patient1.pk])
+        patient_detail_url = self.live_server_url + reverse(
+            'office_panel:patient_detail', args=[self.office_patient1.pk]
+        )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()

@@ -36,7 +36,7 @@ class TestHomeNoData(StaticLiveServerTestCase):
 
     def test_add_patient_button_redirects_to_add_patient(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        add_patient_button = self.live_server_url + reverse('office-patient-add')
+        add_patient_button = self.live_server_url + reverse('office_panel:patient_add')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -71,7 +71,7 @@ class TestHomeNoData(StaticLiveServerTestCase):
 
     def test_medical_histories_make_history_button_redirects_to_make_medical_history(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        add_medical_history_url = self.live_server_url + reverse('office-make-medical-history')
+        add_medical_history_url = self.live_server_url + reverse('office_panel:medical_history:make')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -84,6 +84,7 @@ class TestHomeNoData(StaticLiveServerTestCase):
 
 
 class TestHome(StaticLiveServerTestCase):
+
     def setUp(self):
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
@@ -140,7 +141,9 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_patient_detail_button_redirects_to_patient_detail(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        patient_detail_url = self.live_server_url + reverse('office-patient-detail', args=[self.office_patient1.pk])
+        patient_detail_url = self.live_server_url + reverse(
+            'office_panel:patient_detail', args=[self.office_patient1.pk]
+        )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -153,7 +156,7 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_patients_all_button_redirects_to_patients_list(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        all_patients_url = self.live_server_url + reverse('office-patients')
+        all_patients_url = self.live_server_url + reverse('office_panel:patients')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -166,7 +169,7 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_patient_edit_button_redirects_to_edit_patient(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        edit_patient_url = self.live_server_url + reverse('office-patient-change', args=[self.office_patient1.pk])
+        edit_patient_url = self.live_server_url + reverse('office_panel:patient_update', args=[self.office_patient1.pk])
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -180,7 +183,7 @@ class TestHome(StaticLiveServerTestCase):
     def test_patient_delete_button_redirects_to_confirm_delete(self):
         self.browser.get(self.live_server_url + reverse('login'))
         delete_patient_url = self.live_server_url + reverse(
-            'office-patient-delete-confirm', args=[self.office_patient1.pk]
+            'office_panel:patient_delete', args=[self.office_patient1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
@@ -194,7 +197,7 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_patients_add_button_redirects_to_patient_add(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        add_patient_url = self.live_server_url + reverse('office-patient-add')
+        add_patient_url = self.live_server_url + reverse('office_panel:patient_add')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -220,7 +223,7 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_appointments_all_button_redirects_to_all_appointments(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        all_appointments_url = self.live_server_url + reverse('office-appointments')
+        all_appointments_url = self.live_server_url + reverse('office_panel:appointments:list')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -233,7 +236,9 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_appointment_edit_button_redirects_to_edit_appointment(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        edit_appointment_url = self.live_server_url + reverse('office-appointment-change', args=[self.appointment1.pk])
+        edit_appointment_url = self.live_server_url + reverse(
+            'office_panel:appointments:update', args=[self.appointment1.pk]
+        )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -247,7 +252,7 @@ class TestHome(StaticLiveServerTestCase):
     def test_appointment_delete_button_redirects_to_confirm_delete(self):
         self.browser.get(self.live_server_url + reverse('login'))
         delete_appointment_url = self.live_server_url + reverse(
-            'office-appointment-delete', args=[self.appointment1.pk]
+            'office_panel:appointments:delete', args=[self.appointment1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
@@ -274,7 +279,7 @@ class TestHome(StaticLiveServerTestCase):
     def test_medical_history_detail_button_redirect_to_history_detail(self):
         self.browser.get(self.live_server_url + reverse('login'))
         medical_history_detail_url = self.live_server_url + reverse(
-            'office-medical-history-detail', args=[self.medical_history1.pk]
+            'office_panel:medical_history:detail', args=[self.medical_history1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
@@ -288,7 +293,9 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_medical_history_patient_detail_button_redirect_to_patient_detail(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        patient_detail_url = self.live_server_url + reverse('office-patient-detail', args=[self.office_patient1.pk])
+        patient_detail_url = self.live_server_url + reverse(
+            'office_panel:patient_detail', args=[self.office_patient1.pk]
+        )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -301,7 +308,7 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_medical_histories_all_button_redirects_to_all_histories(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        all_medical_histories_url = self.live_server_url + reverse('office-medical-history')
+        all_medical_histories_url = self.live_server_url + reverse('office_panel:medical_history:list')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -315,7 +322,7 @@ class TestHome(StaticLiveServerTestCase):
     def test_medical_history_edit_button_redirects_to_edit_history(self):
         self.browser.get(self.live_server_url + reverse('login'))
         medical_history_change_url = self.live_server_url + reverse(
-            'office-medical-history-change', args=[self.medical_history1.pk]
+            'office_panel:medical_history:update', args=[self.medical_history1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
@@ -330,7 +337,7 @@ class TestHome(StaticLiveServerTestCase):
     def test_medical_history_delete_button_redirects_to_delete_history(self):
         self.browser.get(self.live_server_url + reverse('login'))
         delete_medical_history_url = self.live_server_url + reverse(
-            'office-medical-history-delete', args=[self.medical_history1.pk]
+            'office_panel:medical_history:delete', args=[self.medical_history1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
@@ -344,7 +351,7 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_medical_history_add_button_redirects_to_add_medical_history(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        make_medical_history_url = self.live_server_url + reverse('office-make-medical-history')
+        make_medical_history_url = self.live_server_url + reverse('office_panel:medical_history:make')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -386,7 +393,7 @@ class TestPatientsNoData(StaticLiveServerTestCase):
 
     def test_patients_add_patient_button_redirect_to_add_patient(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        add_patient_url = self.live_server_url + reverse('office-patient-add')
+        add_patient_url = self.live_server_url + reverse('office_panel:patient_add')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -401,7 +408,9 @@ class TestPatientsNoData(StaticLiveServerTestCase):
 
     def test_patient_detail_button_redirects_to_patient_detail(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        patient_detail_url = self.live_server_url + reverse('office-patient-detail', args=[self.office_patient1.pk])
+        patient_detail_url = self.live_server_url + reverse(
+            'office_panel:patient_detail', args=[self.office_patient1.pk]
+        )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -416,7 +425,7 @@ class TestPatientsNoData(StaticLiveServerTestCase):
 
     def test_patient_edit_button_redirects_to_patient_edit(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        patient_edit_url = self.live_server_url + reverse('office-patient-change', args=[self.office_patient1.pk])
+        patient_edit_url = self.live_server_url + reverse('office_panel:patient_update', args=[self.office_patient1.pk])
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -432,7 +441,7 @@ class TestPatientsNoData(StaticLiveServerTestCase):
     def test_patient_delete_button_redirects_to_patient_delete(self):
         self.browser.get(self.live_server_url + reverse('login'))
         patient_delete_url = self.live_server_url + reverse(
-            'office-patient-delete-confirm', args=[self.office_patient1.pk]
+            'office_panel:patient_delete', args=[self.office_patient1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
@@ -479,7 +488,7 @@ class TestPatients(StaticLiveServerTestCase):
 
     def test_add_patient_button_redirects_to_add_patient(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        patient_add_url = self.live_server_url + reverse('office-patient-add')
+        patient_add_url = self.live_server_url + reverse('office_panel:patient_add')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -494,7 +503,7 @@ class TestPatients(StaticLiveServerTestCase):
 
     def test_patient_detail_redirects_to_patient_detail(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        patient_edit_url = self.live_server_url + reverse('office-patient-detail', args=[self.office_patient1.pk])
+        patient_edit_url = self.live_server_url + reverse('office_panel:patient_detail', args=[self.office_patient1.pk])
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -509,7 +518,7 @@ class TestPatients(StaticLiveServerTestCase):
 
     def test_edit_patient_button_redirects_to_edit_patient(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        patient_edit_url = self.live_server_url + reverse('office-patient-change', args=[self.office_patient1.pk])
+        patient_edit_url = self.live_server_url + reverse('office_panel:patient_update', args=[self.office_patient1.pk])
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -525,7 +534,7 @@ class TestPatients(StaticLiveServerTestCase):
     def test_delete_patient_button_redirects_to_delete_patient(self):
         self.browser.get(self.live_server_url + reverse('login'))
         patient_delete_url = self.live_server_url + reverse(
-            'office-patient-delete-confirm', args=[self.office_patient1.pk]
+            'office_panel:patient_delete', args=[self.office_patient1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')

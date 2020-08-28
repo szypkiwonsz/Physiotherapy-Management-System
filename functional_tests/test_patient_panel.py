@@ -26,7 +26,7 @@ class TestNavigationBar(StaticLiveServerTestCase):
 
     def test_appointment_panel_upcoming_button_redirects_to_upcoming_appointments(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        upcoming_appointments_url = self.live_server_url + reverse('patient-appointment-upcoming')
+        upcoming_appointments_url = self.live_server_url + reverse('patient_panel:appointments:upcoming')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -49,7 +49,7 @@ class TestNavigationBar(StaticLiveServerTestCase):
 
     def test_appointment_panel_make_button_redirects_to_select_office(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        select_office_url = self.live_server_url + reverse('appointments-select')
+        select_office_url = self.live_server_url + reverse('patient_panel:appointments:select')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -71,7 +71,7 @@ class TestNavigationBar(StaticLiveServerTestCase):
 
     def test_appointment_panel_old_button_redirects_to_old_appointments(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        old_appointments_url = self.live_server_url + reverse('patient-appointment-old')
+        old_appointments_url = self.live_server_url + reverse('patient_panel:appointments:old')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -118,7 +118,7 @@ class TestHomeNoData(StaticLiveServerTestCase):
 
     def test_office_make_appointment_button_redirects_to_select_office(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        select_office_url = self.live_server_url + reverse('appointments-select')
+        select_office_url = self.live_server_url + reverse('patient_panel:appointments:select')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -143,7 +143,7 @@ class TestHomeNoData(StaticLiveServerTestCase):
 
     def test_appointments_make_appointment_button_redirects_to_select_office(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        select_office_url = self.live_server_url + reverse('appointments-select')
+        select_office_url = self.live_server_url + reverse('patient_panel:appointments:select')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -168,7 +168,7 @@ class TestHomeNoData(StaticLiveServerTestCase):
 
     def test_medical_histories_make_appointment_button_redirects_to_select_office(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        select_office_url = self.live_server_url + reverse('appointments-select')
+        select_office_url = self.live_server_url + reverse('patient_panel:appointments:select')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -239,7 +239,7 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_show_all_offices_button_redirects_to_offices(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        all_offices_url = self.live_server_url + reverse('patient-offices')
+        all_offices_url = self.live_server_url + reverse('patient_panel:offices')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -264,7 +264,7 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_show_all_upcoming_button_redirects_to_upcoming_appointments(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        upcoming_appointments_url = self.live_server_url + reverse('patient-appointment-upcoming')
+        upcoming_appointments_url = self.live_server_url + reverse('patient_panel:appointments:upcoming')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -278,7 +278,7 @@ class TestHome(StaticLiveServerTestCase):
     def test_edit_appointment_button_redirects_to_update_appointment(self):
         self.browser.get(self.live_server_url + reverse('login'))
         update_appointment_url = self.live_server_url + reverse(
-            'patient-appointment-change', args=[self.appointment1.pk]
+            'patient_panel:appointments:update', args=[self.appointment1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
@@ -293,7 +293,7 @@ class TestHome(StaticLiveServerTestCase):
     def test_delete_appointment_button_redirects_to_confirm_delete(self):
         self.browser.get(self.live_server_url + reverse('login'))
         cancel_appointment_url = self.live_server_url + reverse(
-            'patient-appointment-cancel', args=[self.appointment1.pk]
+            'patient_panel:appointments:delete', args=[self.appointment1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
@@ -319,7 +319,7 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_show_all_medical_histories_button_redirects_to_medical_histories(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        medical_histories_url = self.live_server_url + reverse('patient-medical-history')
+        medical_histories_url = self.live_server_url + reverse('patient_panel:medical_history:list')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()

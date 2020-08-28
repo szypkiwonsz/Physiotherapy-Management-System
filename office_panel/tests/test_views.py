@@ -9,7 +9,7 @@ class TestHomeViews(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.office_home_url = reverse('office-home')
+        self.office_home_url = reverse('office_panel:home')
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
@@ -41,11 +41,11 @@ class TestHomeViews(TestCase):
 class TestPatientViews(TestCase):
 
     def setUp(self):
-        self.patient_url = reverse('office-patients')
-        self.create_patient_url = reverse('office-patient-add')
-        self.detail_patient_url = reverse('office-patient-detail', args=[1])
-        self.update_patient_url = reverse('office-patient-change', args=[1])
-        self.delete_patient_url = reverse('office-patient-delete-confirm', args=[1])
+        self.patient_url = reverse('office_panel:patients')
+        self.create_patient_url = reverse('office_panel:patient_add')
+        self.detail_patient_url = reverse('office_panel:patient_detail', args=[1])
+        self.update_patient_url = reverse('office_panel:patient_update', args=[1])
+        self.delete_patient_url = reverse('office_panel:patient_delete', args=[1])
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
@@ -101,8 +101,7 @@ class TestPatientViews(TestCase):
 
     def test_patient_create_POST(self):
         self.client.login(username='office@gmail.com', password='officepassword')
-        url = reverse('office-patient-add')
-        response = self.client.post(url, {
+        response = self.client.post(self.create_patient_url, {
             'first_name': 'firstname',
             'last_name': 'lastname',
             'email': 'patient2@gmail.com'
@@ -152,9 +151,8 @@ class TestPatientViews(TestCase):
         self.assertTemplateUsed(response, 'office_panel/patient/patient_update_form.html')
 
     def test_patient_update_POST(self):
-        url = reverse('office-patient-change', args=[1])
         self.client.login(username='office@gmail.com', password='officepassword')
-        response = self.client.post(url, {
+        response = self.client.post(self.update_patient_url, {
             'first_name': self.office_patient1.first_name,
             'last_name': self.office_patient1.last_name,
             'email': 'newpatientemail@gmail.com'
@@ -184,10 +182,9 @@ class TestPatientViews(TestCase):
         self.assertTemplateUsed(response, 'office_panel/patient/patient_delete_confirm.html')
 
     def test_patient_delete_POST(self):
-        url = reverse('office-patient-delete-confirm', args=[1])
         self.client.login(username='office@gmail.com', password='officepassword')
         response_with_post = self.client.get(self.delete_patient_url)
         self.assertEquals(response_with_post.status_code, 200)
-        response = self.client.post(url)
+        response = self.client.post(self.delete_patient_url)
         response_with_deleted_post = self.client.get(self.delete_patient_url)
         self.assertEquals(response_with_deleted_post.status_code, 404)

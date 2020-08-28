@@ -21,7 +21,7 @@ class TestLogin(StaticLiveServerTestCase):
 
     def test_no_account_button_redirects_to_signup(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        signup_url = self.live_server_url + reverse('signup')
+        signup_url = self.live_server_url + reverse('users:signup')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/small[1]/a').click()
         self.assertEquals(
             self.browser.current_url,
@@ -49,7 +49,7 @@ class TestLogin(StaticLiveServerTestCase):
 
     def test_login_as_patient_redirects_to_patient_panel(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        panel_patient_url = self.live_server_url + reverse('patient-home')
+        panel_patient_url = self.live_server_url + reverse('patient_panel:home')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -60,7 +60,7 @@ class TestLogin(StaticLiveServerTestCase):
 
     def test_login_as_office_redirects_to_office_panel(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        panel_office_url = self.live_server_url + reverse('office-home')
+        panel_office_url = self.live_server_url + reverse('office_panel:home')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -79,8 +79,8 @@ class TestRegister(StaticLiveServerTestCase):
         self.browser.close()
 
     def test_register_patient_redirects_to_signup_patient(self):
-        self.browser.get(self.live_server_url + reverse('signup'))
-        signup_patient_url = self.live_server_url + reverse('patient-signup')
+        self.browser.get(self.live_server_url + reverse('users:signup'))
+        signup_patient_url = self.live_server_url + reverse('users:patient_signup')
         self.browser.find_element_by_xpath('//*[@id="image-patient"]').click()
         self.assertEquals(
             self.browser.current_url,
@@ -88,8 +88,8 @@ class TestRegister(StaticLiveServerTestCase):
         )
 
     def test_register_office_redirects_to_signup_office(self):
-        self.browser.get(self.live_server_url + reverse('signup'))
-        signup_office_url = self.live_server_url + reverse('office-signup')
+        self.browser.get(self.live_server_url + reverse('users:signup'))
+        signup_office_url = self.live_server_url + reverse('users:office_signup')
         self.browser.find_element_by_xpath('//*[@id="image-office"]').click()
         self.assertEquals(
             self.browser.current_url,
@@ -97,7 +97,7 @@ class TestRegister(StaticLiveServerTestCase):
         )
 
     def test_signup_patient_redirects_to_login(self):
-        self.browser.get(self.live_server_url + reverse('patient-signup'))
+        self.browser.get(self.live_server_url + reverse('users:patient_signup'))
         login_url = self.live_server_url + reverse('login')
         self.browser.find_element_by_xpath('//*[@id="id_email"]').send_keys('randompatient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_confirm_email"]').send_keys('randompatient@gmail.com')
@@ -110,7 +110,7 @@ class TestRegister(StaticLiveServerTestCase):
         )
 
     def test_signup_office_redirects_to_login(self):
-        self.browser.get(self.live_server_url + reverse('office-signup'))
+        self.browser.get(self.live_server_url + reverse('users:office_signup'))
         login_url = self.live_server_url + reverse('login')
         self.browser.find_element_by_xpath('//*[@id="id_name"]').send_keys('Fizjo-Test')
         self.browser.find_element_by_xpath('//*[@id="id_address"]').send_keys('Random')
@@ -127,7 +127,7 @@ class TestRegister(StaticLiveServerTestCase):
         )
 
     def test_signup_have_account_button_redirect_to_login(self):
-        self.browser.get(self.live_server_url + reverse('signup'))
+        self.browser.get(self.live_server_url + reverse('users:signup'))
         login_url = self.live_server_url + reverse('login')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/div[3]/small/a').click()
         self.assertEquals(
@@ -136,7 +136,7 @@ class TestRegister(StaticLiveServerTestCase):
         )
 
     def test_signup_patient_have_account_button_redirect_to_login(self):
-        self.browser.get(self.live_server_url + reverse('patient-signup'))
+        self.browser.get(self.live_server_url + reverse('users:patient_signup'))
         login_url = self.live_server_url + reverse('login')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/div/small/a').click()
         self.assertEquals(
@@ -145,7 +145,7 @@ class TestRegister(StaticLiveServerTestCase):
         )
 
     def test_signup_office_have_account_button_redirect_to_login(self):
-        self.browser.get(self.live_server_url + reverse('office-signup'))
+        self.browser.get(self.live_server_url + reverse('users:office_signup'))
         login_url = self.live_server_url + reverse('login')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/div/small/a').click()
         self.assertEquals(

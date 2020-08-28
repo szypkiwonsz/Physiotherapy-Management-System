@@ -33,7 +33,7 @@ class TestHomePageNotLoggedIn(StaticLiveServerTestCase):
 
     def test_offices_button_redirects_to_offices(self):
         self.browser.get(self.live_server_url)
-        offices_url = self.live_server_url + reverse('offices')
+        offices_url = self.live_server_url + reverse('home_page:offices')
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[3]/a').click()
         except ElementNotInteractableException:
@@ -48,7 +48,7 @@ class TestHomePageNotLoggedIn(StaticLiveServerTestCase):
 
     def test_help_button_redirects_to_help(self):
         self.browser.get(self.live_server_url)
-        help_url = self.live_server_url + reverse('help')
+        help_url = self.live_server_url + reverse('home_page:help')
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[4]/a').click()
         except ElementNotInteractableException:
@@ -78,7 +78,7 @@ class TestHomePageNotLoggedIn(StaticLiveServerTestCase):
 
     def test_register_button_redirects_to_signup_choice(self):
         self.browser.get(self.live_server_url)
-        signup_url = self.live_server_url + reverse('signup')
+        signup_url = self.live_server_url + reverse('users:signup')
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[2]/li[2]/a').click()
         except ElementNotInteractableException:
@@ -105,11 +105,11 @@ class TestHomePageLoggedAsPatient(StaticLiveServerTestCase):
 
     def test_panel_button_redirects_to_panel(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        panel_patient_url = self.live_server_url + reverse('patient-home')
+        panel_patient_url = self.live_server_url + reverse('patient_panel:home')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        self.browser.get(self.live_server_url + reverse('home'))
+        self.browser.get(self.live_server_url + reverse('home_page:home'))
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[2]/a').click()
         except ElementNotInteractableException:
@@ -127,8 +127,8 @@ class TestHomePageLoggedAsPatient(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        self.browser.get(self.live_server_url + reverse('home'))
-        offices_url = self.live_server_url + reverse('offices')
+        self.browser.get(self.live_server_url + reverse('home_page:home'))
+        offices_url = self.live_server_url + reverse('home_page:offices')
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[3]/a').click()
         except ElementNotInteractableException:
@@ -146,8 +146,8 @@ class TestHomePageLoggedAsPatient(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        self.browser.get(self.live_server_url + reverse('home'))
-        help_url = self.live_server_url + reverse('help')
+        self.browser.get(self.live_server_url + reverse('home_page:home'))
+        help_url = self.live_server_url + reverse('home_page:help')
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[4]/a').click()
         except ElementNotInteractableException:
@@ -162,11 +162,11 @@ class TestHomePageLoggedAsPatient(StaticLiveServerTestCase):
 
     def test_profile_button_redirects_to_profile(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        profile_patient_url = self.live_server_url + reverse('profile-patient')
+        profile_patient_url = self.live_server_url + reverse('users:patient_profile')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        self.browser.get(self.live_server_url + reverse('home'))
+        self.browser.get(self.live_server_url + reverse('home_page:home'))
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[2]/li[1]/a').click()
         except ElementNotInteractableException:
@@ -185,7 +185,7 @@ class TestHomePageLoggedAsPatient(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        self.browser.get(self.live_server_url + reverse('home'))
+        self.browser.get(self.live_server_url + reverse('home_page:home'))
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[2]/li[2]/a').click()
         except ElementNotInteractableException:
@@ -212,11 +212,11 @@ class TestHomePageLoggedAsOffice(StaticLiveServerTestCase):
 
     def test_panel_button_redirects_to_panel(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        panel_office_url = self.live_server_url + reverse('office-home')
+        panel_office_url = self.live_server_url + reverse('office_panel:home')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        self.browser.get(self.live_server_url + reverse('home'))
+        self.browser.get(self.live_server_url + reverse('home_page:home'))
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[2]/a').click()
         except ElementNotInteractableException:
@@ -234,8 +234,8 @@ class TestHomePageLoggedAsOffice(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        self.browser.get(self.live_server_url + reverse('home'))
-        offices_url = self.live_server_url + reverse('offices')
+        self.browser.get(self.live_server_url + reverse('home_page:home'))
+        offices_url = self.live_server_url + reverse('home_page:offices')
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[3]/a').click()
         except ElementNotInteractableException:
@@ -253,8 +253,8 @@ class TestHomePageLoggedAsOffice(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        self.browser.get(self.live_server_url + reverse('home'))
-        help_url = self.live_server_url + reverse('help')
+        self.browser.get(self.live_server_url + reverse('home_page:home'))
+        help_url = self.live_server_url + reverse('home_page:help')
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[1]/li[4]/a').click()
         except ElementNotInteractableException:
@@ -269,11 +269,11 @@ class TestHomePageLoggedAsOffice(StaticLiveServerTestCase):
 
     def test_profile_button_redirects_to_profile(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        profile_office_url = self.live_server_url + reverse('profile-office')
+        profile_office_url = self.live_server_url + reverse('users:office_profile')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        self.browser.get(self.live_server_url + reverse('home'))
+        self.browser.get(self.live_server_url + reverse('home_page:home'))
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[2]/li[1]/a').click()
         except ElementNotInteractableException:
@@ -292,7 +292,7 @@ class TestHomePageLoggedAsOffice(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        self.browser.get(self.live_server_url + reverse('home'))
+        self.browser.get(self.live_server_url + reverse('home_page:home'))
         try:
             self.browser.find_element_by_xpath('//*[@id="basicExampleNav"]/ul[2]/li[2]/a').click()
         except ElementNotInteractableException:

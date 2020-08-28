@@ -57,7 +57,9 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
 
     def test_appointment_edit_button_redirects_to_edit_appointment(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        appointment_edit_url = self.live_server_url + reverse('office-appointment-change', args=[self.appointment1.pk])
+        appointment_edit_url = self.live_server_url + reverse(
+            'office_panel:appointments:update', args=[self.appointment1.pk]
+        )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -73,7 +75,7 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
     def test_appointment_delete_button_redirects_to_delete_appointment(self):
         self.browser.get(self.live_server_url + reverse('login'))
         appointment_delete_url = self.live_server_url + reverse(
-            'office-appointment-delete', args=[self.appointment1.pk]
+            'office_panel:appointments:delete', args=[self.appointment1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
@@ -136,7 +138,9 @@ class TestPatientAppointments(StaticLiveServerTestCase):
 
     def test_edit_appointment_button_redirects_to_edit_appointment(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        appointment_edit_url = self.live_server_url + reverse('patient-appointment-change', args=[self.appointment1.pk])
+        appointment_edit_url = self.live_server_url + reverse(
+            'patient_panel:appointments:update', args=[self.appointment1.pk]
+        )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -152,7 +156,7 @@ class TestPatientAppointments(StaticLiveServerTestCase):
     def test_delete_appointment_button_redirects_to_delete_appointment(self):
         self.browser.get(self.live_server_url + reverse('login'))
         appointment_delete_url = self.live_server_url + reverse(
-            'patient-appointment-cancel', args=[self.appointment1.pk]
+            'patient_panel:appointments:delete', args=[self.appointment1.pk]
         )
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('patient@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('patientpassword')
