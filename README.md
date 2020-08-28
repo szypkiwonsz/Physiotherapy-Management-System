@@ -57,6 +57,25 @@ Type "python manage.py migrate", to create database
 Type "python manage.py runserver", to start the server
 ```
 ---
+### Running tests
+
+How to run tests
+```
+Do the same as for running the project
+```
+```
+Download the [chromedriver.exe](https://chromedriver.chromium.org/downloads) file from suitable for your version of Chrome browser
+```
+```
+Move the downloaded file to "Physiotherapy_Management_System\functional_tests>"
+```
+```
+Open terminal with choosen folder "Physiotherapy_Management_System>" where manage.py file is
+```
+```
+Type: "python manage.py test"
+```
+---
 
 ## Application Features
 ```
@@ -109,10 +128,10 @@ Adding a medical history for any patient visit
 * CSS - Cascading Style Sheet
 * [Bootstrap](https://getbootstrap.com/) - HTML, CSS, and JS library
 * JavaScript - Scripting language
-* jQuery(https://jquery.com/) - JavaScript library
+* [jQuery](https://jquery.com/) - JavaScript library
 * AJAX - Set of web development techniques
 * Unit Tests - Software testing method
-* Selenium(https://www.selenium.dev/) - Automated testing framework
+* [Selenium](https://www.selenium.dev/) - Automated testing framework
 
 ## Authors
 
