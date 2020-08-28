@@ -42,10 +42,10 @@ Download project
 Install requirements
 ```
 ```
-Run terminal with choosen folder "Physiotherapy_Management_System\Physiotherapy_Management_System>" where manage.py file is
+Run terminal with choosen folder "Physiotherapy_Management_System>" where manage.py file is
 ```
 ```
-Go to the seetings.py file and at the bottom set the mailbox from which messages will be sent (registration confirmation, etc.)
+Go to the seetings.py file and at the bottom set the mailbox from which messages will be sent.
 ```
 ```
 Type "python manage.py makemigrations", to make migrations
@@ -59,6 +59,18 @@ Type "python manage.py runserver", to start the server
 ---
 
 ## Application Features
+```
+The patient can see the information entered into the system by the office if the office adds a patient with the same email.
+```
+```
+Visibility of registered offices
+```
+```
+Possibility to register as a patient or office
+```
+```
+Password reminder
+```
 
 From the patient panel side
 
@@ -72,7 +84,7 @@ Displaying of the medical offices assigned to the patient
 List of future and past visits with the option of editing or canceling them
 ```
 ```
-Displaying patient medical histories
+Displaying patient medical histories 
 ```
 ---
 
