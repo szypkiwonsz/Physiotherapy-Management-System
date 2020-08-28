@@ -1,5 +1,5 @@
 # Physiotherapy-Management-System
-&#x1F534; Project made in Polish language
+Project made in Polish language
 
 [**See Project Live Here**](https://fizjo-system.herokuapp.com/)
 
