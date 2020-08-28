@@ -1,0 +1,18 @@
+{% extends 'base/base_panel_office.html' %}
+{% load crispy_forms_tags %}
+{% block head %}
+    <title>Fizjo-System - Pacjenci</title>
+{% endblock head %}
+{% block content %}
+    <div class="container border rounded bg-light">
+        <div class="form">
+            <h2>Dodaj pacjenta</h2>
+            <hr>
+            <form method="post" id="register-office">{% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-success">Dodaj</button>
+                <a href="{% url 'office_panel:patients' %}" class="btn btn-outline-secondary" role="button">Powrót</a>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

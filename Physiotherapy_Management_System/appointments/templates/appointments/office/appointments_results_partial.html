@@ -1,0 +1,61 @@
+{% if appointments %}
+    <div class="text-description"><h2>Wszystkie wizyty:</h2></div>
+    {% for appointment in appointments %}
+        <hr>
+        <div class="text-description">
+            {{ appointment.owner }},
+            {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
+            {{ appointment.choice }}
+            <br>
+            {% if appointment.confirmed %}
+                [<span id="confirmed-color">Potwierdzona</span>]
+            {% else %}
+                [<span id="unconfirmed-color">Niepotwierdzona</span>]
+            {% endif %}
+        </div>
+        <div class="right-button">
+            <a href="{% url 'office_panel:appointments:update' appointment.pk %}" class="btn btn-info"
+               role="button">Edytuj</a>
+            <a href="{% url 'office_panel:appointments:delete' appointment.pk %}"
+               class="btn btn-danger"
+               role="button">Odwołaj</a>
+        </div>
+    {% endfor %}
+    <hr>
+{% else %}
+    <h2>Nie masz umówionych żadnych wizyt.</h2>
+    <hr>
+    <h6>(pacjent musi umówić wizytę w twoim gabinecie.)</h6>
+{% endif %}
+<div id="endpoint" value="{{ endpoint }}"></div>
+{% if appointments.has_other_pages %}
+    <ul class="pagination">
+        {% if appointments.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ appointments.previous_page_number }}">&laquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1">&laquo;</a>
+            </li>
+        {% endif %}
+        {% for i in appointments.paginator.page_range %}
+            {% if appointments.number == i %}
+                <div id="page" value="{{ i }}"></div>
+                <li class="page-item active"><a class="page-link">{{ i }} <span class="sr-only">(current)</span></a>
+                </li>
+            {% else %}
+                <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if appointments.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ appointments.next_page_number }}">&raquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link">&raquo;</a>
+            </li>
+        {% endif %}
+    </ul>
+{% endif %}

@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% block head %}{% endblock head %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static "css/navbar.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/mystyle.css" %}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+    <a class="navbar-brand" href="{% url 'home_page:home' %}">Fizjo-System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+            aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="basicExampleNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                {% if user.is_patient %}
+                    <a class="nav-link" href="{% url 'patient_panel:home' %}">Panel pacjenta
+                        <span class="sr-only">(current)</span>
+                    </a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'office_panel:home' %}">Panel gabinetu
+                        <span class="sr-only">(current)</span>
+                    </a>
+                {% endif %}
+            </li>
+            {% if user.is_patient %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Panel wizyt</a>
+                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'patient_panel:appointments:upcoming' %}">Zbliżające się
+                            wizyty</a>
+                        <a class="dropdown-item" href="{% url 'patient_panel:appointments:select' %}">Umów wizytę</a>
+                        <a class="dropdown-item" href="{% url 'patient_panel:appointments:old' %}">Poprzednie wizyty</a>
+                    </div>
+                </li>
+            {% endif %}
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_office %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:office_profile' %}">Profil</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:patient_profile' %}">Profil</a>
+                </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Wyloguj</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container" id="messages">
+    {% if messages %}
+        <div class="container" id="uslugi">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} text-center">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% block content %}{% endblock content %}
+<footer>
+    <p class="main">
+        2020 © JK Sawicki | Fizjo-System
+    </p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="{% static "js/navbar.js" %}"></script>
+</body>
+</html>

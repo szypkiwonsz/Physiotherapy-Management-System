@@ -1,0 +1,31 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block head %}
+    <title>Fizjo-System - Logowanie</title>
+{% endblock head %}
+{% block content %}
+    <div class="container border rounded bg-light">
+        <div class="form">
+            <h2>Zaloguj się</h2>
+            <hr>
+            <form method="post">
+                <input type="hidden" name="csrfmiddlewaretoken" value="pHK2CZzBB323BM2Nq7DE2sxnQoBG1jPl" disabled="">
+                {{ form|crispy }}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Zaloguj</button>
+            </form>
+            <div class="border-top pt-3 mt-4"></div>
+            <small class="text-muted">
+                Nie masz jeszcze konta? <a class="ml-2" href="{% url 'users:signup' %}">Zarejestruj się</a>
+            </small>
+            <br>
+            <small class="text-muted">
+                Zapomniałeś hasła? <a class="ml-2" href="{% url 'password_reset' %}">Zresetuj</a>
+            </small>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static "js/form_reloading.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/prevent_multiple_button.js" %}"></script>
+{% endblock content %}

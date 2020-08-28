@@ -1,13 +1,30 @@
 # Physiotherapy-Management-System
+Project made in Polish language
+
 [**See Project Live Here**](https://fizjo-system.herokuapp.com/)
 
-A web application built in Django that allows you to manage a physiotherapy room. It has many functionalities from the side of the office and patient panel, which are described below.
+A web application built in Django that allows you to manage a physiotherapy office. It has many functionalities from the side of the office and patient panel, which are described below.
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine.
 
+### Installing
+
+Clone the repository
+
+```
+Open a terminal with the selected path where the project should be cloned
+```
+```
+Type: git clone https://github.com/szypkiwonsz/Physiotherapy_Management_System.git
+```
+
 ### Prerequisites
+Python Version
+```
+3.8+
+```
 
 Libraries and Packages
 
@@ -27,7 +44,10 @@ Download project
 Install requirements
 ```
 ```
-Run terminal with choosen folder "Physiotherapy_Management_System>"
+Run terminal with choosen folder "Physiotherapy_Management_System>" where manage.py file is
+```
+```
+Go to the seetings.py file and at the bottom set the mailbox from which messages will be sent
 ```
 ```
 Type "python manage.py makemigrations", to make migrations
@@ -39,8 +59,37 @@ Type "python manage.py migrate", to create database
 Type "python manage.py runserver", to start the server
 ```
 ---
+### Running tests
+
+How to run tests
+```
+Do the same as for running the project
+```
+```
+Download the chromedriver.exe from https://chromedriver.chromium.org/downloads/
+```
+```
+Move the downloaded file to "Physiotherapy_Management_System\functional_tests>"
+```
+```
+Open terminal with choosen folder "Physiotherapy_Management_System>" where manage.py file is
+```
+```
+Type: "python manage.py test"
+```
+---
 
 ## Application Features
+```
+The patient can see the information from the office if the office adds a patient with the same email
+```
+```
+Visibility of registered offices
+```
+```
+Possibility to register as a patient or office
+```
+---
 
 From the patient panel side
 
@@ -54,7 +103,7 @@ Displaying of the medical offices assigned to the patient
 List of future and past visits with the option of editing or canceling them
 ```
 ```
-Displaying patient medical histories
+Displaying patient medical histories 
 ```
 ---
 
@@ -77,6 +126,14 @@ Adding a medical history for any patient visit
 
 * [Python 3.8](https://www.python.org/) - The programming language used
 * [Django 3.0.4](https://www.djangoproject.com/) -  Web framework
+* HTML - Hypertext Markup Language
+* CSS - Cascading Style Sheet
+* [Bootstrap](https://getbootstrap.com/) - HTML, CSS, and JS library
+* JavaScript - Scripting language
+* [jQuery](https://jquery.com/) - JavaScript library
+* AJAX - Set of web development techniques
+* Unit Tests - Software testing method
+* [Selenium](https://www.selenium.dev/) - Automated testing framework
 
 ## Authors
 

@@ -1,0 +1,10 @@
+{% autoescape off %}
+Aktywacja konta dla użytkownika o adresie email: {{ user.get_username }} w aplikacji Fizjo-System.
+Kliknij link poniżej, aby aktywować swoje konto.
+
+http://{{ domain }}{% url 'users:activate' uidb64=uid token=token %}
+
+Jeśli nie możesz kliknąć linku powyżej, skopiuj i wklej go do przeglądarki.
+
+Fizjo-System
+{% endautoescape %}
