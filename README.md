@@ -1,13 +1,28 @@
 # Physiotherapy-Management-System
 [**See Project Live Here**](https://fizjo-system.herokuapp.com/)
 
-A web application built in Django that allows you to manage a physiotherapy room. It has many functionalities from the side of the office and patient panel, which are described below.
+A web application built in Django that allows you to manage a physiotherapy office. It has many functionalities from the side of the office and patient panel, which are described below.
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine.
 
+### Installing
+
+Clone the repository
+
+```
+Open a terminal with the selected path where the project should be cloned
+```
+```
+Type: git clone https://github.com/szypkiwonsz/Physiotherapy_Management_System.git
+```
+
 ### Prerequisites
+Python Version
+```
+3.8+
+```
 
 Libraries and Packages
 
@@ -27,7 +42,10 @@ Download project
 Install requirements
 ```
 ```
-Run terminal with choosen folder "Physiotherapy_Management_System>"
+Run terminal with choosen folder "Physiotherapy_Management_System\Physiotherapy_Management_System>" where manage.py file is
+```
+```
+Go to the seetings.py file and at the bottom set the mailbox from which messages will be sent (registration confirmation, etc.)
 ```
 ```
 Type "python manage.py makemigrations", to make migrations
