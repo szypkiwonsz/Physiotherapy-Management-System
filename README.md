@@ -1,9 +1,7 @@
 # Physiotherapy-Management-System
 [**See Project Live Here**](https://fizjo-system.herokuapp.com/)
 
-```diff
-- Project made in Polish language
-```
+&#x1F534; Project made in Polish language
 
 A web application built in Django that allows you to manage a physiotherapy office. It has many functionalities from the side of the office and patient panel, which are described below.
 
