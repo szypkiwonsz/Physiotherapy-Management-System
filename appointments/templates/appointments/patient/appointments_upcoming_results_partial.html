@@ -18,9 +18,9 @@
             {% endif %}
         </div>
         <div class="right-button">
-            <a href="{% url 'patient-appointment-change' appointment.pk %}" class="btn btn-info"
+            <a href="{% url 'patient_panel:appointments:update' appointment.pk %}" class="btn btn-info"
                role="button">Zmień</a>
-            <a href="{% url 'patient-appointment-cancel' appointment.pk %}" class="btn btn-danger"
+            <a href="{% url 'patient_panel:appointments:delete' appointment.pk %}" class="btn btn-danger"
                role="button">Odwołaj</a>
         </div>
     {% endfor %}
@@ -28,7 +28,7 @@
 {% endif %}
 {% if not appointments %}
     <hr>
-    <a href="{% url 'appointments-select' %}" class="btn btn-warning" role="button">Umów się na wizytę</a>
+    <a href="{% url 'patient_panel:appointments:select' %}" class="btn btn-warning" role="button">Umów się na wizytę</a>
 {% endif %}
 <div id="endpoint" value="{{ endpoint }}"></div>
 {% if appointments.has_other_pages %}

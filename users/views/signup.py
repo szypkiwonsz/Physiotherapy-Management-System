@@ -8,24 +8,21 @@ from users.models import Office, UserPatient
 from utils.send_email import activation_email
 
 
-class SignUp:
-
-    @staticmethod
-    def user_save(form, is_patient=False, is_office=False):
-        user = form.save(commit=False)
-        # The account is not active until the user activates it.
-        user.is_active = False
-        user.is_patient = is_patient
-        user.is_office = is_office
-        user.save()
-        return user
+def user_save(form, is_patient=False, is_office=False):
+    user = form.save(commit=False)
+    # The account is not active until the user activates it.
+    user.is_active = False
+    user.is_patient = is_patient
+    user.is_office = is_office
+    user.save()
+    return user
 
 
 class Register(TemplateView):
     template_name = 'users/signup.html'
 
 
-class RegisterPatient(CreateView, SignUp):
+class RegisterPatient(CreateView):
     form_class = PatientSignUpForm
     template_name = 'users/signup_patient.html'
 
@@ -36,7 +33,7 @@ class RegisterPatient(CreateView, SignUp):
         user_patient.save()
 
     def form_valid(self, form):
-        user = self.user_save(form, is_patient=True)
+        user = user_save(form, is_patient=True)
         self.create_patient(form, user)
         current_site = get_current_site(self.request)
         patient_email = form.cleaned_data.get('email')
@@ -45,7 +42,7 @@ class RegisterPatient(CreateView, SignUp):
         return redirect('login')
 
 
-class RegisterOffice(CreateView, SignUp):
+class RegisterOffice(CreateView):
     form_class = OfficeSignUpForm
     template_name = 'users/signup_office.html'
 
@@ -55,10 +52,11 @@ class RegisterOffice(CreateView, SignUp):
         office.name = form.cleaned_data.get('name')
         office.address = form.cleaned_data.get('address')
         office.city = form.cleaned_data.get('city')
+        office.phone_number = form.cleaned_data.get('phone_number')
         office.save()
 
     def form_valid(self, form):
-        user = self.user_save(form, is_office=True)
+        user = user_save(form, is_office=True)
         self.create_office(form, user)
         current_site = get_current_site(self.request)
         office_email = form.cleaned_data.get('email')

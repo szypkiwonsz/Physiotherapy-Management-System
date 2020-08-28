@@ -12,9 +12,9 @@ class TestOfficeAppointmentViews(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.appointment_list_url = reverse('office-appointments')
-        self.update_appointment_url = reverse('office-appointment-change', args=[1])
-        self.delete_appointment_url = reverse('office-appointment-delete', args=[1])
+        self.appointment_list_url = reverse('office_panel:appointments:list')
+        self.update_appointment_url = reverse('office_panel:appointments:update', args=[1])
+        self.delete_appointment_url = reverse('office_panel:appointments:delete', args=[1])
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
@@ -82,8 +82,7 @@ class TestOfficeAppointmentViews(TestCase):
 
     def test_appointment_update_POST(self):
         self.client.login(username='office@gmail.com', password='officepassword')
-        url = reverse('office-appointment-change', args=[1])
-        response = self.client.post(url, {
+        response = self.client.post(self.update_appointment_url, {
             'date': '17.02.2020 17:00',
             'confirmed': True
         })
@@ -112,11 +111,10 @@ class TestOfficeAppointmentViews(TestCase):
         self.assertTemplateUsed(response, 'appointments/office/appointment_delete_confirm.html')
 
     def test_medical_history_delete_POST(self):
-        url = reverse('office-appointment-delete', args=[1])
         self.client.login(username='office@gmail.com', password='officepassword')
         response_with_post = self.client.get(self.delete_appointment_url)
         self.assertEquals(response_with_post.status_code, 200)
-        response = self.client.post(url)
+        response = self.client.post(self.delete_appointment_url)
         response_with_deleted_post = self.client.get(self.update_appointment_url)
         self.assertEquals(response_with_deleted_post.status_code, 404)
 
@@ -125,12 +123,12 @@ class TestPatientAppointmentViews(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.select_office_url = reverse('appointments-select')
-        self.make_appointment_url = reverse('appointments-make-appointment', args=[2])
-        self.upcoming_appointments_list_url = reverse('patient-appointment-upcoming')
-        self.old_appointments_list_url = reverse('patient-appointment-old')
-        self.update_appointment_url = reverse('patient-appointment-change', args=[1])
-        self.delete_appointment_url = reverse('patient-appointment-cancel', args=[1])
+        self.select_office_url = reverse('patient_panel:appointments:select')
+        self.make_appointment_url = reverse('patient_panel:appointments:make', args=[2])
+        self.upcoming_appointments_list_url = reverse('patient_panel:appointments:upcoming')
+        self.old_appointments_list_url = reverse('patient_panel:appointments:old')
+        self.update_appointment_url = reverse('patient_panel:appointments:update', args=[1])
+        self.delete_appointment_url = reverse('patient_panel:appointments:delete', args=[1])
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
@@ -207,9 +205,8 @@ class TestPatientAppointmentViews(TestCase):
         self.assertTemplateNotUsed(response, 'appointments/patient/appointment_make_form.html')
 
     def test_make_appointment_create_POST(self):
-        url = reverse('appointments-make-appointment', args=[2])
         self.client.login(username='patient@gmail.com', password='patientpassword')
-        response = self.client.post(url, {
+        response = self.client.post(self.make_appointment_url, {
             'date': '17.02.1998 17:00',
             'name': 'name',
             'phone_number': '000000000',
@@ -221,9 +218,8 @@ class TestPatientAppointmentViews(TestCase):
         self.assertEquals(appointment2.confirmed, False)
 
     def test_make_appointment_create_date_taken_POST(self):
-        url = reverse('appointments-make-appointment', args=[2])
         self.client.login(username='patient@gmail.com', password='patientpassword')
-        response = self.client.post(url, {
+        response = self.client.post(self.make_appointment_url, {
             'date': '13.01.2012 16:00',
             'name': 'name',
             'phone_number': '000000000',
@@ -294,8 +290,7 @@ class TestPatientAppointmentViews(TestCase):
 
     def test_update_appointment_POST(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
-        url = reverse('patient-appointment-change', args=[1])
-        response = self.client.post(url, {
+        response = self.client.post(self.update_appointment_url, {
             'date': '17.02.2020 17:00',
             'name': self.appointment1.name,
             'phone_number': '111111111',
@@ -308,8 +303,7 @@ class TestPatientAppointmentViews(TestCase):
 
     def test_update_appointment_date_taken_POST(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
-        url = reverse('patient-appointment-change', args=[1])
-        response = self.client.post(url, {
+        response = self.client.post(self.update_appointment_url, {
             'date': '13.01.2018 16:00',
             'name': self.appointment1.name,
             'phone_number': '111111111',
@@ -342,9 +336,8 @@ class TestPatientAppointmentViews(TestCase):
 
     def test_delete_appointment_POST(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
-        url = reverse('patient-appointment-cancel', args=[1])
         response_with_post = self.client.get(self.delete_appointment_url)
         self.assertEquals(response_with_post.status_code, 200)
-        response = self.client.post(url)
+        response = self.client.post(self.delete_appointment_url)
         response_with_deleted_post = self.client.get(self.update_appointment_url)
         self.assertEquals(response_with_deleted_post.status_code, 404)

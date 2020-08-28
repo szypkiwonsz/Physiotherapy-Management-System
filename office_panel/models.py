@@ -16,11 +16,13 @@ class Patient(models.Model):
     first_name = models.CharField(max_length=20, unique=False, default='', validators=[alphanumeric_first_name])
     last_name = models.CharField(max_length=40, unique=False, default='', validators=[alphanumeric_last_name])
     email = models.EmailField(unique=True, default='', error_messages={
-        'unique': _("Pacjent z takim adresem email już istnieje.")
+        'unique': _('Pacjent z takim adresem email już istnieje.')
     })
     address = models.CharField(max_length=50)
     pesel = models.CharField(max_length=11, validators=[numeric_pesel])
-    phone_number = models.CharField(max_length=9, validators=[numeric_phone_number])
+    phone_number = models.CharField(max_length=9, validators=[numeric_phone_number], error_messages={
+        'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
+    })
     date_selected = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

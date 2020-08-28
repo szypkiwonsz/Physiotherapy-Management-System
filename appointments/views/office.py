@@ -72,14 +72,14 @@ class AppointmentUpdateView(UpdateView):
         return Appointment.objects.filter(office=self.request.user.id)
 
     def get_success_url(self):
-        return reverse('office-appointment-change', kwargs={'pk': self.object.pk})
+        return reverse('office_panel:appointments:update', kwargs={'pk': self.object.pk})
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class AppointmentDeleteView(DeleteView):
     model = Appointment
     template_name = 'appointments/office/appointment_delete_confirm.html'
-    success_url = reverse_lazy('office-appointments')
+    success_url = reverse_lazy('office_panel:appointments:list')
 
     def delete(self, request, *args, **kwargs):
         appointment = self.get_object()

@@ -31,11 +31,9 @@ class UserPatient(models.Model):
 class Office(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=50)
-    address = models.CharField(max_length=100, unique=True)
+    address = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=9, unique=True, error_messages={
-        'unique': _("Użytkownik z takim numerem telefonu już istnieje.")
-    })
+    phone_number = models.CharField(max_length=9)
     website = models.CharField(max_length=20)
 
     def __str__(self):

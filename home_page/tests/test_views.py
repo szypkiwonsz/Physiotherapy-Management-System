@@ -6,9 +6,9 @@ class TestViews(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.home_url = reverse('home')
-        self.help_url = reverse('help')
-        self.offices_url = reverse('offices')
+        self.home_url = reverse('home_page:home')
+        self.help_url = reverse('home_page:help')
+        self.offices_url = reverse('home_page:offices')
 
     def test_home_GET(self):
         response = self.client.get(self.home_url)

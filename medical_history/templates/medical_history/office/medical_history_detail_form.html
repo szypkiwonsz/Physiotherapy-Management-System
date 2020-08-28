@@ -6,10 +6,10 @@
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
             <h2>Historia medyczna pacjenta {{ medicalhistory.patient }}</h2>
-            <div class="right-button"><a href="{% url 'office-medical-history-change' medicalhistory.pk %}"
+            <div class="right-button"><a href="{% url 'office_panel:medical_history:update' medicalhistory.pk %}"
                                          class="btn btn-info"
                                          role="button">Edytuj</a>
-                <a href="{% url 'office-medical-history-delete' medicalhistory.pk %}"
+                <a href="{% url 'office_panel:medical_history:delete' medicalhistory.pk %}"
                    class="btn btn-danger" role="button">Usuń</a></div>
             <hr>
             {{ medicalhistory.patient }} -

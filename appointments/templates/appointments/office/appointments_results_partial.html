@@ -14,9 +14,9 @@
             {% endif %}
         </div>
         <div class="right-button">
-            <a href="{% url 'office-appointment-change' appointment.pk %}" class="btn btn-info"
+            <a href="{% url 'office_panel:appointments:update' appointment.pk %}" class="btn btn-info"
                role="button">Edytuj</a>
-            <a href="{% url 'office-appointment-delete' appointment.pk %}"
+            <a href="{% url 'office_panel:appointments:delete' appointment.pk %}"
                class="btn btn-danger"
                role="button">Odwołaj</a>
         </div>

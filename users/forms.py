@@ -1,10 +1,13 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import SetPasswordForm
+from django.core.validators import RegexValidator
 from django.utils.translation import gettext as _
 
 from users.widgets import MyClearableFileInput
 from .models import User, Profile, Office, UserPatient
+
+numeric_phone_number = RegexValidator('^[0-9]*$', 'Jako numer telefonu, możesz podać jedynie cyfry.')
 
 
 class LoginForm(AuthenticationForm):
@@ -29,8 +32,9 @@ class OfficeSignUpForm(UserCreationForm):
     name = forms.CharField()
     address = forms.CharField()
     city = forms.CharField()
-    phone_number = forms.CharField(min_length=9, error_messages={
+    phone_number = forms.CharField(min_length=9, max_length=9, validators=[numeric_phone_number], error_messages={
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
+        'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
     })
     email = forms.CharField(widget=forms.EmailInput)
     confirm_email = forms.CharField(widget=forms.EmailInput)
@@ -71,9 +75,11 @@ class PatientSignUpForm(UserCreationForm):
 
     email = forms.CharField(widget=forms.EmailInput)
     confirm_email = forms.CharField(widget=forms.EmailInput)
-    phone_number = forms.CharField(required=False, min_length=9, error_messages={
-        'min_length': _('Numer powinien zawierać 9 cyfr.')
-    })
+    phone_number = forms.CharField(
+        required=False, min_length=9, max_length=9, validators=[numeric_phone_number], error_messages={
+            'min_length': _('Numer powinien zawierać 9 cyfr.'),
+            'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
+        })
 
     def __init__(self, *args, **kwargs):
         super(PatientSignUpForm, self).__init__(*args, **kwargs)

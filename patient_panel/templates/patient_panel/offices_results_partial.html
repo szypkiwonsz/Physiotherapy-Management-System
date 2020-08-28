@@ -9,7 +9,7 @@
     <h2>Nie jesteś zarejestrowany w żadnym gabinecie.</h2>
     <p>(gabinet musi dodać Cię do swojej bazy)</p>
     <hr>
-    <a href="{% url 'appointments-select' %}" class="btn btn-warning" role="button">Umów się na wizytę</a>
+    <a href="{% url 'patient_panel:appointments:select' %}" class="btn btn-warning" role="button">Umów się na wizytę</a>
 {% endif %}
 <div id="endpoint" value="{{ endpoint }}"></div>
 {% if offices.has_other_pages %}

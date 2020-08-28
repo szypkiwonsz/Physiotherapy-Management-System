@@ -11,11 +11,11 @@ class TestOfficeMedicalHistoryViews(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.medical_history_url = reverse('office-medical-history')
-        self.make_medical_history_url = reverse('office-make-medical-history')
-        self.detail_medical_history_url = reverse('office-medical-history-detail', args=[1])
-        self.update_medical_history_url = reverse('office-medical-history-change', args=[1])
-        self.delete_medical_history_url = reverse('office-medical-history-delete', args=[1])
+        self.medical_history_url = reverse('office_panel:medical_history:list')
+        self.make_medical_history_url = reverse('office_panel:medical_history:make')
+        self.detail_medical_history_url = reverse('office_panel:medical_history:detail', args=[1])
+        self.update_medical_history_url = reverse('office_panel:medical_history:update', args=[1])
+        self.delete_medical_history_url = reverse('office_panel:medical_history:delete', args=[1])
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
@@ -78,8 +78,7 @@ class TestOfficeMedicalHistoryViews(TestCase):
 
     def test_make_medical_history_create_POST(self):
         self.client.login(username='office@gmail.com', password='officepassword')
-        url = reverse('office-make-medical-history')
-        response = self.client.post(url, {
+        response = self.client.post(self.make_medical_history_url, {
             'patient': Patient.objects.get(id=1).pk,
             'description': 'description',
             'recommendations': 'recommendations'
@@ -129,9 +128,8 @@ class TestOfficeMedicalHistoryViews(TestCase):
         self.assertTemplateUsed(response, 'medical_history/office/medical_history_update_form.html')
 
     def test_medical_history_update_POST(self):
-        url = reverse('office-medical-history-change', args=[1])
         self.client.login(username='office@gmail.com', password='officepassword')
-        response = self.client.post(url, {
+        response = self.client.post(self.update_medical_history_url, {
             'patient': self.medical_history1.patient.pk,
             'description': self.medical_history1.description,
             'recommendations': 'newrecommendations'
@@ -161,11 +159,10 @@ class TestOfficeMedicalHistoryViews(TestCase):
         self.assertTemplateUsed(response, 'medical_history/office/medical_history_delete_confirm.html')
 
     def test_medical_history_delete_POST(self):
-        url = reverse('office-medical-history-delete', args=[1])
         self.client.login(username='office@gmail.com', password='officepassword')
         response_with_post = self.client.get(self.detail_medical_history_url)
         self.assertEquals(response_with_post.status_code, 200)
-        response = self.client.post(url)
+        response = self.client.post(self.delete_medical_history_url)
         response_with_deleted_post = self.client.get(self.detail_medical_history_url)
         self.assertEquals(response_with_deleted_post.status_code, 404)
 
@@ -174,7 +171,7 @@ class TestPatientMedicalHistoryViews(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.medical_history_url = reverse('patient-medical-history')
+        self.medical_history_url = reverse('patient_panel:medical_history:list')
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )

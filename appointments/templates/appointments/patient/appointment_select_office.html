@@ -12,7 +12,7 @@
             {% endif %}
             <hr>
             {% for office in offices %}
-                <a href="{% url 'appointments-make-appointment' office.pk %}">
+                <a href="{% url 'patient_panel:appointments:make' office.pk %}">
                     <div class="row">
                         <div class="col-6">
                             <img id="office-image"

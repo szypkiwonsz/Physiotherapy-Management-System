@@ -13,7 +13,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark primary-color">
-    <a class="navbar-brand" href="{% url 'home' %}">Fizjo-System</a>
+    <a class="navbar-brand" href="{% url 'home_page:home' %}">Fizjo-System</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
             aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -22,11 +22,11 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 {% if user.is_patient %}
-                    <a class="nav-link" href="{% url 'patient-home' %}">Panel pacjenta
+                    <a class="nav-link" href="{% url 'patient_panel:home' %}">Panel pacjenta
                         <span class="sr-only">(current)</span>
                     </a>
                 {% else %}
-                    <a class="nav-link" href="{% url 'office-home' %}">Panel gabinetu
+                    <a class="nav-link" href="{% url 'office_panel:home' %}">Panel gabinetu
                         <span class="sr-only">(current)</span>
                     </a>
                 {% endif %}
@@ -36,10 +36,10 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">Panel wizyt</a>
                     <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'patient-appointment-upcoming' %}">Zbliżające się
+                        <a class="dropdown-item" href="{% url 'patient_panel:appointments:upcoming' %}">Zbliżające się
                             wizyty</a>
-                        <a class="dropdown-item" href="{% url 'appointments-select' %}">Umów wizytę</a>
-                        <a class="dropdown-item" href="{% url 'patient-appointment-old' %}">Poprzednie wizyty</a>
+                        <a class="dropdown-item" href="{% url 'patient_panel:appointments:select' %}">Umów wizytę</a>
+                        <a class="dropdown-item" href="{% url 'patient_panel:appointments:old' %}">Poprzednie wizyty</a>
                     </div>
                 </li>
             {% endif %}
@@ -47,11 +47,11 @@
         <ul class="navbar-nav ml-auto">
             {% if user.is_office %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'profile-office' %}">Profil</a>
+                    <a class="nav-link" href="{% url 'users:office_profile' %}">Profil</a>
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'profile-patient' %}">Profil</a>
+                    <a class="nav-link" href="{% url 'users:patient_profile' %}">Profil</a>
                 </li>
             {% endif %}
             <li class="nav-item">

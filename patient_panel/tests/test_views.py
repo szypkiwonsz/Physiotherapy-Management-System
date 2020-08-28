@@ -8,7 +8,7 @@ class TestHomeViews(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.home_url = reverse('patient-home')
+        self.home_url = reverse('patient_panel:home')
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
@@ -41,7 +41,7 @@ class TestOfficesViews(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.patient_offices_url = reverse('patient-offices')
+        self.patient_offices_url = reverse('patient_panel:offices')
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )

@@ -31,7 +31,7 @@ class OfficeProfile(View):
             p_form.save()
             o_form.save()
             u_form.save()
-            return redirect('profile-office')
+            return redirect('users:office_profile')
 
         context = {
             'p_form': p_form,
@@ -66,7 +66,7 @@ class PatientProfile(View):
             p_form.save()
             o_form.save()
             u_form.save()
-            return redirect('profile-patient')
+            return redirect('users:patient_profile')
 
         context = {
             'p_form': p_form,

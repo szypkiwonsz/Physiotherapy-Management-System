@@ -61,7 +61,7 @@ class MakeMedicalHistory(CreateView):
         post = form.save(commit=False)
         post.owner_id = self.request.user.id
         post.save()
-        return redirect('office-medical-history')
+        return redirect('office_panel:medical_history:list')
 
 
 @method_decorator([login_required, office_required], name='dispatch')
@@ -73,7 +73,7 @@ class MedicalHistoryDetailView(DetailView):
         return MedicalHistory.objects.all()
 
     def get_success_url(self):
-        return reverse('office-patient-change', kwargs={'pk': self.object.pk})
+        return reverse('office_panel:patient_update', kwargs={'pk': self.object.pk})
 
 
 @method_decorator([login_required, office_required], name='dispatch')
@@ -85,14 +85,14 @@ class MedicalHistoryUpdateView(UpdateView):
         return MedicalHistory.objects.filter(owner=self.request.user.id)
 
     def get_success_url(self):
-        return reverse('office-medical-history-change', kwargs={'pk': self.object.pk})
+        return reverse('office_panel:medical_history:update', kwargs={'pk': self.object.pk})
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class MedicalHistoryDeleteView(DeleteView):
     form_class = MedicalHistoryForm
     template_name = 'medical_history/office/medical_history_delete_confirm.html'
-    success_url = reverse_lazy('office-medical-history')
+    success_url = reverse_lazy('office_panel:medical_history:list')
 
     def delete(self, request, *args, **kwargs):
         messages.success(request, f'Wizyta została poprawnie usunięta.')

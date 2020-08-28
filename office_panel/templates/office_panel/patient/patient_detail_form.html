@@ -7,9 +7,9 @@
         <div class="form">
             {{ patient.owner.city }}
             <div class="text-description"><h2>Pacjent {{ patient.first_name }} {{ patient.last_name }}</h2></div>
-            <div class="right-button"><a href="{% url 'office-patient-change' patient.pk %}" class="btn btn-info"
+            <div class="right-button"><a href="{% url 'office_panel:patient_update' patient.pk %}" class="btn btn-info"
                                          role="button">Edytuj</a>
-                <a href="{% url 'office-patient-delete-confirm' patient.pk %}"
+                <a href="{% url 'office_panel:patient_delete' patient.pk %}"
                    class="btn btn-danger" role="button">Usuń</a></div>
             <hr>
             Imie: {{ patient.first_name }}<br>
