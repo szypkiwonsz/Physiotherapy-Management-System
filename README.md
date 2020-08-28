@@ -3,8 +3,6 @@
 
 A web application built in Django that allows you to manage a physiotherapy office. It has many functionalities from the side of the office and patient panel, which are described below.
 
-Technologies used: Python, Django, HTML, CSS, Bootstrap, JavaScript, jQuery, AJAX, Unit Tests, Selenium (Functional Tests)
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine.
@@ -107,6 +105,14 @@ Adding a medical history for any patient visit
 
 * [Python 3.8](https://www.python.org/) - The programming language used
 * [Django 3.0.4](https://www.djangoproject.com/) -  Web framework
+* HTML - Hypertext Markup Language
+* CSS - Cascading Style Sheet
+* [Bootstrap](https://getbootstrap.com/) - HTML, CSS, and JS library
+* JavaScript - Scripting language
+* jQuery(https://jquery.com/) - JavaScript library
+* AJAX - Set of web development techniques
+* Unit Tests - Software testing method
+* Selenium(https://www.selenium.dev/) - Automated testing framework
 
 ## Authors
 
