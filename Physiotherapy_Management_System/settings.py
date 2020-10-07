@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
+    'easy_thumbnails'
 ]
 
 MIDDLEWARE = [
@@ -129,10 +131,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
 )
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'assets/media')
-
-MEDIA_URL = '/media/'
-
 # Custom Django auth settings
 
 AUTH_USER_MODEL = 'users.User'
@@ -149,7 +147,22 @@ DATE_FORMAT = ['%d.%m.%Y %H:%M']
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'host'
-EMAIL_HOST_USER = 'host_user'
-EMAIL_HOST_PASSWORD = 'host_password'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
+
+# Media file settings
+if DEBUG:
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'assets/media')
+    MEDIA_URL = '/media/'
+else:
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    AWS_S3_REGION_NAME = 'eu-north-1'
+    AWS_S3_ADDRESSING_STYLE = 'virtual'
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = 'fizjo-system'
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
