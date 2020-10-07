@@ -1,7 +1,11 @@
+from io import BytesIO
+
 from PIL import Image
 from django.contrib.auth.models import AbstractUser
+from django.core.files.storage import default_storage
 from django.db import models
 from django.utils.translation import gettext as _
+from easy_thumbnails.fields import ThumbnailerImageField
 
 
 class User(AbstractUser):
@@ -41,18 +45,21 @@ class Office(models.Model):
 
 
 class Profile(models.Model):
+    CROP_SETTINGS = {'size': (100, 100), 'crop': 'smart'}
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+    image = ThumbnailerImageField(default='default.jpg', upload_to='profile_pics', resize_source=CROP_SETTINGS)
 
     def __str__(self):
         return self.user.email
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        img = Image.open(self.image.path)
-
-        if img.height > 100 or img.width > 100:
-            output_size = (100, 100)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
+    #
+    #     img = Image.open(self.image.path)
+    #
+    #     if img.height > 100 or img.width > 100:
+    #         output_size = (100, 100)
+    #         img.thumbnail(output_size)
+    #         img.save(self.image.path)
+    #         img.close()
