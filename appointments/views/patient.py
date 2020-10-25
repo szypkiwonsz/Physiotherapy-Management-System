@@ -16,7 +16,7 @@ from users.decorators import patient_required
 from users.models import Office, User
 from utils.date_time import DateTime
 from utils.paginate import paginate
-from utils.send_email import appointment_confirmation_patient, appointment_confirmation_office
+from appointments.tasks import appointment_confirmation_patient, appointment_confirmation_office
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
@@ -57,6 +57,11 @@ class MakeAppointment(CreateView):
 
     def form_valid(self, form):
         date = form.cleaned_data.get('date')
+        date_list = str(date).split(' ')
+        only_date = date_list[0]
+        only_time = date_list[1]
+        only_time = only_time.split(':')
+        only_date = only_date.split('-')
         name = form.cleaned_data.get('name')
         id_owner = self.get_owner_id()
         id_office = self.get_office_id()
@@ -75,8 +80,8 @@ class MakeAppointment(CreateView):
 
         office_email = appointment.office.user.email
         patient_email = self.request.user.email
-        appointment_confirmation_office(name, date, office_email)
-        appointment_confirmation_patient(name, appointment.office.name, date, patient_email)
+        appointment_confirmation_office.delay(name, only_date, only_time, office_email)
+        appointment_confirmation_patient.delay(name, appointment.office.name, only_date, only_time, patient_email)
 
         messages.warning(self.request, 'Poprawnie umówiono wizytę, ale oczekuje ona na potwierdzenie.')
         return redirect('patient_panel:appointments:upcoming')
