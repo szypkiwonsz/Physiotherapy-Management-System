@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, CreateView
 
 from users.forms import OfficeSignUpForm, PatientSignUpForm
 from users.models import Office, UserPatient
-from utils.send_email import activation_email
+from users.tasks import activation_email
 
 
 def user_save(form, is_patient=False, is_office=False):
@@ -36,8 +36,9 @@ class RegisterPatient(CreateView):
         user = user_save(form, is_patient=True)
         self.create_patient(form, user)
         current_site = get_current_site(self.request)
+        domain = current_site.domain
         patient_email = form.cleaned_data.get('email')
-        activation_email(user, current_site, patient_email)
+        activation_email.delay(user.pk, domain, patient_email)
         messages.warning(self.request, 'Potwierdź swoje konto poprzez link wysłany na email.')
         return redirect('login')
 
@@ -59,7 +60,8 @@ class RegisterOffice(CreateView):
         user = user_save(form, is_office=True)
         self.create_office(form, user)
         current_site = get_current_site(self.request)
+        domain = current_site.domain
         office_email = form.cleaned_data.get('email')
-        activation_email(user, current_site, office_email)
+        activation_email.delay(user.pk, domain, office_email)
         messages.warning(self.request, 'Potwierdź swoje konto poprzez link wysłany na email.')
         return redirect('login')
