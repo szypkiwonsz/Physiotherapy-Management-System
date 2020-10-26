@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import gettext as _
 
 from Physiotherapy_Management_System import settings
-from .models import Appointment
+from appointments.models import Appointment
 
 
 class AppointmentPatientMakeForm(forms.ModelForm):
