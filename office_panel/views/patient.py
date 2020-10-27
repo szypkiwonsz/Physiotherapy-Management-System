@@ -24,6 +24,9 @@ class PatientListView(ListView):
         return queryset
 
     def get(self, request, **kwargs):
+        """
+        Function override due to adding pagination and search.
+        """
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_q = request.GET.get('q')
         if url_parameter_q:

@@ -20,6 +20,9 @@ class MedicalHistoryListView(View):
     template_name = 'medical_history/office/medical_history.html'
 
     def get(self, request):
+        """
+        Function override due to adding pagination and search.
+        """
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_q = request.GET.get('q')
         if url_parameter_q:
