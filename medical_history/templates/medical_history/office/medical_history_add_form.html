@@ -9,7 +9,8 @@
         <div class="form">
             <h2>Dodaj historię medyczyną</h2>
             <hr>
-            <form method="post" id="register-office">{% csrf_token %}
+            <form method="post" id="register-office" novalidate="novalidate">
+                {% csrf_token %}
                 <div class="row">
                     <div class="col">{{ form.patient|as_crispy_field }}</div>
                     <div class="col">
