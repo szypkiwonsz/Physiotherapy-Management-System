@@ -128,8 +128,9 @@ class UsersUpdateForm(forms.ModelForm):
 
 class OfficeUpdateForm(forms.ModelForm):
     website = forms.CharField(required=False)
-    phone_number = forms.CharField(min_length=9, error_messages={
-        'min_length': _('Numer powinien zawierać 9 cyfr.')
+    phone_number = forms.CharField(min_length=9, validators=[numeric_phone_number], error_messages={
+        'min_length': _('Numer powinien zawierać 9 cyfr.'),
+        'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
     })
 
     def __init__(self, *args, **kwargs):
@@ -146,9 +147,11 @@ class OfficeUpdateForm(forms.ModelForm):
 
 
 class PatientUpdateForm(forms.ModelForm):
-    phone_number = forms.CharField(label='Numer telefonu', required=False, min_length=9, error_messages={
-        'min_length': _('Numer powinien zawierać 9 cyfr.')
-    })
+    phone_number = forms.CharField(label='Numer telefonu', validators=[numeric_phone_number], required=False,
+                                   min_length=9, error_messages={
+            'min_length': _('Numer powinien zawierać 9 cyfr.'),
+            'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
+        })
 
     class Meta:
         model = UserPatient
