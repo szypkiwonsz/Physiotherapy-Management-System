@@ -213,7 +213,7 @@ class TestPatientAppointmentViews(TestCase):
             'choice': 'Konsultacja'
         })
         appointment2 = Appointment.objects.get(id=3)
-        self.assertEquals(appointment2.date, datetime(1998, 2, 17, 17, 00, 00, tzinfo=UTC))
+        self.assertEquals(appointment2.date, datetime(1998, 2, 17, 17, 00, 00))
         self.assertEquals(appointment2.office_id, 2)
         self.assertEquals(appointment2.confirmed, False)
 
