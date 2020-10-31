@@ -14,6 +14,7 @@ class AppointmentPatientMakeForm(forms.ModelForm):
     name = forms.CharField(label='Imię')
     phone_number = forms.CharField(label='Numer telefonu', min_length=9, error_messages={
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
+        'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
     })
     choices = ['Konsultacja', 'Terapia manualna i indywidualna', 'Masaż', 'Fala uderzeniowa']
     choice = forms.ChoiceField(
