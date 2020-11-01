@@ -107,14 +107,21 @@ class PatientUpdateView(UpdateView):
         return self.request.user.patients.all()
 
     def get_success_url(self):
-        return reverse('office_panel:patient_update', kwargs={'pk': self.object.pk})
+        return reverse('office_panel:patients')
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientDeleteView(DeleteView):
-    form_class = PatientForm
     template_name = 'office_panel/patient/patient_delete_confirm.html'
     success_url = reverse_lazy('office_panel:patients')
+
+    def get(self, request, **kwargs):
+        patient = Patient.objects.get(pk=self.kwargs['pk'])
+        ctx = {
+            'patient': patient,
+            'previous_url': self.request.META.get('HTTP_REFERER')
+        }
+        return render(request, self.template_name, ctx)
 
     def delete(self, request, *args, **kwargs):
         patient = self.get_object()
