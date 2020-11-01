@@ -84,18 +84,34 @@ class MedicalHistoryUpdateView(UpdateView):
     form_class = MedicalHistoryForm
     template_name = 'medical_history/office/medical_history_update_form.html'
 
+    def get(self, request, **kwargs):
+        medical_history = MedicalHistory.objects.get(pk=self.kwargs['pk'])
+        ctx = {
+            'medical_history': medical_history,
+            'form': self.form_class(instance=medical_history),
+            'previous_url': self.request.META.get('HTTP_REFERER')
+        }
+        return render(request, self.template_name, ctx)
+
     def get_queryset(self):
         return MedicalHistory.objects.filter(owner=self.request.user.id)
 
     def get_success_url(self):
-        return reverse('office_panel:medical_history:update', kwargs={'pk': self.object.pk})
+        return reverse('office_panel:medical_history:list')
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class MedicalHistoryDeleteView(DeleteView):
-    form_class = MedicalHistoryForm
     template_name = 'medical_history/office/medical_history_delete_confirm.html'
     success_url = reverse_lazy('office_panel:medical_history:list')
+
+    def get(self, request, **kwargs):
+        medical_history = MedicalHistory.objects.get(pk=self.kwargs['pk'])
+        ctx = {
+            'medical_history': medical_history,
+            'previous_url': self.request.META.get('HTTP_REFERER')
+        }
+        return render(request, self.template_name, ctx)
 
     def delete(self, request, *args, **kwargs):
         messages.success(request, f'Wizyta została poprawnie usunięta.')
