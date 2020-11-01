@@ -128,9 +128,16 @@ class OldAppointmentListView(ListView):
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class AppointmentCancelView(DeleteView):
-    model = Appointment
     template_name = 'appointments/patient/appointment_cancel_confirm.html'
     success_url = reverse_lazy('patient_panel:appointments:upcoming')
+
+    def get(self, request, **kwargs):
+        appointment = Appointment.objects.get(pk=self.kwargs['pk'])
+        ctx = {
+            'appointment': appointment,
+            'previous_url': self.request.META.get('HTTP_REFERER')
+        }
+        return render(request, self.template_name, ctx)
 
     def delete(self, request, *args, **kwargs):
         appointment = self.get_object()
@@ -145,6 +152,15 @@ class AppointmentCancelView(DeleteView):
 class AppointmentUpdateView(UpdateView):
     form_class = AppointmentPatientMakeForm
     template_name = 'appointments/patient/appointment_update_form.html'
+
+    def get(self, request, **kwargs):
+        appointment = Appointment.objects.get(pk=self.kwargs['pk'])
+        ctx = {
+            'appointment': appointment,
+            'form': self.form_class(instance=appointment),
+            'previous_url': self.request.META.get('HTTP_REFERER')
+        }
+        return render(request, self.template_name, ctx)
 
     def appointment_date_taken(self, date):
         messages.warning(
@@ -188,4 +204,4 @@ class AppointmentUpdateView(UpdateView):
         return Appointment.objects.filter(owner=self.request.user.id)
 
     def get_success_url(self):
-        return reverse('patient_panel:appointments:update', kwargs={'pk': self.object.pk})
+        return reverse('patient_panel:appointments:upcoming')
