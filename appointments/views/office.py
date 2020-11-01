@@ -68,18 +68,34 @@ class AppointmentUpdateView(UpdateView):
         initial['date'] = date_object
         return initial
 
+    def get(self, request, **kwargs):
+        appointment = Appointment.objects.get(pk=self.kwargs['pk'])
+        ctx = {
+            'appointment': appointment,
+            'form': self.form_class(instance=appointment),
+            'previous_url': self.request.META.get('HTTP_REFERER')
+        }
+        return render(request, self.template_name, ctx)
+
     def get_queryset(self):
         return Appointment.objects.filter(office=self.request.user.id)
 
     def get_success_url(self):
-        return reverse('office_panel:appointments:update', kwargs={'pk': self.object.pk})
+        return reverse('office_panel:appointments:list')
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class AppointmentDeleteView(DeleteView):
-    model = Appointment
     template_name = 'appointments/office/appointment_delete_confirm.html'
     success_url = reverse_lazy('office_panel:appointments:list')
+
+    def get(self, request, **kwargs):
+        appointment = Appointment.objects.get(pk=self.kwargs['pk'])
+        ctx = {
+            'appointment': appointment,
+            'previous_url': self.request.META.get('HTTP_REFERER')
+        }
+        return render(request, self.template_name, ctx)
 
     def delete(self, request, *args, **kwargs):
         appointment = self.get_object()
