@@ -61,6 +61,13 @@ class PatientCreateView(CreateView):
     form_class = PatientForm
     template_name = 'office_panel/patient/patient_add_form.html'
 
+    def get(self, request, **kwargs):
+        ctx = {
+            'form': self.form_class,
+            'previous_url': self.request.META.get('HTTP_REFERER')
+        }
+        return render(request, self.template_name, ctx)
+
     def form_valid(self, form):
         patient = form.save(commit=False)
         patient.owner = self.request.user
@@ -86,6 +93,15 @@ class PatientDetailView(DetailView):
 class PatientUpdateView(UpdateView):
     form_class = PatientForm
     template_name = 'office_panel/patient/patient_update_form.html'
+
+    def get(self, request, **kwargs):
+        patient = Patient.objects.get(pk=self.kwargs['pk'])
+        ctx = {
+            'patient': patient,
+            'form': self.form_class(instance=patient),
+            'previous_url': self.request.META.get('HTTP_REFERER')
+        }
+        return render(request, self.template_name, ctx)
 
     def get_queryset(self):
         return self.request.user.patients.all()
