@@ -131,13 +131,10 @@ class AppointmentCancelView(DeleteView):
     template_name = 'appointments/patient/appointment_cancel_confirm.html'
     success_url = reverse_lazy('patient_panel:appointments:upcoming')
 
-    def get(self, request, **kwargs):
-        appointment = Appointment.objects.get(pk=self.kwargs['pk'])
-        ctx = {
-            'appointment': appointment,
-            'previous_url': self.request.META.get('HTTP_REFERER')
-        }
-        return render(request, self.template_name, ctx)
+    def get_context_data(self, **kwargs):
+        context = super(AppointmentCancelView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def delete(self, request, *args, **kwargs):
         appointment = self.get_object()
@@ -153,14 +150,10 @@ class AppointmentUpdateView(UpdateView):
     form_class = AppointmentPatientMakeForm
     template_name = 'appointments/patient/appointment_update_form.html'
 
-    def get(self, request, **kwargs):
-        appointment = Appointment.objects.get(pk=self.kwargs['pk'])
-        ctx = {
-            'appointment': appointment,
-            'form': self.form_class(instance=appointment),
-            'previous_url': self.request.META.get('HTTP_REFERER')
-        }
-        return render(request, self.template_name, ctx)
+    def get_context_data(self, **kwargs):
+        context = super(AppointmentUpdateView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def appointment_date_taken(self, date):
         messages.warning(

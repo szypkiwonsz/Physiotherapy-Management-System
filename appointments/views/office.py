@@ -68,14 +68,10 @@ class AppointmentUpdateView(UpdateView):
         initial['date'] = date_object
         return initial
 
-    def get(self, request, **kwargs):
-        appointment = Appointment.objects.get(pk=self.kwargs['pk'])
-        ctx = {
-            'appointment': appointment,
-            'form': self.form_class(instance=appointment),
-            'previous_url': self.request.META.get('HTTP_REFERER')
-        }
-        return render(request, self.template_name, ctx)
+    def get_context_data(self, **kwargs):
+        context = super(AppointmentUpdateView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def get_queryset(self):
         return Appointment.objects.filter(office=self.request.user.id)
@@ -89,13 +85,10 @@ class AppointmentDeleteView(DeleteView):
     template_name = 'appointments/office/appointment_delete_confirm.html'
     success_url = reverse_lazy('office_panel:appointments:list')
 
-    def get(self, request, **kwargs):
-        appointment = Appointment.objects.get(pk=self.kwargs['pk'])
-        ctx = {
-            'appointment': appointment,
-            'previous_url': self.request.META.get('HTTP_REFERER')
-        }
-        return render(request, self.template_name, ctx)
+    def get_context_data(self, **kwargs):
+        context = super(AppointmentDeleteView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def delete(self, request, *args, **kwargs):
         appointment = self.get_object()

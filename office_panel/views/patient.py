@@ -61,12 +61,10 @@ class PatientCreateView(CreateView):
     form_class = PatientForm
     template_name = 'office_panel/patient/patient_add_form.html'
 
-    def get(self, request, **kwargs):
-        ctx = {
-            'form': self.form_class,
-            'previous_url': self.request.META.get('HTTP_REFERER')
-        }
-        return render(request, self.template_name, ctx)
+    def get_context_data(self, **kwargs):
+        context = super(PatientCreateView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def form_valid(self, form):
         patient = form.save(commit=False)
@@ -94,14 +92,10 @@ class PatientUpdateView(UpdateView):
     form_class = PatientForm
     template_name = 'office_panel/patient/patient_update_form.html'
 
-    def get(self, request, **kwargs):
-        patient = Patient.objects.get(pk=self.kwargs['pk'])
-        ctx = {
-            'patient': patient,
-            'form': self.form_class(instance=patient),
-            'previous_url': self.request.META.get('HTTP_REFERER')
-        }
-        return render(request, self.template_name, ctx)
+    def get_context_data(self, **kwargs):
+        context = super(PatientUpdateView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def get_queryset(self):
         return self.request.user.patients.all()
@@ -115,13 +109,10 @@ class PatientDeleteView(DeleteView):
     template_name = 'office_panel/patient/patient_delete_confirm.html'
     success_url = reverse_lazy('office_panel:patients')
 
-    def get(self, request, **kwargs):
-        patient = Patient.objects.get(pk=self.kwargs['pk'])
-        ctx = {
-            'patient': patient,
-            'previous_url': self.request.META.get('HTTP_REFERER')
-        }
-        return render(request, self.template_name, ctx)
+    def get_context_data(self, **kwargs):
+        context = super(PatientDeleteView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def delete(self, request, *args, **kwargs):
         patient = self.get_object()

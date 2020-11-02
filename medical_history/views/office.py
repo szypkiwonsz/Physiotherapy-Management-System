@@ -60,6 +60,11 @@ class MakeMedicalHistory(CreateView):
     form_class = MedicalHistoryForm
     template_name = 'medical_history/office/medical_history_add_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(MakeMedicalHistory, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
+
     def form_valid(self, form):
         post = form.save(commit=False)
         post.owner_id = self.request.user.id
@@ -84,14 +89,10 @@ class MedicalHistoryUpdateView(UpdateView):
     form_class = MedicalHistoryForm
     template_name = 'medical_history/office/medical_history_update_form.html'
 
-    def get(self, request, **kwargs):
-        medical_history = MedicalHistory.objects.get(pk=self.kwargs['pk'])
-        ctx = {
-            'medical_history': medical_history,
-            'form': self.form_class(instance=medical_history),
-            'previous_url': self.request.META.get('HTTP_REFERER')
-        }
-        return render(request, self.template_name, ctx)
+    def get_context_data(self, **kwargs):
+        context = super(MedicalHistoryUpdateView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def get_queryset(self):
         return MedicalHistory.objects.filter(owner=self.request.user.id)
@@ -105,13 +106,10 @@ class MedicalHistoryDeleteView(DeleteView):
     template_name = 'medical_history/office/medical_history_delete_confirm.html'
     success_url = reverse_lazy('office_panel:medical_history:list')
 
-    def get(self, request, **kwargs):
-        medical_history = MedicalHistory.objects.get(pk=self.kwargs['pk'])
-        ctx = {
-            'medical_history': medical_history,
-            'previous_url': self.request.META.get('HTTP_REFERER')
-        }
-        return render(request, self.template_name, ctx)
+    def get_context_data(self, **kwargs):
+        context = super(MedicalHistoryDeleteView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def delete(self, request, *args, **kwargs):
         messages.success(request, f'Wizyta została poprawnie usunięta.')
