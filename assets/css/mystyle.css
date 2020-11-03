@@ -16,7 +16,7 @@
 .ml13 {
     text-transform: uppercase;
 }
-
+ó
 .ml13 .letter {
     display: inline-block;
     line-height: 1em;
@@ -59,8 +59,9 @@
     text-align: center;
     margin: 10px;
 }
+
 @media screen and (min-width: 1500px) {
-        .home-icon-right{
+    .home-icon-right {
         max-height: 80px;
         max-width: 80px;
         float: right;
@@ -68,7 +69,7 @@
         opacity: 70%;
     }
 
-    .home-icon-left{
+    .home-icon-left {
         max-height: 80px;
         max-width: 80px;
         float: left;
@@ -79,11 +80,11 @@
 }
 
 @media screen and (max-width: 1500px) {
-        .home-icon-right{
+    .home-icon-right {
         display: none;
     }
 
-    .home-icon-left{
+    .home-icon-left {
         display: none;
     }
 }
@@ -118,8 +119,8 @@
         margin-right: 15%;
         padding: 50px 20px 20px 20px;
         -moz-box-shadow: 0 0 20px 0 #ccc;
--webkit-box-shadow: 0 0 20px 0 #ccc;
-box-shadow: 0 0 20px 0 #ccc;
+        -webkit-box-shadow: 0 0 20px 0 #ccc;
+        box-shadow: 0 0 20px 0 #ccc;
 
     }
 
