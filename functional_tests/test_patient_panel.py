@@ -10,7 +10,7 @@ from appointments.models import Appointment
 from medical_history.models import MedicalHistory
 from office_panel.models import Patient
 from users.models import User, Office
-from utils.date_time import DateTime
+from appointments.utils import add_zero
 
 
 class TestNavigationBar(StaticLiveServerTestCase):
@@ -258,7 +258,7 @@ class TestHome(StaticLiveServerTestCase):
         appointment_text = self.browser.find_element_by_class_name('text-description').text
         self.assertEquals(
             appointment_text,
-            f'name, {DateTime.add_zero(datetime.today().day + 1)}.{DateTime.add_zero(datetime.today().month)}.'
+            f'name, {add_zero(datetime.today().day + 1)}.{add_zero(datetime.today().month)}.'
             f'{datetime.today().year}, o godz: 00:00 - Konsultacja [Niepotwierdzona]'
         )
 

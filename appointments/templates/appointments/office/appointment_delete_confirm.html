@@ -13,8 +13,13 @@
             <form method="post">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Tak, usuń</button>
-                <a href="{% url 'office_panel:appointments:list' %}" class="btn btn-outline-secondary"
-                   role="button">Powrót</a>
+                {% if previous_url %}
+                    <a href="{{ previous_url }}" class="btn btn-outline-secondary" role="button">Powrót</a>
+                {% else %}
+                    <a href="{% url 'office_panel:appointments:list' %}" class="btn btn-outline-secondary"
+                       role="button">Powrót
+                    </a>
+                {% endif %}
             </form>
         </div>
     </div>

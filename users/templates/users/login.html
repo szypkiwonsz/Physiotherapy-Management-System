@@ -9,7 +9,7 @@
         <div class="form">
             <h2>Zaloguj się</h2>
             <hr>
-            <form method="post">
+            <form method="post" novalidate="novalidate">
                 <input type="hidden" name="csrfmiddlewaretoken" value="pHK2CZzBB323BM2Nq7DE2sxnQoBG1jPl" disabled="">
                 {{ form|crispy }}
                 {% csrf_token %}

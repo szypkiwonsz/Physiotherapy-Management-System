@@ -9,7 +9,7 @@ from appointments.models import Appointment
 from medical_history.models import MedicalHistory
 from office_panel.models import Patient
 from users.models import User, Office
-from utils.date_time import DateTime
+from appointments.utils import add_zero
 
 
 class TestHomeNoData(StaticLiveServerTestCase):
@@ -216,8 +216,8 @@ class TestHome(StaticLiveServerTestCase):
         appointment_text = self.browser.find_elements_by_class_name('text-description')[1].text
         self.assertEquals(
             appointment_text,
-            f'patient@gmail.com, {DateTime.add_zero(datetime.today().day + 1)}.'
-            f'{DateTime.add_zero(datetime.today().month)}.{datetime.today().year}, o godz: 00:00 - Konsultacja\n'
+            f'patient@gmail.com, {add_zero(datetime.today().day + 1)}.'
+            f'{add_zero(datetime.today().month)}.{datetime.today().year}, o godz: 00:00 - Konsultacja\n'
             f'[Niepotwierdzona]'
         )
 

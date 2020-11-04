@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -12,6 +10,7 @@ from django.views.generic import UpdateView, DeleteView
 
 from appointments.forms import AppointmentOfficeUpdateForm
 from appointments.models import Appointment
+from appointments.utils import database_old_datetime_format_to_new
 from users.decorators import office_required
 from utils.paginate import paginate
 
@@ -22,6 +21,9 @@ class AppointmentListView(View):
     template_name = 'appointments/office/appointments.html'
 
     def get(self, request):
+        """
+        Function override due to adding pagination and search.
+        """
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_q = request.GET.get('q')
         if url_parameter_q:
@@ -56,30 +58,37 @@ class AppointmentUpdateView(UpdateView):
     form_class = AppointmentOfficeUpdateForm
     template_name = 'appointments/office/appointment_update_form.html'
 
-    @staticmethod
-    def parse_db_time_string(time_string):
-        date = datetime.strptime(time_string.split('+')[0], '%Y-%m-%d %H:%M:%S')
-        return datetime.strftime(date, '%d.%m.%Y %H:%M')
-
     def get_initial(self):
+        """
+        Replacing the initialized date due to an error with the date saving.
+        """
         initial = super().get_initial()
         date = str(Appointment.objects.filter(id=self.object.pk).values_list('date').get()[0])
-        date_object = self.parse_db_time_string(date)
+        date_object = database_old_datetime_format_to_new(date)
         initial['date'] = date_object
         return initial
+
+    def get_context_data(self, **kwargs):
+        context = super(AppointmentUpdateView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def get_queryset(self):
         return Appointment.objects.filter(office=self.request.user.id)
 
     def get_success_url(self):
-        return reverse('office_panel:appointments:update', kwargs={'pk': self.object.pk})
+        return reverse('office_panel:appointments:list')
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class AppointmentDeleteView(DeleteView):
-    model = Appointment
     template_name = 'appointments/office/appointment_delete_confirm.html'
     success_url = reverse_lazy('office_panel:appointments:list')
+
+    def get_context_data(self, **kwargs):
+        context = super(AppointmentDeleteView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def delete(self, request, *args, **kwargs):
         appointment = self.get_object()

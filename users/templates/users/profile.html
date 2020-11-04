@@ -15,7 +15,7 @@
         <img class="mt-1 rounded-circle avatar p-2 border border-secondary" src="{{ user.profile.image.url }}">
         <div class="mt-2">{{ user.email }}</div>
         <hr>
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" novalidate="novalidate">
             {% csrf_token %}
             <input type="hidden" name="csrfmiddlewaretoken" value="pHK2CZzBB323BM2Nq7DE2sxnQoBG1jPl"
                    disabled="">

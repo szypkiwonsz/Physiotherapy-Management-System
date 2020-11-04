@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import gettext as _
 
 from Physiotherapy_Management_System import settings
-from .models import Appointment
+from appointments.models import Appointment
 
 
 class AppointmentPatientMakeForm(forms.ModelForm):
@@ -14,6 +14,7 @@ class AppointmentPatientMakeForm(forms.ModelForm):
     name = forms.CharField(label='Imię')
     phone_number = forms.CharField(label='Numer telefonu', min_length=9, error_messages={
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
+        'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
     })
     choices = ['Konsultacja', 'Terapia manualna i indywidualna', 'Masaż', 'Fala uderzeniowa']
     choice = forms.ChoiceField(

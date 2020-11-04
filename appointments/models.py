@@ -17,7 +17,6 @@ class Appointment(models.Model):
     name = models.CharField(max_length=120, validators=[alphanumeric])
     date_selected = models.DateTimeField(default=timezone.now)
     phone_number = models.CharField(max_length=9, validators=[numeric])
-    phone_number.validators[-1].message = 'Podany numer jest za długi.'
     confirmed = models.BooleanField(default=False)
     choice = models.CharField(max_length=120)
 

@@ -9,20 +9,27 @@
         <div class="form">
             <h2>Dodaj historię medyczyną</h2>
             <hr>
-            <form method="post" id="register-office">{% csrf_token %}
+            <form method="post" id="register-office" novalidate="novalidate">
+                {% csrf_token %}
                 <div class="row">
                     <div class="col">{{ form.patient|as_crispy_field }}</div>
                     <div class="col">
                         <div class="float-right" id="medical-history-add-question">Nie dodałeś jeszcze tego pacjenta?
                         </div>
-                        <br><a href="{% url 'office_panel:patients' %}" class="btn btn-warning float-right mt-2"
+                        <br><a href="{% url 'office_panel:patient_add' %}" class="btn btn-warning float-right mt-2"
                                role="button">Dodaj go tutaj</a></div>
                 </div>
                 {{ form.appointment|as_crispy_field }}
                 {{ form.description|as_crispy_field }}
                 {{ form.recommendations|as_crispy_field }}
                 <button type="submit" class="btn btn-success">Zapisz</button>
-                <a href="{% url 'office_panel:medical_history:list' %}" class="btn btn-outline-secondary" role="button">Powrót</a>
+                {% if previous_url %}
+                    <a href="{{ previous_url }}" class="btn btn-outline-secondary" role="button">Powrót</a>
+                {% else %}
+                    <a href="{% url 'office_panel:medical_history:list' %}" class="btn btn-outline-secondary"
+                       role="button">Powrót
+                    </a>
+                {% endif %}
             </form>
         </div>
     </div>

@@ -3,7 +3,7 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
@@ -12,11 +12,12 @@ from django.views.generic import DeleteView, UpdateView, CreateView, ListView
 
 from appointments.forms import AppointmentPatientMakeForm
 from appointments.models import Appointment
+from appointments.tasks import appointment_confirmation_email_patient, appointment_confirmation_email_office
+from appointments.utils import add_zero
+from appointments.utils import database_old_datetime_format_to_new
 from users.decorators import patient_required
-from users.models import Office, User
-from utils.date_time import DateTime
+from users.models import Office
 from utils.paginate import paginate
-from appointments.tasks import appointment_confirmation_patient, appointment_confirmation_office
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
@@ -31,57 +32,41 @@ class MakeAppointment(CreateView):
     form_class = AppointmentPatientMakeForm
     template_name = 'appointments/patient/appointment_make_form.html'
 
-    def get(self, request, *args, **kwargs):
-        id_office = self.get_office_id()
-        user = User.objects.get(id=id_office)
-        if user.is_patient:
-            return HttpResponse(status=404)
-        else:
-            context = {'form': self.form_class}
-            return render(request, self.template_name, context)
-
-    def get_owner_id(self):
-        return self.request.user.id
-
-    def get_office_id(self):
-        url = self.request.get_full_path()
-        office_id = int(''.join(i for i in url if i.isdigit()))
-        return office_id
-
     def appointment_date_taken(self, date):
         messages.warning(
             self.request,
-            f'Wybrana data {DateTime.add_zero(date.day)}.{DateTime.add_zero(date.month)}.{date.year} {date.hour}:00 '
+            f'Wybrana data {add_zero(date.day)}.{add_zero(date.month)}.{date.year} {date.hour}:00 '
             f'jest już zajęta.'
         )
 
+    @staticmethod
+    def date_and_time_from_datetime(datetime_value):
+        date_and_time = str(datetime_value).split(' ')
+        date = date_and_time[0].split('-')
+        time = date_and_time[1].split(':')
+        return date, time
+
     def form_valid(self, form):
-        date = form.cleaned_data.get('date')
-        date_list = str(date).split(' ')
-        only_date = date_list[0]
-        only_time = date_list[1]
-        only_time = only_time.split(':')
-        only_date = only_date.split('-')
-        name = form.cleaned_data.get('name')
-        id_owner = self.get_owner_id()
-        id_office = self.get_office_id()
-        if date.hour == 0:
+        datetime_form_value = form.cleaned_data.get('date')
+        if datetime_form_value.hour == 0:
             messages.warning(self.request, 'Wybierz poprawną godzinę.')
-            return redirect('patient_panel:appointments:make', id_office)
+            return redirect('patient_panel:appointments:make', pk=self.kwargs.get('pk'))
         else:
-            appointment = Appointment.objects.filter(date=date)
+            appointment = Appointment.objects.filter(date=datetime_form_value)
             if appointment:
-                self.appointment_date_taken(date)
-                return redirect('patient_panel:appointments:make', id_office)
+                self.appointment_date_taken(datetime_form_value)
+                return redirect('patient_panel:appointments:make', pk=self.kwargs.get('pk'))
+        date, time = self.date_and_time_from_datetime(datetime_form_value)
+        name = form.cleaned_data.get('name')
         appointment = form.save(commit=False)
-        appointment.owner_id = id_owner
-        appointment.office_id = id_office
+        appointment.owner_id = self.request.user.id
+        appointment.office_id = self.kwargs.get('pk')
         appointment.save()
 
         office_email = appointment.office.user.email
         patient_email = self.request.user.email
-        appointment_confirmation_office.delay(name, only_date, only_time, office_email)
-        appointment_confirmation_patient.delay(name, appointment.office.name, only_date, only_time, patient_email)
+        appointment_confirmation_email_office.delay(name, date, time, office_email)
+        appointment_confirmation_email_patient.delay(name, appointment.office.name, date, time, patient_email)
 
         messages.warning(self.request, 'Poprawnie umówiono wizytę, ale oczekuje ona na potwierdzenie.')
         return redirect('patient_panel:appointments:upcoming')
@@ -99,6 +84,9 @@ class AppointmentListView(ListView):
         return queryset
 
     def get(self, request, **kwargs):
+        """
+        Function override due to adding pagination and search.
+        """
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_q = request.GET.get('q')
         if url_parameter_q:
@@ -140,9 +128,13 @@ class OldAppointmentListView(ListView):
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class AppointmentCancelView(DeleteView):
-    model = Appointment
     template_name = 'appointments/patient/appointment_cancel_confirm.html'
     success_url = reverse_lazy('patient_panel:appointments:upcoming')
+
+    def get_context_data(self, **kwargs):
+        context = super(AppointmentCancelView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def delete(self, request, *args, **kwargs):
         appointment = self.get_object()
@@ -158,48 +150,51 @@ class AppointmentUpdateView(UpdateView):
     form_class = AppointmentPatientMakeForm
     template_name = 'appointments/patient/appointment_update_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(AppointmentUpdateView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
+
     def appointment_date_taken(self, date):
         messages.warning(
             self.request,
-            f'Wybrana data {DateTime.add_zero(date.day)}.{DateTime.add_zero(date.month)}.{date.year} {date.hour}:00 '
+            f'Wybrana data {add_zero(date.day)}.{add_zero(date.month)}.{date.year} {date.hour}:00 '
             f'jest już zajęta.'
         )
 
-    @staticmethod
-    def parse_db_time_string(time_string):
-        date = datetime.strptime(time_string.split('+')[0], '%Y-%m-%d %H:%M:%S')
-        return datetime.strftime(date, '%d.%m.%Y %H:%M')
-
     def get_initial(self):
+        """
+        Replacing the initialized date due to an error with the date saving.
+        """
         initial = super().get_initial()
         date = str(Appointment.objects.filter(id=self.object.pk).values_list('date').get()[0])
-        date_object = self.parse_db_time_string(date)
+        date_object = database_old_datetime_format_to_new(date)
         initial['date'] = date_object
         return initial
 
     def form_valid(self, form):
         appointment = Appointment.objects.get(pk=self.object.pk)
-        appointment.confirmed = False
-        appointment.date = form.cleaned_data['date']
-        id_appointment = appointment.pk
         if appointment.date.hour == 0:
-            self.appointment_wrong_date()
+            messages.warning(self.request, 'Wybierz poprawną godzinę.')
+            return redirect('patient_panel:appointments:update', pk=self.object.pk)
         else:
             try:
-                appointment_check = Appointment.objects.get(date=appointment.date)
+                appointment_check = Appointment.objects.get(date=form.cleaned_data['date'])
             except ObjectDoesNotExist:
                 appointment_check = None
-            if appointment_check and appointment_check.pk != id_appointment:
+            if appointment_check and appointment_check.pk != self.object.pk:
                 self.appointment_date_taken(appointment.date)
-                return redirect('office_panel:appointments:update', id_appointment)
+                return redirect('patient_panel:appointments:update', self.object.pk)
+        appointment.confirmed = False
+        appointment.date = form.cleaned_data['date']
         appointment.name = form.cleaned_data['name']
         appointment.phone_number = form.cleaned_data['phone_number']
         appointment.choice = form.cleaned_data['choice']
         appointment.save()
-        return HttpResponseRedirect(self.get_success_url())
+        return redirect(self.get_success_url())
 
     def get_queryset(self):
         return Appointment.objects.filter(owner=self.request.user.id)
 
     def get_success_url(self):
-        return reverse('office_panel:appointments:update', kwargs={'pk': self.object.pk})
+        return reverse('patient_panel:appointments:upcoming')

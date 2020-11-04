@@ -6,8 +6,8 @@ from django.urls import reverse
 from selenium import webdriver
 
 from appointments.models import Appointment
+from appointments.utils import add_zero
 from users.models import User, Office
-from utils.date_time import DateTime
 
 
 class TestOfficeAppointments(StaticLiveServerTestCase):
@@ -132,7 +132,7 @@ class TestPatientAppointments(StaticLiveServerTestCase):
         appointments_text = self.browser.find_element_by_class_name('text-description').text
         self.assertEquals(
             appointments_text,
-            f'name, {DateTime.add_zero(datetime.today().day + 1)}.{DateTime.add_zero(datetime.today().month)}.'
+            f'name, {add_zero(datetime.today().day + 1)}.{add_zero(datetime.today().month)}.'
             f'{datetime.today().year}, o godz: 00:00 - Konsultacja [Niepotwierdzona]'
         )
 

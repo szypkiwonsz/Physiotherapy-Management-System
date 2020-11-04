@@ -24,8 +24,13 @@
                 {% csrf_token %}
                 {{ form|crispy }}
                 <button type="submit" class="btn btn-success">Zapisz zmiany</button>
-                <a href="{% url 'patient_panel:appointments:upcoming' %}" class="btn btn-outline-secondary"
-                   role="button">Powrót</a>
+                {% if previous_url %}
+                    <a href="{{ previous_url }}" class="btn btn-outline-secondary" role="button">Powrót</a>
+                {% else %}
+                    <a href="{% url 'patient_panel:appointments:upcoming' %}" class="btn btn-outline-secondary"
+                       role="button">Powrót
+                    </a>
+                {% endif %}
             </form>
             <hr>
         </div>

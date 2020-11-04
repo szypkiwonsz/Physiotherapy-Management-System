@@ -24,6 +24,9 @@ class PatientListView(ListView):
         return queryset
 
     def get(self, request, **kwargs):
+        """
+        Function override due to adding pagination and search.
+        """
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_q = request.GET.get('q')
         if url_parameter_q:
@@ -58,6 +61,11 @@ class PatientCreateView(CreateView):
     form_class = PatientForm
     template_name = 'office_panel/patient/patient_add_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(PatientCreateView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
+
     def form_valid(self, form):
         patient = form.save(commit=False)
         patient.owner = self.request.user
@@ -84,18 +92,27 @@ class PatientUpdateView(UpdateView):
     form_class = PatientForm
     template_name = 'office_panel/patient/patient_update_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(PatientUpdateView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
+
     def get_queryset(self):
         return self.request.user.patients.all()
 
     def get_success_url(self):
-        return reverse('office_panel:patient_update', kwargs={'pk': self.object.pk})
+        return reverse('office_panel:patients')
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientDeleteView(DeleteView):
-    form_class = PatientForm
     template_name = 'office_panel/patient/patient_delete_confirm.html'
     success_url = reverse_lazy('office_panel:patients')
+
+    def get_context_data(self, **kwargs):
+        context = super(PatientDeleteView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
 
     def delete(self, request, *args, **kwargs):
         patient = self.get_object()

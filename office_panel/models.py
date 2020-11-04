@@ -20,9 +20,7 @@ class Patient(models.Model):
     })
     address = models.CharField(max_length=50)
     pesel = models.CharField(max_length=11, validators=[numeric_pesel])
-    phone_number = models.CharField(max_length=9, validators=[numeric_phone_number], error_messages={
-        'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
-    })
+    phone_number = models.CharField(max_length=9, validators=[numeric_phone_number])
     date_selected = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
