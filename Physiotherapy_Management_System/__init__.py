@@ -5,4 +5,4 @@ from .celery import app as celery_app
 __all__ = ('celery_app',)
 
 # Default app config
-default_app_config = 'users.apps.UsersConfig'
+default_app_config = 'applications.users.apps.UsersConfig'

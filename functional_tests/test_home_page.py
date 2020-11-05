@@ -5,7 +5,7 @@ from django.urls import reverse
 from selenium import webdriver
 from selenium.common.exceptions import ElementNotInteractableException
 
-from users.models import User
+from applications.users.models import User
 
 
 class TestHomePageNotLoggedIn(StaticLiveServerTestCase):

@@ -6,11 +6,11 @@ from django.urls import reverse
 from selenium import webdriver
 from selenium.common.exceptions import ElementNotInteractableException
 
-from appointments.models import Appointment
-from medical_history.models import MedicalHistory
-from office_panel.models import Patient
-from users.models import User, Office
-from appointments.utils import add_zero
+from applications.appointments.models import Appointment
+from applications.medical_history.models import MedicalHistory
+from applications.office_panel.models import Patient
+from applications.users.models import User, Office
+from applications.appointments.utils import add_zero
 
 
 class TestNavigationBar(StaticLiveServerTestCase):

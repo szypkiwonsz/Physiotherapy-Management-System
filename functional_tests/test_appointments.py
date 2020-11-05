@@ -5,9 +5,9 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
 
-from appointments.models import Appointment
-from appointments.utils import add_zero
-from users.models import User, Office
+from applications.appointments.models import Appointment
+from applications.appointments.utils import add_zero
+from applications.users.models import User, Office
 
 
 class TestOfficeAppointments(StaticLiveServerTestCase):

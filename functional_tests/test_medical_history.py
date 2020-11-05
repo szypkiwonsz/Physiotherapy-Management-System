@@ -5,9 +5,9 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
 
-from medical_history.models import MedicalHistory
-from office_panel.models import Patient
-from users.models import User
+from applications.medical_history.models import MedicalHistory
+from applications.office_panel.models import Patient
+from applications.users.models import User
 
 
 class TestOfficeMedicalHistory(StaticLiveServerTestCase):

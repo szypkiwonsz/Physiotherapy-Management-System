@@ -34,13 +34,13 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'office_panel.apps.OfficePanelConfig',
+    'applications.office_panel.apps.OfficePanelConfig',
     'crispy_forms',
-    'users.apps.UsersConfig',
-    'home_page.apps.HomePageConfig',
-    'patient_panel.apps.PatientPanelConfig',
-    'appointments.apps.AppointmentConfig',
-    'medical_history.apps.MedicalHistoryConfig',
+    'applications.users.apps.UsersConfig',
+    'applications.home_page.apps.HomePageConfig',
+    'applications.patient_panel.apps.PatientPanelConfig',
+    'applications.appointments.apps.AppointmentConfig',
+    'applications.medical_history.apps.MedicalHistoryConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
