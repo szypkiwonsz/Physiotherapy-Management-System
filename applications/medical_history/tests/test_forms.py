@@ -20,7 +20,8 @@ class TestMedicalHistoryForm(TestCase):
             owner=self.office1,
             first_name='firstname',
             last_name='lastname',
-            email='patient@gmail.com'
+            email='patient@gmail.com',
+            phone_number='000000000'
         )
         self.appointment_office1 = Office.objects.create(
             user=self.office1,
@@ -43,14 +44,15 @@ class TestMedicalHistoryForm(TestCase):
 
     def test_medical_history_make_form_valid(self):
         form = MedicalHistoryForm(data={
-            'patient': self.office_patient1,
-            'appointment': self.appointment1,
+            'patient': self.office_patient1.pk,
+            'appointment': self.appointment1.pk,
             'description': 'random',
             'recommendations': 'random'
-        })
+        }, user=self.office1)
+
         self.assertTrue(form.is_valid())
 
     def test_medical_history_make_form_no_data(self):
         form = MedicalHistoryForm(data={})
         self.assertFalse(form.is_valid())
-        self.assertEquals(len(form.errors), 3)
+        self.assertEquals(len(form.errors), 4)
