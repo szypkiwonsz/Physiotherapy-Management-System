@@ -14,10 +14,10 @@ from applications.appointments.forms import AppointmentPatientMakeForm
 from applications.appointments.models import Appointment
 from applications.appointments.tasks import appointment_confirmation_email_patient, \
     appointment_confirmation_email_office
-from applications.appointments.utils import add_zero
 from applications.appointments.utils import database_old_datetime_format_to_new
 from applications.users.decorators import patient_required
 from applications.users.models import Office
+from utils.add_zero import add_zero
 from utils.paginate import paginate
 
 
