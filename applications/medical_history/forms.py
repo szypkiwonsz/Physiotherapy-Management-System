@@ -12,10 +12,10 @@ class MedicalHistoryForm(forms.ModelForm):
         super(MedicalHistoryForm, self).__init__(*args, **kwargs)
 
         self.fields['appointment'] = forms.ModelChoiceField(
-            queryset=Appointment.objects.filter(office__user=self.user), required=False
+            queryset=Appointment.objects.filter(office__user=self.user), required=True
         )
         self.fields['patient'] = forms.ModelChoiceField(
-            queryset=Patient.objects.filter(owner=self.user), required=False
+            queryset=Patient.objects.filter(owner=self.user), required=True
         )
 
         label = ['Pacjent', 'Wizyta', 'Opis', 'Zalecenia']
