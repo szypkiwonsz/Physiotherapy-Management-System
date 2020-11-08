@@ -6,7 +6,7 @@ from django.urls import reverse
 from selenium import webdriver
 
 from applications.appointments.models import Appointment
-from applications.appointments.utils import add_zero
+from utils.add_zero import add_zero
 from applications.users.models import User, Office
 
 

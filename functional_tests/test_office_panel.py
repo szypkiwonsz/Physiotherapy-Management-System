@@ -9,7 +9,7 @@ from applications.appointments.models import Appointment
 from applications.medical_history.models import MedicalHistory
 from applications.office_panel.models import Patient
 from applications.users.models import User, Office
-from applications.appointments.utils import add_zero
+from utils.add_zero import add_zero
 
 
 class TestHomeNoData(StaticLiveServerTestCase):
