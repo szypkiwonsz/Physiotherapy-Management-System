@@ -3,6 +3,7 @@ from django.utils.translation import gettext as _
 
 from Physiotherapy_Management_System import settings
 from applications.appointments.models import Appointment
+from applications.office_panel.models import Patient
 
 
 class AppointmentPatientMakeForm(forms.ModelForm):
@@ -28,6 +29,18 @@ class AppointmentPatientMakeForm(forms.ModelForm):
     class Meta:
         model = Appointment
         fields = ['date', 'name', 'phone_number', 'choice']
+
+
+class AppointmentOfficeMakeForm(AppointmentPatientMakeForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.date = kwargs.pop('date', None)
+        super(AppointmentOfficeMakeForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget = forms.HiddenInput()
+        self.fields['phone_number'].widget = forms.HiddenInput()
+        self.fields['owner'] = forms.ModelChoiceField(queryset=Patient.objects.filter(owner=self.user), required=False)
+        self.fields['owner'].label = 'Pacjent'
+        self.fields['date'].widget = forms.TextInput(attrs={'value': str(self.date), 'readonly': 'true'})
 
 
 class AppointmentOfficeUpdateForm(forms.ModelForm):
