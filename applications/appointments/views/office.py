@@ -1,14 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import UpdateView, DeleteView
+from django.views.generic import UpdateView, DeleteView, CreateView
 
-from applications.appointments.forms import AppointmentOfficeUpdateForm
+from applications.appointments.forms import AppointmentOfficeUpdateForm, AppointmentOfficeMakeForm
 from applications.appointments.models import Appointment
 from applications.appointments.utils import database_old_datetime_format_to_new
 from applications.users.decorators import office_required
@@ -97,3 +97,23 @@ class AppointmentDeleteView(DeleteView):
 
     def get_queryset(self):
         return Appointment.objects.filter(office=self.request.user.id)
+
+
+class MakeAppointment(CreateView):
+    form_class = AppointmentOfficeMakeForm
+    template_name = 'appointments/office/appointment_make_form.html'
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(MakeAppointment, self).get_form_kwargs()
+        date = self.request.GET['date']
+        if date in self.request.session['dates_taken']:
+            # if date from url is taken raise 404 error (in case the user changes the url)
+            raise Http404
+        if int(self.request.session['hour_open']) > int(self.request.GET['date'][-5:-3]) or \
+                int(self.request.session['hour_close']) <= int(self.request.GET['date'][-5:-3]):
+            # if the visit time given in the url is smaller or greater than the possibility of making an appointment
+            # raise 404 error (in case the user changes the url)
+            raise Http404
+        kwargs['user'] = self.request.user
+        kwargs['date'] = date
+        return kwargs
