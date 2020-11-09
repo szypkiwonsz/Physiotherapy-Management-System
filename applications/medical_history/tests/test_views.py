@@ -4,10 +4,10 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
 
+from applications.appointments.models import Appointment
 from applications.medical_history.models import MedicalHistory
 from applications.office_panel.models import Patient
 from applications.users.models import User, Office
-from applications.appointments.models import Appointment
 
 
 class TestOfficeMedicalHistoryViews(TestCase):
@@ -50,7 +50,8 @@ class TestOfficeMedicalHistoryViews(TestCase):
             owner=self.patient1,
             office=self.appointment_office1,
             date=datetime(2012, 1, 13, 16, 00, 00),
-            name='name',
+            first_name='Kacper',
+            last_name='Sawicki',
             date_selected=datetime(2012, 1, 13, 23, 51, 34),
             phone_number='000000000',
             confirmed=False,

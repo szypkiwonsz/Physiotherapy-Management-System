@@ -7,7 +7,8 @@ class TestPatientMakeAppointmentForm(SimpleTestCase):
     def test_patient_make_form_valid(self):
         form = AppointmentPatientMakeForm(data={
             'date': '27.08.2020 17:00',
-            'name': 'Name',
+            'first_name': 'Kacper',
+            'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': 'Konsultacja'
         })
@@ -16,7 +17,7 @@ class TestPatientMakeAppointmentForm(SimpleTestCase):
     def test_patient_make_form_no_data(self):
         form = AppointmentPatientMakeForm(data={})
         self.assertFalse(form.is_valid())
-        self.assertEquals(len(form.errors), 4)
+        self.assertEquals(len(form.errors), 5)
 
     def test_patient_make_form_wrong_name(self):
         form = AppointmentPatientMakeForm(data={
@@ -30,7 +31,8 @@ class TestPatientMakeAppointmentForm(SimpleTestCase):
     def test_patient_make_form_wrong_phone_number(self):
         form = AppointmentPatientMakeForm(data={
             'date': '27.08.2020 17:00',
-            'name': 'name',
+            'first_name': 'Kacper',
+            'last_name': 'Sawicki',
             'phone_number': '00000',
             'choice': 'Konsultacja'
         })

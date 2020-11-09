@@ -206,8 +206,10 @@ class TestHome(StaticLiveServerTestCase):
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.office1,
+            patient_email='patient@gmail.com',
             date=datetime(datetime.today().year, datetime.today().month, datetime.today().day + 1),
-            name='Kacper',
+            first_name='Kacper',
+            last_name='Sawicki',
             date_selected=datetime(2020, 8, 21, 17, 00, 00),
             phone_number='000000000',
             confirmed=False,

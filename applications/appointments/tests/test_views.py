@@ -31,8 +31,10 @@ class TestOfficeAppointmentViews(TestCase):
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.appointment_office1,
+            patient_email='patient@gmail.com',
             date=datetime(2012, 1, 13, 16, 00, 00),
-            name='name',
+            first_name='Kacper',
+            last_name='Sawicki',
             date_selected=datetime(2012, 1, 13, 23, 51, 34),
             phone_number='000000000',
             confirmed=False,
@@ -145,8 +147,10 @@ class TestPatientAppointmentViews(TestCase):
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.appointment_office1,
+            patient_email='patient@gmail.com',
             date=datetime(2012, 1, 13, 16, 00, 00),
-            name='name',
+            first_name='Kacper',
+            last_name='Sawicki',
             date_selected=datetime(2012, 1, 13, 23, 51, 34),
             phone_number='000000000',
             confirmed=False,
@@ -155,8 +159,10 @@ class TestPatientAppointmentViews(TestCase):
         self.appointment2 = Appointment.objects.create(
             owner=self.patient1,
             office=self.appointment_office1,
+            patient_email='patient@gmail.com',
             date=datetime(2018, 1, 13, 16, 00, 00),
-            name='name',
+            first_name='Kacper',
+            last_name='Sawicki',
             date_selected=datetime(2018, 1, 13, 23, 51, 34),
             phone_number='000000000',
             confirmed=False,
@@ -207,7 +213,8 @@ class TestPatientAppointmentViews(TestCase):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.post(self.make_appointment_url, {
             'date': '17.02.1998 17:00',
-            'name': 'name',
+            'first_name': self.appointment1.first_name,
+            'last_name': self.appointment1.last_name,
             'phone_number': '000000000',
             'choice': 'Konsultacja'
         })
@@ -220,7 +227,8 @@ class TestPatientAppointmentViews(TestCase):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.post(self.make_appointment_url, {
             'date': '13.01.2012 16:00',
-            'name': 'name',
+            'first_name': self.appointment1.first_name,
+            'last_name': self.appointment1.last_name,
             'phone_number': '000000000',
             'choice': 'Konsultacja'
         })
@@ -291,7 +299,8 @@ class TestPatientAppointmentViews(TestCase):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.post(self.update_appointment_url, {
             'date': '17.02.2020 17:00',
-            'name': self.appointment1.name,
+            'first_name': self.appointment1.first_name,
+            'last_name': self.appointment1.last_name,
             'phone_number': '111111111',
             'choice': self.appointment1.choice
         })
@@ -304,7 +313,8 @@ class TestPatientAppointmentViews(TestCase):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.post(self.update_appointment_url, {
             'date': '13.01.2018 16:00',
-            'name': self.appointment1.name,
+            'first_name': self.appointment1.first_name,
+            'last_name': self.appointment1.last_name,
             'phone_number': '111111111',
             'choice': self.appointment1.choice
         })

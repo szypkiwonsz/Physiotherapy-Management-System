@@ -26,7 +26,8 @@ class TestAppointmentModels(TestCase):
             owner=self.patient1,
             office=self.appointment_office1,
             date=datetime(2012, 1, 13, 16, 00, 00),
-            name='name',
+            first_name='kacper',
+            last_name='sawicki',
             date_selected=datetime(2012, 1, 13, 23, 51, 34),
             phone_number='000000000',
             confirmed=False,
@@ -34,7 +35,8 @@ class TestAppointmentModels(TestCase):
         )
 
     def test_appointment_patient_name_is_capitalized_on_creation(self):
-        self.assertEquals(self.appointment1.name, 'Name')
+        self.assertEquals(self.appointment1.first_name, 'Kacper')
+        self.assertEquals(self.appointment1.last_name, 'Sawicki')
 
     def test_string_representation(self):
         self.assertEquals(str(self.appointment1), self.patient1.email)

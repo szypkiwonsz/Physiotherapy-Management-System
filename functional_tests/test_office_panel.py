@@ -109,8 +109,10 @@ class TestHome(StaticLiveServerTestCase):
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.office1,
+            patient_email='patient@gmail.com',
             date=datetime(datetime.today().year, datetime.today().month, datetime.today().day + 1),
-            name='Kacper',
+            first_name='Kacper',
+            last_name='Sawicki',
             date_selected=datetime(2020, 8, 21, 17, 00, 00),
             phone_number='000000000',
             confirmed=False,
@@ -216,7 +218,7 @@ class TestHome(StaticLiveServerTestCase):
         appointment_text = self.browser.find_elements_by_class_name('text-description')[1].text
         self.assertEquals(
             appointment_text,
-            f'patient@gmail.com, {add_zero(datetime.today().day + 1)}.'
+            f'Kacper Sawicki, {add_zero(datetime.today().day + 1)}.'
             f'{add_zero(datetime.today().month)}.{datetime.today().year}, o godz: 00:00 - Konsultacja\n'
             f'[Niepotwierdzona]'
         )

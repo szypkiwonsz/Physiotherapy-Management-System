@@ -18,7 +18,7 @@ class TestPatientForm(TestCase):
     def test_make_patient_form_no_data(self):
         form = PatientForm(data={})
         self.assertFalse(form.is_valid())
-        self.assertEquals(len(form.errors), 4)
+        self.assertEquals(len(form.errors), 3)
 
     def test_make_patient_form_invalid_first_name(self):
         form = PatientForm(data={

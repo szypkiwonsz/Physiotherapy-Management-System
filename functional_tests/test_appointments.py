@@ -6,8 +6,8 @@ from django.urls import reverse
 from selenium import webdriver
 
 from applications.appointments.models import Appointment
-from utils.add_zero import add_zero
 from applications.users.models import User, Office
+from utils.add_zero import add_zero
 
 
 class TestOfficeAppointments(StaticLiveServerTestCase):
@@ -31,7 +31,9 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
             owner=self.patient1,
             office=self.office1,
             date=datetime(datetime.today().year, datetime.today().month, datetime.today().day + 1),
-            name='Kacper',
+            first_name='Kacper',
+            last_name='Sawicki',
+            patient_email='patient@gmail.com',
             date_selected=datetime(2020, 8, 21, 17, 00, 00),
             phone_number='000000000',
             confirmed=False,
@@ -111,7 +113,9 @@ class TestPatientAppointments(StaticLiveServerTestCase):
             owner=self.patient1,
             office=self.office1,
             date=datetime(datetime.today().year, datetime.today().month, datetime.today().day + 1),
-            name='Kacper',
+            first_name='Kacper',
+            last_name='Sawicki',
+            patient_email='patient@gmail.com',
             date_selected=datetime(2020, 8, 21, 17, 00, 00),
             phone_number='000000000',
             confirmed=False,
