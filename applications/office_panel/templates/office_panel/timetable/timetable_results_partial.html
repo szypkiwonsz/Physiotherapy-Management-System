@@ -1,0 +1,21 @@
+{% load office_panel_extras %}
+<div class="font-weight-bold mb-2 border border-rounded"> {{ month|add_zero }}.{{ year }}</div>
+{% for date in dates %}
+    {% with hours|len_str as len_hours %}
+        <span>
+        {% with date|split:' ' as date_split %}
+            {% if date in dates_taken %}
+                <button class="btn btn-danger btn mt-1 btn-timetable">{{ date_split|index:1 }}</button>
+            {% else %}
+                <a type="submit" href="{% url 'office_panel:appointments:make' pk=office_id %}?date={{ date }}"
+                   class="btn btn-success btn mt-1 btn-timetable">{{ date_split|index:1 }}</a>
+            {% endif %}
+        {% endwith %}
+        </span>
+        {% if forloop.counter|divisibleby:len_hours %}
+            <span class="font-weight-bold day-number"><div>{{ date|index:0|remove_zero }}{{ date|index:1 }}</div></span>
+            <hr>
+            <br>
+        {% endif %}
+    {% endwith %}
+{% endfor %}
