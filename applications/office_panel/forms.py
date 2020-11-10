@@ -14,6 +14,7 @@ class PatientForm(forms.ModelForm):
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
         'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
     })
+    email = forms.EmailField(required=False)
 
     def __init__(self, *args, **kwargs):
         super(PatientForm, self).__init__(*args, **kwargs)
