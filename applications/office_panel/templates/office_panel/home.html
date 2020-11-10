@@ -15,8 +15,7 @@
                 <div class="text-description">
                     <a href="{% url 'office_panel:patient_detail' patient.pk %}"
                        role="button">{{ patient.first_name }}
-                        {{ patient.last_name }}</a>,
-                    {{ patient.email }}
+                        {{ patient.last_name }}</a>{% if patient.email %}, {{ patient.email }}{% endif %}
                 </div>
                 <div class="right-button">
                     <a href="{% url 'office_panel:patient_update' patient.pk %}" class="btn btn-info" role="button">Edytuj</a>
@@ -46,7 +45,8 @@
             {% for appointment in appointments %}
                 <hr>
                 <div class="text-description">
-                    {{ appointment.owner }},
+                    {{ appointment.first_name }}
+                    {{ appointment.last_name }},
                     {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
                     {{ appointment.choice }}
                     <br>
