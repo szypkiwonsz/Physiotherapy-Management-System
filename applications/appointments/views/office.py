@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, Http404
@@ -106,7 +108,8 @@ class MakeAppointment(CreateView):
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super(MakeAppointment, self).get_form_kwargs()
         date = self.request.GET['date']
-        if date in self.request.session['dates_taken']:
+        date_database_format = datetime.datetime.strptime(date, '%d.%m.%Y %H:%M')
+        if Appointment.objects.filter(date=date_database_format):
             # if date from url is taken raise 404 error (in case the user changes the url)
             raise Http404
         if int(self.request.session['hour_open']) > int(self.request.GET['date'][-5:-3]) or \
