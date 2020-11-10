@@ -94,7 +94,7 @@ class AppointmentDeleteView(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         appointment = self.get_object()
-        messages.success(request, f'Wizyta {appointment.name} została poprawnie usunięta.')
+        messages.success(request, f'Wizyta {appointment.first_name} {appointment.last_name} została poprawnie usunięta.')
         return super().delete(request, *args, **kwargs)
 
     def get_queryset(self):
