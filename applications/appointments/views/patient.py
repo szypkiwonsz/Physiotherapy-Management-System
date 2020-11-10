@@ -62,6 +62,7 @@ class MakeAppointment(CreateView):
         appointment = form.save(commit=False)
         appointment.owner_id = self.request.user.id
         appointment.office_id = self.kwargs.get('pk')
+        appointment.patient_email = self.request.user.email
         appointment.save()
 
         office_email = appointment.office.user.email
