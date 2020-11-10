@@ -29,7 +29,7 @@ class AppointmentListView(View):
         if url_parameter_q:
             ctx = {
                 'appointments': Appointment.objects.filter(
-                    office=self.request.user.id, owner__email__icontains=url_parameter_q).order_by('date'),
+                    office=self.request.user.id, last_name__icontains=url_parameter_q).order_by('date'),
             }
         else:
             ctx = {
