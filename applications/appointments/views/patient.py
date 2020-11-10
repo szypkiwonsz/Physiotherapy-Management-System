@@ -82,8 +82,8 @@ class AppointmentListView(ListView):
     context_object_name = 'appointments'
 
     def get_queryset(self):
-        queryset = self.request.user.appointments.select_related('owner').order_by('date') \
-            .filter(date__gte=datetime.today())
+        queryset = Appointment.objects.order_by('date') \
+            .filter(date__gte=datetime.today(), patient_email=self.request.user.email)
         return queryset
 
     def get(self, request, **kwargs):
@@ -124,8 +124,8 @@ class OldAppointmentListView(ListView):
     context_object_name = 'appointments'
 
     def get_queryset(self):
-        queryset = self.request.user.appointments.select_related('owner').order_by('date') \
-            .filter(date__lte=datetime.today())
+        queryset = Appointment.objects.order_by('date') \
+            .filter(date__lte=datetime.today(), patient_email=self.request.user.email)
         return queryset
 
 
@@ -145,7 +145,7 @@ class AppointmentCancelView(DeleteView):
         return super().delete(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Appointment.objects.filter(owner=self.request.user.id)
+        return Appointment.objects.filter(patient_email=self.request.user.email)
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
@@ -198,7 +198,7 @@ class AppointmentUpdateView(UpdateView):
         return redirect(self.get_success_url())
 
     def get_queryset(self):
-        return Appointment.objects.filter(owner=self.request.user.id)
+        return Appointment.objects.filter(patient_email=self.request.user.email)
 
     def get_success_url(self):
         return reverse('patient_panel:appointments:upcoming')
