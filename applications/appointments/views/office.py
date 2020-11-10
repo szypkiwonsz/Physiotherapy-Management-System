@@ -3,7 +3,7 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
@@ -104,6 +104,17 @@ class AppointmentDeleteView(DeleteView):
 class MakeAppointment(CreateView):
     form_class = AppointmentOfficeMakeForm
     template_name = 'appointments/office/appointment_make_form.html'
+    success_url = reverse_lazy('office_panel:appointments:list')
+
+    def form_valid(self, form):
+        appointment = form.save(commit=False)
+        appointment.first_name = form.cleaned_data.get('patient').first_name
+        appointment.last_name = form.cleaned_data.get('patient').last_name
+        appointment.owner = self.request.user
+        appointment.office_id = self.kwargs.get('pk')
+        appointment.patient_email = form.cleaned_data.get('patient').email
+        appointment.save()
+        return redirect('office_panel:appointments:list')
 
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super(MakeAppointment, self).get_form_kwargs()
