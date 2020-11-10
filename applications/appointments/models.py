@@ -18,8 +18,10 @@ alphanumeric_last_name = RegexValidator(
 class Appointment(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments')
     office = models.ForeignKey(Office, on_delete=models.CASCADE)
+    patient_email = models.EmailField()
+    first_name = models.CharField(max_length=20, unique=False, default='', validators=[alphanumeric_first_name])
+    last_name = models.CharField(max_length=40, unique=False, default='', validators=[alphanumeric_last_name])
     date = models.DateTimeField()
-    name = models.CharField(max_length=120, validators=[alphanumeric])
     date_selected = models.DateTimeField(default=timezone.now)
     phone_number = models.CharField(max_length=9, validators=[numeric])
     confirmed = models.BooleanField(default=False)
