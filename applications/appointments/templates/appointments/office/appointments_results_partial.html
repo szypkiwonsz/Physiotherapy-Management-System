@@ -3,7 +3,8 @@
     {% for appointment in appointments %}
         <hr>
         <div class="text-description">
-            {{ appointment.owner }},
+            {{ appointment.first_name }}
+            {{ appointment.last_name }},
             {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
             {{ appointment.choice }}
             <br>
