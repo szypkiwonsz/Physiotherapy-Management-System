@@ -6,7 +6,12 @@ from applications.office_panel.models import Patient
 from applications.users.models import User, Office
 
 numeric = RegexValidator('^[0-9]*$', 'Jako numer telefonu, możesz podać jedynie cyfry.')
-alphanumeric = RegexValidator('^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]*$', 'Twoje imię nie może zawierać cyfr.')
+alphanumeric_first_name = RegexValidator(
+    '^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]*$', 'Imię nie może zawierać cyfr, ani znaków specjalnych'
+)
+alphanumeric_last_name = RegexValidator(
+    '^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]*$', 'Nazwisko nie może zawierać cyfr, ani znaków specjalnych.'
+)
 
 
 # Create your models here.
