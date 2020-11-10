@@ -12,7 +12,8 @@ class AppointmentPatientMakeForm(forms.ModelForm):
         input_formats=settings.DATE_INPUT_FORMATS,
         widget=forms.TextInput(attrs={'autocomplete': 'off'})
     )
-    name = forms.CharField(label='Imię')
+    first_name = forms.CharField(label='Imię')
+    last_name = forms.CharField(label='Nazwisko')
     phone_number = forms.CharField(label='Numer telefonu', min_length=9, error_messages={
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
         'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
@@ -28,7 +29,7 @@ class AppointmentPatientMakeForm(forms.ModelForm):
 
     class Meta:
         model = Appointment
-        fields = ['date', 'name', 'phone_number', 'choice']
+        fields = ['date', 'first_name', 'last_name', 'phone_number', 'choice']
 
 
 class AppointmentOfficeMakeForm(AppointmentPatientMakeForm):
