@@ -37,10 +37,11 @@ class AppointmentOfficeMakeForm(AppointmentPatientMakeForm):
         self.user = kwargs.pop('user', None)
         self.date = kwargs.pop('date', None)
         super(AppointmentOfficeMakeForm, self).__init__(*args, **kwargs)
-        self.fields['name'].widget = forms.HiddenInput()
-        self.fields['phone_number'].widget = forms.HiddenInput()
-        self.fields['owner'] = forms.ModelChoiceField(queryset=Patient.objects.filter(owner=self.user), required=False)
-        self.fields['owner'].label = 'Pacjent'
+        del self.fields['first_name']
+        del self.fields['last_name']
+        del self.fields['phone_number']
+        self.fields['patient'] = forms.ModelChoiceField(queryset=Patient.objects.filter(owner=self.user), required=True)
+        self.fields['patient'].label = 'Pacjent'
         self.fields['date'].widget = forms.TextInput(attrs={'value': str(self.date), 'readonly': 'true'})
 
 
