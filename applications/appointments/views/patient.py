@@ -58,7 +58,7 @@ class MakeAppointment(CreateView):
                 self.appointment_date_taken(datetime_form_value)
                 return redirect('patient_panel:appointments:make', pk=self.kwargs.get('pk'))
         date, time = self.date_and_time_from_datetime(datetime_form_value)
-        name = form.cleaned_data.get('name')
+        patient_first_name = form.cleaned_data.get('first_name')
         appointment = form.save(commit=False)
         appointment.owner_id = self.request.user.id
         appointment.office_id = self.kwargs.get('pk')
@@ -67,8 +67,9 @@ class MakeAppointment(CreateView):
 
         office_email = appointment.office.user.email
         patient_email = self.request.user.email
-        appointment_confirmation_email_office.delay(name, date, time, office_email)
-        appointment_confirmation_email_patient.delay(name, appointment.office.name, date, time, patient_email)
+        appointment_confirmation_email_office.delay(patient_first_name, date, time, office_email)
+        appointment_confirmation_email_patient.delay(patient_first_name, appointment.office.name, date, time,
+                                                     patient_email)
 
         messages.warning(self.request, 'Poprawnie umówiono wizytę, ale oczekuje ona na potwierdzenie.')
         return redirect('patient_panel:appointments:upcoming')
@@ -189,7 +190,8 @@ class AppointmentUpdateView(UpdateView):
                 return redirect('patient_panel:appointments:update', self.object.pk)
         appointment.confirmed = False
         appointment.date = form.cleaned_data['date']
-        appointment.name = form.cleaned_data['name']
+        appointment.first_name = form.cleaned_data['first_name']
+        appointment.last_name = form.cleaned_data['last_name']
         appointment.phone_number = form.cleaned_data['phone_number']
         appointment.choice = form.cleaned_data['choice']
         appointment.save()
