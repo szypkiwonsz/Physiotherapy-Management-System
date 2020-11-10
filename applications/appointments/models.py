@@ -31,7 +31,8 @@ class Appointment(models.Model):
         return str(self.owner)
 
     def save(self, *args, **kwargs):
-        self.name = self.name.capitalize()
+        self.first_name = self.first_name.capitalize()
+        self.last_name = self.last_name.capitalize()
         super(Appointment, self).save(*args, **kwargs)
 
     class Meta:
