@@ -1,6 +1,8 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
+
 from applications.office_panel.views import home, patient
+from applications.office_panel.views import timetable
 
 
 class TestOfficeHomeUrls(SimpleTestCase):
@@ -29,3 +31,7 @@ class TestOfficePatientUrls(SimpleTestCase):
     def test_patient_delete_url_resolves(self):
         url = reverse('office_panel:patient_delete', args=[1])
         self.assertEquals(resolve(url).func.view_class, patient.PatientDeleteView)
+
+    def test_timetable_url_resolves(self):
+        url = reverse('office_panel:timetable')
+        self.assertEquals(resolve(url).func.view_class, timetable.TimetableView)
