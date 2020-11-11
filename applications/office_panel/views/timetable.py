@@ -4,12 +4,15 @@ import datetime
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
+from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from applications.appointments.models import Appointment
+from applications.users.decorators import login_required, office_required
 from utils.add_zero import add_zero
 
 
+@method_decorator([login_required, office_required], name='dispatch')
 class TimetableView(View):
     template_name = 'office_panel/timetable/timetable.html'
     hour_open = 11
