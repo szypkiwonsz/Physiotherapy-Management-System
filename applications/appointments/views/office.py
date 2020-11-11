@@ -101,6 +101,7 @@ class AppointmentDeleteView(DeleteView):
         return Appointment.objects.filter(office=self.request.user.id)
 
 
+@method_decorator([login_required, office_required], name='dispatch')
 class MakeAppointment(CreateView):
     form_class = AppointmentOfficeMakeForm
     template_name = 'appointments/office/appointment_make_form.html'
