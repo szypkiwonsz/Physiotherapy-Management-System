@@ -111,7 +111,7 @@ class TestOfficeAppointmentViews(TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'appointments/office/appointment_delete_confirm.html')
 
-    def test_medical_history_delete_POST(self):
+    def test_appointment_delete_POST(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response_with_post = self.client.get(self.delete_appointment_url)
         self.assertEquals(response_with_post.status_code, 200)
