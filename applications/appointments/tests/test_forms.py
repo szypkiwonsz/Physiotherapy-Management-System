@@ -19,10 +19,11 @@ class TestPatientMakeAppointmentForm(SimpleTestCase):
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 5)
 
-    def test_patient_make_form_wrong_name(self):
+    def test_patient_make_form_wrong_first_name(self):
         form = AppointmentPatientMakeForm(data={
             'date': '27.08.2020 17:00',
-            'name': 'Name1',
+            'first_name': 'Kacper_',
+            'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': 'Konsultacja'
         })
