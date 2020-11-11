@@ -46,6 +46,7 @@ class TestPatientViews(TestCase):
         self.detail_patient_url = reverse('office_panel:patient_detail', args=[1])
         self.update_patient_url = reverse('office_panel:patient_update', args=[1])
         self.delete_patient_url = reverse('office_panel:patient_delete', args=[1])
+        self.timetable_url = reverse('office_panel:timetable')
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
@@ -190,3 +191,34 @@ class TestPatientViews(TestCase):
         response = self.client.post(self.delete_patient_url)
         response_with_deleted_post = self.client.get(self.delete_patient_url)
         self.assertEquals(response_with_deleted_post.status_code, 404)
+
+
+class TestTimetableViews(TestCase):
+    def setUp(self):
+        self.timetable_url = reverse('office_panel:timetable')
+        self.patient1 = User.objects.create_user(
+            'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
+        )
+        self.office1 = User.objects.create_user(
+            'office', 'office@gmail.com', 'officepassword', is_office=True
+        )
+
+    def test_timetable_GET_not_logged_in(self):
+        response = self.client.get(self.timetable_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'office_panel/timetable/timetable.html')
+
+    def test_timetable_GET_logged_as_patient(self):
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        response = self.client.get(self.timetable_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'office_panel/timetable/timetable.html')
+
+    def test_timetable_GET_logged_as_office(self):
+        self.client.login(username='office@gmail.com', password='officepassword')
+        response = self.client.get(self.timetable_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'office_panel/timetable/timetable.html')
