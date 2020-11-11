@@ -4,6 +4,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 
 from applications.appointments.models import Appointment
+from applications.office_panel.models import Patient
 from applications.users.models import User, Office
 
 
@@ -12,6 +13,7 @@ class TestOfficeAppointmentViews(TestCase):
     def setUp(self):
         self.client = Client()
         self.appointment_list_url = reverse('office_panel:appointments:list')
+        self.make_appointment_url = reverse('office_panel:appointments:make', args=[2])
         self.update_appointment_url = reverse('office_panel:appointments:update', args=[1])
         self.delete_appointment_url = reverse('office_panel:appointments:delete', args=[1])
         self.patient1 = User.objects.create_user(
@@ -19,6 +21,12 @@ class TestOfficeAppointmentViews(TestCase):
         )
         self.office1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
+        )
+        self.office_patient1 = Patient.objects.create(
+            owner=self.office1,
+            first_name='firstname',
+            last_name='lastname',
+            email='patient@gmail.com',
         )
         self.appointment_office1 = Office.objects.create(
             user=self.office1,
@@ -118,6 +126,39 @@ class TestOfficeAppointmentViews(TestCase):
         response = self.client.post(self.delete_appointment_url)
         response_with_deleted_post = self.client.get(self.update_appointment_url)
         self.assertEquals(response_with_deleted_post.status_code, 404)
+
+    def test_make_appointment_create_GET_not_logged_in(self):
+        response = self.client.get(self.make_appointment_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/office_panel/appointment_make_form.html')
+
+    def test_make_appointment_create_GET_logged_as_patient(self):
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        response = self.client.get(self.make_appointment_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/office_panel/appointment_make_form.html')
+
+    """How to test with request.GET -> appointments.views.office (line 122)"""
+    # def test_make_appointment_create_GET_logged_as_office(self):
+    #     self.client.login(username='office@gmail.com', password='officepassword')
+    #     response = self.client.get(self.make_appointment_url)
+    #
+    #     self.assertEquals(response.status_code, 200)
+    #     self.assertTemplateUsed(response, 'appointments/office_panel/appointment_make_form.html')
+    #
+    # def test_make_appointment_create_POST(self):
+    #     self.client.login(username='office@gmail.com', password='officepassword')
+    #     response = self.client.post(self.make_appointment_url, {
+    #         'choice': 'Konsultacja',
+    #         'patient': self.office_patient1,
+    #     })
+    #     appointment2 = Appointment.objects.get(id=3)
+    #     self.assertEquals(appointment2.date, datetime(1998, 2, 17, 17, 00, 00))
+    #     self.assertEquals(appointment2.office_id, 2)
+    #     self.assertEquals(appointment2.confirmed, False)
+    #     self.assertEquals(appointment2.first_name, 'firstname')
 
 
 class TestPatientAppointmentViews(TestCase):
