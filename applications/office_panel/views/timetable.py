@@ -19,9 +19,9 @@ class TimetableView(View):
     hour_close = 20
 
     @staticmethod
-    def get_dates_in_month(number_of_days_in_month, hours, month, year):
+    def get_dates_in_month(days_in_month, hours, month, year):
         dates = []
-        for day in number_of_days_in_month:
+        for day in days_in_month:
             day = add_zero(day)
             for hour in hours:
                 date = f'{day}.{month}.{year} {hour}'
@@ -53,7 +53,7 @@ class TimetableView(View):
                 date__year=int(url_parameter_y), date__month=int(url_parameter_m), office__user=request.user
             )
             dates = self.get_dates_in_month(
-                number_of_days_in_month=self.get_number_of_days_in_month(int(url_parameter_y), int(url_parameter_m)),
+                days_in_month=self.get_number_of_days_in_month(int(url_parameter_y), int(url_parameter_m)),
                 hours=self.get_hours(self.hour_open, self.hour_close),
                 month=int(url_parameter_m),
                 year=int(url_parameter_y)
@@ -74,7 +74,7 @@ class TimetableView(View):
                 date__year=now.year, date__month=now.month, office__user=request.user
             )
             dates = self.get_dates_in_month(
-                number_of_days_in_month=self.get_number_of_days_in_month(now.year, now.month),
+                days_in_month=self.get_number_of_days_in_month(now.year, now.month),
                 hours=self.get_hours(self.hour_open, self.hour_close),
                 month=now.month,
                 year=now.year
