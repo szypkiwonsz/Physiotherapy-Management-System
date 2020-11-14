@@ -14,7 +14,7 @@
         </span>
         {% if forloop.counter|divisibleby:len_hours %}
             <span class="font-weight-bold day-number"><div>{{ date|index:0|remove_zero }}{{ date|index:1 }}</div></span>
-            <hr>
+            <hr class="margin-hr-timetable">
             <br>
         {% endif %}
     {% endwith %}
