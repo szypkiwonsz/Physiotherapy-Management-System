@@ -6,8 +6,8 @@ from django.urls import reverse
 from selenium import webdriver
 
 from applications.appointments.models import Appointment
-from applications.users.models import User, Office
 from applications.office_panel.models import Patient
+from applications.users.models import User, Office
 from utils.add_zero import add_zero
 
 
@@ -57,7 +57,7 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
         sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[3]/div/a').click()
+        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[4]/div/a').click()
         appointments_text = self.browser.find_element_by_class_name('text-description').text
         self.assertEquals(
             appointments_text,
@@ -73,7 +73,7 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
         sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[3]/div/a').click()
+        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[4]/div/a').click()
         sleep(0.5)
         self.browser.find_element_by_xpath('//*[@id="replaceable-content"]/div[3]/a[1]').click()
         self.assertEquals(
@@ -90,7 +90,7 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
         sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[3]/div/a').click()
+        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[4]/div/a').click()
         sleep(0.5)
         self.browser.find_element_by_xpath('//*[@id="replaceable-content"]/div[3]/a[2]').click()
         self.assertEquals(
