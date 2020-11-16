@@ -14,10 +14,10 @@ from applications.appointments.forms import AppointmentPatientMakeForm
 from applications.appointments.models import Appointment
 from applications.appointments.tasks import appointment_confirmation_email_patient, \
     appointment_confirmation_email_office
-from applications.appointments.utils import add_zero
 from applications.appointments.utils import database_old_datetime_format_to_new
 from applications.users.decorators import patient_required
 from applications.users.models import Office
+from utils.add_zero import add_zero
 from utils.paginate import paginate
 
 
@@ -58,16 +58,18 @@ class MakeAppointment(CreateView):
                 self.appointment_date_taken(datetime_form_value)
                 return redirect('patient_panel:appointments:make', pk=self.kwargs.get('pk'))
         date, time = self.date_and_time_from_datetime(datetime_form_value)
-        name = form.cleaned_data.get('name')
+        patient_first_name = form.cleaned_data.get('first_name')
         appointment = form.save(commit=False)
         appointment.owner_id = self.request.user.id
         appointment.office_id = self.kwargs.get('pk')
+        appointment.patient_email = self.request.user.email
         appointment.save()
 
         office_email = appointment.office.user.email
         patient_email = self.request.user.email
-        appointment_confirmation_email_office.delay(name, date, time, office_email)
-        appointment_confirmation_email_patient.delay(name, appointment.office.name, date, time, patient_email)
+        appointment_confirmation_email_office.delay(patient_first_name, date, time, office_email)
+        appointment_confirmation_email_patient.delay(patient_first_name, appointment.office.name, date, time,
+                                                     patient_email)
 
         messages.warning(self.request, 'Poprawnie umówiono wizytę, ale oczekuje ona na potwierdzenie.')
         return redirect('patient_panel:appointments:upcoming')
@@ -80,8 +82,8 @@ class AppointmentListView(ListView):
     context_object_name = 'appointments'
 
     def get_queryset(self):
-        queryset = self.request.user.appointments.select_related('owner').order_by('date') \
-            .filter(date__gte=datetime.today())
+        queryset = Appointment.objects.order_by('date') \
+            .filter(date__gte=datetime.today(), patient_email=self.request.user.email)
         return queryset
 
     def get(self, request, **kwargs):
@@ -122,8 +124,8 @@ class OldAppointmentListView(ListView):
     context_object_name = 'appointments'
 
     def get_queryset(self):
-        queryset = self.request.user.appointments.select_related('owner').order_by('date') \
-            .filter(date__lte=datetime.today())
+        queryset = Appointment.objects.order_by('date') \
+            .filter(date__lte=datetime.today(), patient_email=self.request.user.email)
         return queryset
 
 
@@ -143,7 +145,7 @@ class AppointmentCancelView(DeleteView):
         return super().delete(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Appointment.objects.filter(owner=self.request.user.id)
+        return Appointment.objects.filter(patient_email=self.request.user.email)
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
@@ -188,14 +190,15 @@ class AppointmentUpdateView(UpdateView):
                 return redirect('patient_panel:appointments:update', self.object.pk)
         appointment.confirmed = False
         appointment.date = form.cleaned_data['date']
-        appointment.name = form.cleaned_data['name']
+        appointment.first_name = form.cleaned_data['first_name']
+        appointment.last_name = form.cleaned_data['last_name']
         appointment.phone_number = form.cleaned_data['phone_number']
         appointment.choice = form.cleaned_data['choice']
         appointment.save()
         return redirect(self.get_success_url())
 
     def get_queryset(self):
-        return Appointment.objects.filter(owner=self.request.user.id)
+        return Appointment.objects.filter(patient_email=self.request.user.email)
 
     def get_success_url(self):
         return reverse('patient_panel:appointments:upcoming')

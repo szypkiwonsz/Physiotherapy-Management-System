@@ -17,7 +17,7 @@
 {% block content %}
     <div class="container border rounded bg-light">
         <div class="form">
-            <h2>Edytuj wizytę dla pacjenta: {{ appointment.owner }}</h2>
+            <h2>Edytuj wizytę dla pacjenta: {{ appointment.first_name }} {{ appointment.last_name }}</h2>
             <hr>
             <form method="post" novalidate>
                 {% csrf_token %}

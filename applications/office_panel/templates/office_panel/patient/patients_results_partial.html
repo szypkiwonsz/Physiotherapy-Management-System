@@ -7,9 +7,7 @@
         <div class="text-description">
             <a href="{% url 'office_panel:patient_detail' patient.pk %}" role="button">
                 {{ patient.first_name }}
-                {{ patient.last_name }}
-            </a>,
-            {{ patient.email }}
+                {{ patient.last_name }}</a>{% if patient.email %}, {{ patient.email }}{% endif %}
         </div>
         <div class="right-button">
             <a href="{% url 'office_panel:patient_update' patient.pk %}" class="btn btn-info"

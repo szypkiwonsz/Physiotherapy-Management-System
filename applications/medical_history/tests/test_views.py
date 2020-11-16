@@ -1,10 +1,13 @@
+from datetime import datetime
+
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
 
+from applications.appointments.models import Appointment
 from applications.medical_history.models import MedicalHistory
 from applications.office_panel.models import Patient
-from applications.users.models import User
+from applications.users.models import User, Office
 
 
 class TestOfficeMedicalHistoryViews(TestCase):
@@ -34,6 +37,25 @@ class TestOfficeMedicalHistoryViews(TestCase):
             description='description',
             recommendations='recommendations',
             date_selected=timezone.now(),
+        )
+        self.appointment_office1 = Office.objects.create(
+            user=self.office1,
+            name='name',
+            address='address',
+            city='City',
+            phone_number='000000000',
+            website='www.website.com'
+        )
+        self.appointment1 = Appointment.objects.create(
+            owner=self.patient1,
+            office=self.appointment_office1,
+            date=datetime(2012, 1, 13, 16, 00, 00),
+            first_name='Kacper',
+            last_name='Sawicki',
+            date_selected=datetime(2012, 1, 13, 23, 51, 34),
+            phone_number='000000000',
+            confirmed=False,
+            choice='Konsultacja'
         )
 
     def test_medical_history_list_GET_not_logged_in(self):
@@ -79,7 +101,8 @@ class TestOfficeMedicalHistoryViews(TestCase):
     def test_make_medical_history_create_POST(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.post(self.make_medical_history_url, {
-            'patient': Patient.objects.get(id=1).pk,
+            'patient': self.office_patient1.pk,
+            'appointment': self.appointment1.pk,
             'description': 'description',
             'recommendations': 'recommendations'
         })
@@ -131,6 +154,7 @@ class TestOfficeMedicalHistoryViews(TestCase):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.post(self.update_medical_history_url, {
             'patient': self.medical_history1.patient.pk,
+            'appointment': self.appointment1.pk,
             'description': self.medical_history1.description,
             'recommendations': 'newrecommendations'
         })

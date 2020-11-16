@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from applications.office_panel.views import home, patient
+from applications.office_panel.views import home, patient, timetable
 
 app_name = 'office_panel'
 urlpatterns = [
@@ -14,4 +14,5 @@ urlpatterns = [
     ])),
     path('medical_history/', include('applications.medical_history.urls.office')),
     path('appointments/', include('applications.appointments.urls.office')),
+    path('timetable/', timetable.TimetableView.as_view(), name='timetable')
 ]

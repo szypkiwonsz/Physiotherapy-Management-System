@@ -1,14 +1,16 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse, Http404
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import UpdateView, DeleteView
+from django.views.generic import UpdateView, DeleteView, CreateView
 
-from applications.appointments.forms import AppointmentOfficeUpdateForm
+from applications.appointments.forms import AppointmentOfficeUpdateForm, AppointmentOfficeMakeForm
 from applications.appointments.models import Appointment
 from applications.appointments.utils import database_old_datetime_format_to_new
 from applications.users.decorators import office_required
@@ -29,7 +31,7 @@ class AppointmentListView(View):
         if url_parameter_q:
             ctx = {
                 'appointments': Appointment.objects.filter(
-                    office=self.request.user.id, owner__email__icontains=url_parameter_q).order_by('date'),
+                    office=self.request.user.id, last_name__icontains=url_parameter_q).order_by('date'),
             }
         else:
             ctx = {
@@ -92,8 +94,43 @@ class AppointmentDeleteView(DeleteView):
 
     def delete(self, request, *args, **kwargs):
         appointment = self.get_object()
-        messages.success(request, f'Wizyta {appointment.name} została poprawnie usunięta.')
+        messages.success(
+            request, f'Wizyta {appointment.first_name} {appointment.last_name} została poprawnie usunięta.'
+        )
         return super().delete(request, *args, **kwargs)
 
     def get_queryset(self):
         return Appointment.objects.filter(office=self.request.user.id)
+
+
+@method_decorator([login_required, office_required], name='dispatch')
+class MakeAppointment(CreateView):
+    form_class = AppointmentOfficeMakeForm
+    template_name = 'appointments/office/appointment_make_form.html'
+    success_url = reverse_lazy('office_panel:appointments:list')
+
+    def form_valid(self, form):
+        appointment = form.save(commit=False)
+        appointment.first_name = form.cleaned_data.get('patient').first_name
+        appointment.last_name = form.cleaned_data.get('patient').last_name
+        appointment.owner = self.request.user
+        appointment.office_id = self.kwargs.get('pk')
+        appointment.patient_email = form.cleaned_data.get('patient').email
+        appointment.save()
+        return redirect('office_panel:appointments:list')
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(MakeAppointment, self).get_form_kwargs()
+        date = self.request.GET['date']
+        date_database_format = datetime.datetime.strptime(date, '%d.%m.%Y %H:%M')
+        if Appointment.objects.filter(date=date_database_format):
+            # if date from url is taken raise 404 error (in case the user changes the url)
+            raise Http404
+        if int(self.request.session['hour_open']) > int(self.request.GET['date'][-5:-3]) or \
+                int(self.request.session['hour_close']) <= int(self.request.GET['date'][-5:-3]):
+            # if the visit time given in the url is smaller or greater than the possibility of making an appointment
+            # raise 404 error (in case the user changes the url)
+            raise Http404
+        kwargs['user'] = self.request.user
+        kwargs['date'] = date
+        return kwargs

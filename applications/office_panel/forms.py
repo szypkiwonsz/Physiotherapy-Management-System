@@ -10,10 +10,11 @@ class PatientForm(forms.ModelForm):
         'min_length': _('Pesel powinien zawierać 11 cyfr.'),
         'max_length': _('Pesel powinien składać się z maksymalnie 11 cyfr. ')
     })
-    phone_number = forms.CharField(required=False, min_length=9, error_messages={
+    phone_number = forms.CharField(min_length=9, error_messages={
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
         'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
     })
+    email = forms.EmailField(required=False)
 
     def __init__(self, *args, **kwargs):
         super(PatientForm, self).__init__(*args, **kwargs)
@@ -25,4 +26,4 @@ class PatientForm(forms.ModelForm):
 
     class Meta:
         model = Patient
-        fields = ['first_name', 'last_name', 'email', 'address', 'pesel', 'phone_number']
+        fields = ['first_name', 'last_name', 'phone_number', 'email', 'address', 'pesel']

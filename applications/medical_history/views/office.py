@@ -60,6 +60,11 @@ class MakeMedicalHistory(CreateView):
     form_class = MedicalHistoryForm
     template_name = 'medical_history/office/medical_history_add_form.html'
 
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(MakeMedicalHistory, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def get_context_data(self, **kwargs):
         context = super(MakeMedicalHistory, self).get_context_data(**kwargs)
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
@@ -88,6 +93,11 @@ class MedicalHistoryDetailView(DetailView):
 class MedicalHistoryUpdateView(UpdateView):
     form_class = MedicalHistoryForm
     template_name = 'medical_history/office/medical_history_update_form.html'
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(MedicalHistoryUpdateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super(MedicalHistoryUpdateView, self).get_context_data(**kwargs)

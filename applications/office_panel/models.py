@@ -7,8 +7,12 @@ from applications.users.models import User
 
 numeric_phone_number = RegexValidator('^[0-9]*$', 'Jako numer telefonu, możesz podać jedynie cyfry.')
 numeric_pesel = RegexValidator('^[0-9]*$', 'Jako pesel, możesz podać jedynie cyfry.')
-alphanumeric_first_name = RegexValidator('^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]*$', 'Imię pacjenta nie może zawierać cyfr.')
-alphanumeric_last_name = RegexValidator('^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]*$', 'Nazwisko pacjenta nie może zawierać cyfr.')
+alphanumeric_first_name = RegexValidator(
+    '^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]*$', 'Imię nie może zawierać cyfr, ani znaków specjalnych'
+)
+alphanumeric_last_name = RegexValidator(
+    '^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]*$', 'Nazwisko nie może zawierać cyfr, ani znaków specjalnych.'
+)
 
 
 class Patient(models.Model):

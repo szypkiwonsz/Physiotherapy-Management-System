@@ -41,3 +41,7 @@ class TestOfficeAppointmentUrls(SimpleTestCase):
     def test_appointment_delete_url_resolves(self):
         url = reverse('office_panel:appointments:delete', args=[1])
         self.assertEquals(resolve(url).func.view_class, office.AppointmentDeleteView)
+
+    def test_appointment_make_url_resolves(self):
+        url = reverse('office_panel:appointments:make', args=[1])
+        self.assertEquals(resolve(url).func.view_class, office.MakeAppointment)

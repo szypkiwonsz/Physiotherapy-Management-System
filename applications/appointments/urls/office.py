@@ -8,5 +8,6 @@ urlpatterns = [
     path('<int:pk>/', include([
         path('update/', office.AppointmentUpdateView.as_view(), name='update'),
         path('delete/', office.AppointmentDeleteView.as_view(), name='delete'),
+        path('make/', office.MakeAppointment.as_view(), name='make')
     ]))
 ]

@@ -6,8 +6,9 @@ from django.urls import reverse
 from selenium import webdriver
 
 from applications.appointments.models import Appointment
-from applications.appointments.utils import add_zero
+from applications.office_panel.models import Patient
 from applications.users.models import User, Office
+from utils.add_zero import add_zero
 
 
 class TestOfficeAppointments(StaticLiveServerTestCase):
@@ -31,11 +32,19 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
             owner=self.patient1,
             office=self.office1,
             date=datetime(datetime.today().year, datetime.today().month, datetime.today().day + 1),
-            name='Kacper',
+            first_name='Kacper',
+            last_name='Sawicki',
+            patient_email='patient@gmail.com',
             date_selected=datetime(2020, 8, 21, 17, 00, 00),
             phone_number='000000000',
             confirmed=False,
             choice='Konsultacja'
+        )
+        self.office_patient1 = Patient.objects.create(
+            owner=self.office_user1,
+            first_name='firstname',
+            last_name='lastname',
+            email='patient@gmail.com',
         )
         self.browser = webdriver.Chrome('functional_tests/chromedriver.exe')
 
@@ -48,7 +57,7 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
         sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[3]/div/a').click()
+        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[4]/div/a').click()
         appointments_text = self.browser.find_element_by_class_name('text-description').text
         self.assertEquals(
             appointments_text,
@@ -64,7 +73,7 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
         sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[3]/div/a').click()
+        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[4]/div/a').click()
         sleep(0.5)
         self.browser.find_element_by_xpath('//*[@id="replaceable-content"]/div[3]/a[1]').click()
         self.assertEquals(
@@ -81,12 +90,34 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
         sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[3]/div/a').click()
+        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[4]/div/a').click()
         sleep(0.5)
         self.browser.find_element_by_xpath('//*[@id="replaceable-content"]/div[3]/a[2]').click()
         self.assertEquals(
             self.browser.current_url,
             appointment_delete_url
+        )
+
+    def test_appointment_make_button_redirects_to_all_appointments(self):
+        self.browser.get(self.live_server_url + reverse('login'))
+        appointments_list_url = self.live_server_url + reverse(
+            'office_panel:appointments:list'
+        )
+        self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
+        self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
+        self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
+        sleep(0.5)
+        self.browser.get(self.live_server_url + reverse('office_panel:timetable'))
+        self.browser.find_element_by_xpath('//*[@id="replaceable-content"]/span[1]/a').click()
+        sleep(0.5)
+        self.browser.find_element_by_xpath('//*[@id="id_patient"]').click()
+        sleep(0.5)
+        self.browser.find_element_by_xpath('//*[@id="id_patient"]/option[2]').click()
+        sleep(0.5)
+        self.browser.find_element_by_xpath('//*[@id="register-office"]/button').click()
+        self.assertEquals(
+            self.browser.current_url,
+            appointments_list_url
         )
 
 
@@ -111,7 +142,9 @@ class TestPatientAppointments(StaticLiveServerTestCase):
             owner=self.patient1,
             office=self.office1,
             date=datetime(datetime.today().year, datetime.today().month, datetime.today().day + 1),
-            name='Kacper',
+            first_name='Kacper',
+            last_name='Sawicki',
+            patient_email='patient@gmail.com',
             date_selected=datetime(2020, 8, 21, 17, 00, 00),
             phone_number='000000000',
             confirmed=False,

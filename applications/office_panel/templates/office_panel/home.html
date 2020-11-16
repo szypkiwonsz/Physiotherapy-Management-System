@@ -1,4 +1,5 @@
 {% extends 'base/base_panel_office.html' %}
+{% load office_panel_extras %}
 {% block head %}
     <title>Fizjo-System - Panel Gabinetu</title>
 {% endblock head %}
@@ -15,8 +16,7 @@
                 <div class="text-description">
                     <a href="{% url 'office_panel:patient_detail' patient.pk %}"
                        role="button">{{ patient.first_name }}
-                        {{ patient.last_name }}</a>,
-                    {{ patient.email }}
+                        {{ patient.last_name }}</a>{% if patient.email %}, {{ patient.email }}{% endif %}
                 </div>
                 <div class="right-button">
                     <a href="{% url 'office_panel:patient_update' patient.pk %}" class="btn btn-info" role="button">Edytuj</a>
@@ -35,7 +35,38 @@
             {% endif %}
         </div>
     </div>
-
+    <div class="container border rounded mt-3 bg-light">
+        <div class="form">
+            {% if dates %}
+                <h2>Najbliższe wolne terminy:</h2>
+            {% else %}
+                <h2>Brak wolnych terminów w tym miesiącu.</h2>
+            {% endif %}
+            <hr>
+            <div class="timetable">
+                {% for date_list in dates|slice:':2' %}
+                    {% for date in date_list %}
+                        {% with date_list|len_str as len_date_list %}
+                            <span>
+                    {% with date|split:' ' as date_split %}
+                        <a type="submit" href="{% url 'office_panel:appointments:make' pk=office_id %}?date={{ date }}"
+                           class="btn btn-success btn mt-1 btn-timetable">{{ date_split|index:1 }}</a>
+                    {% endwith %}
+                            </span>
+                            {% if forloop.counter|divisibleby:len_date_list %}
+                                <span class="font-weight-bold day-number"><div>
+                                {{ date|index:0 }}{{ date|index:1 }}.{{ date|index:3 }}{{ date|index:4 }}
+                            </div></span>
+                                <hr class="margin-hr-home-timetable">
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            <a href="{% url 'office_panel:timetable' %}" class="btn btn-warning" role="button">Pokaż cały harmonogram
+            </a>
+        </div>
+    </div>
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
             {% if appointments %}
@@ -46,7 +77,8 @@
             {% for appointment in appointments %}
                 <hr>
                 <div class="text-description">
-                    {{ appointment.owner }},
+                    {{ appointment.first_name }}
+                    {{ appointment.last_name }},
                     {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
                     {{ appointment.choice }}
                     <br>
@@ -89,11 +121,6 @@
                     Pacjent: <a href="{% url 'office_panel:patient_detail' medical_history.patient.pk %}"
                                 role="button">{{ medical_history.patient }}</a>
                 </div>
-                {% if medical_history.appointment %}
-                    {{ medical_history.appointment.date|date:"d.m.Y" }},
-                    {{ medical_history.appointment.date|date:"H:i" }},
-                    <div class="text-description">{{ medical_history.appointment.choice }}</div>
-                {% endif %}
                 <div class="border-left rounded p-1 mt-3">Opis:
                     <div class="text-description">{{ medical_history.description }}</div>
                 </div>
