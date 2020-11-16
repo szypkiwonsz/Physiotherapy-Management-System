@@ -52,8 +52,8 @@ class TimetableView(View):
                 'year': url_parameter_y,
                 'month': url_parameter_m,
                 'dates': dates,
-                'hours': self.get_hours(self.hour_open, self.hour_close),
-                'days': self.get_number_of_days_in_month(int(url_parameter_y), int(url_parameter_m)),
+                'hours': get_hours_in_day(self.hour_open, self.hour_close),
+                'days': get_number_of_days_in_month(int(url_parameter_y), int(url_parameter_m)),
                 'endpoint': url_without_parameters,
                 'office_id': self.request.user.pk
             }
