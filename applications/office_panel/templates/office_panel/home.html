@@ -121,11 +121,6 @@
                     Pacjent: <a href="{% url 'office_panel:patient_detail' medical_history.patient.pk %}"
                                 role="button">{{ medical_history.patient }}</a>
                 </div>
-                {% if medical_history.appointment %}
-                    {{ medical_history.appointment.date|date:"d.m.Y" }},
-                    {{ medical_history.appointment.date|date:"H:i" }},
-                    <div class="text-description">{{ medical_history.appointment.choice }}</div>
-                {% endif %}
                 <div class="border-left rounded p-1 mt-3">Opis:
                     <div class="text-description">{{ medical_history.description }}</div>
                 </div>
