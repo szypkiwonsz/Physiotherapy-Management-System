@@ -1,7 +1,13 @@
+import calendar
+import locale
+
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext as _
 from easy_thumbnails.fields import ThumbnailerImageField
+
+from utils.add_zero import add_zero
 
 
 class User(AbstractUser):
@@ -38,6 +44,28 @@ class Office(models.Model):
 
     def __str__(self):
         return self.user.email
+
+
+class OfficeDay(models.Model):
+    locale.setlocale(locale.LC_ALL, 'pl_PL')
+    DAY_CHOICES = [(str(i), (calendar.day_name[i]).capitalize()) for i in range(7)]
+    HOUR_CHOICES = [(f'{add_zero(i)}:00', f'{add_zero(i)}:00') for i in range(24)]
+    office = models.ForeignKey(Office, on_delete=models.CASCADE)
+    day = models.CharField(max_length=1, choices=DAY_CHOICES)
+    opening_hour = models.CharField(max_length=5, choices=HOUR_CHOICES, default='11:00')
+    closing_hour = models.CharField(max_length=5, choices=HOUR_CHOICES, default='20:00')
+
+    def validate_hours(self):
+        if self.opening_hour > self.closing_hour:
+            raise ValidationError(
+                'The closing hour must be greater than the opening hour.',
+                params={'opening_hour': self.opening_hour, 'closing_hour': self.closing_hour}
+            )
+
+    def save(self, *args, **kwargs):
+        self.validate_hours()
+
+        super().save(*args, **kwargs)
 
 
 class Profile(models.Model):
