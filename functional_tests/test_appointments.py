@@ -98,28 +98,6 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
             appointment_delete_url
         )
 
-    def test_appointment_make_button_redirects_to_all_appointments(self):
-        self.browser.get(self.live_server_url + reverse('login'))
-        appointments_list_url = self.live_server_url + reverse(
-            'office_panel:appointments:list'
-        )
-        self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
-        self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
-        self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        sleep(0.5)
-        self.browser.get(self.live_server_url + reverse('office_panel:timetable'))
-        self.browser.find_element_by_xpath('//*[@id="replaceable-content"]/span[1]/a').click()
-        sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="id_patient"]').click()
-        sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="id_patient"]/option[2]').click()
-        sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="register-office"]/button').click()
-        self.assertEquals(
-            self.browser.current_url,
-            appointments_list_url
-        )
-
 
 class TestPatientAppointments(StaticLiveServerTestCase):
 
