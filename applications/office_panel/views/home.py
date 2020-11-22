@@ -34,7 +34,7 @@ class OfficePanelView(View):
         for dates in all_dates:
             list_of_dates = []
             for date in dates:
-                if datetime.datetime.strptime(date, '%d.%m.%Y %H:%M') > now and date not in taken_dates:
+                if datetime.datetime.strptime(date, '%d.%m.%Y %H:%M') > tomorrow and date not in taken_dates:
                     list_of_dates.append(date)
             if list_of_dates:
                 final_dates.append(list_of_dates)
