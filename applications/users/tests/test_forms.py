@@ -1,7 +1,8 @@
 from django.test import TestCase
 
-from applications.users.forms import LoginForm, OfficeSignUpForm, PatientSignUpForm, NewSetPasswordForm, UsersUpdateForm, \
-    OfficeUpdateForm, PatientUpdateForm, ProfileUpdateForm
+from applications.users.forms import LoginForm, OfficeSignUpForm, PatientSignUpForm, NewSetPasswordForm, \
+    UsersUpdateForm, \
+    OfficeUpdateForm, PatientUpdateForm, ProfileUpdateForm, OfficeDayUpdateForm
 from applications.users.models import User
 
 
@@ -246,3 +247,17 @@ class TestProfileUpdateForm(TestCase):
         form = ProfileUpdateForm(data={})
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 1)
+
+
+class TestOfficeDayUpdateForm(TestCase):
+    def test_patient_update_form_valid(self):
+        form = OfficeDayUpdateForm(data={
+            'day': 0,
+            'earliest_appointment_time': '10:00',
+            'latest_appointment_time': '20:00'
+        })
+        self.assertTrue(form.is_valid())
+
+    def test_patient_update_form_no_data(self):
+        form = OfficeDayUpdateForm(data={})
+        self.assertFalse(form.is_valid())

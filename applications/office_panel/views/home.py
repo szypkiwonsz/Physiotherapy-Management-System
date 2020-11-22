@@ -8,40 +8,22 @@ from django.views import View
 from applications.appointments.models import Appointment
 from applications.medical_history.models import MedicalHistory
 from applications.office_panel.models import Patient
-from applications.office_panel.utils import get_number_of_days_in_month, get_hours_in_day
+from applications.office_panel.utils import get_number_of_days_in_month, get_dates_in_month
 from applications.users.decorators import office_required
-from utils.add_zero import add_zero
 
 
 @method_decorator([login_required, office_required], name='dispatch')
 class OfficePanelView(View):
     model = Patient
     template_name = 'office_panel/home.html'
-    hour_open = 11
-    hour_close = 20
-
-    @staticmethod
-    def get_dates_in_month(days_in_month, hours_in_day, month, year):
-        dates = []
-        for day in days_in_month:
-            days = []
-            day = add_zero(day)
-            for hour in hours_in_day:
-                date = f'{day}.{month}.{year} {hour}'
-                days.append(date)
-            dates.append(days)
-        return dates
 
     def get(self, request):
         now = datetime.datetime.now()
         yesterday = datetime.datetime(now.year, now.month, now.day - 1)
-
-        request.session['hour_open'] = add_zero(self.hour_open)
-        request.session['hour_close'] = add_zero(self.hour_close)
+        tomorrow = datetime.datetime(now.year, now.month, now.day + 1)
 
         days = get_number_of_days_in_month(now.year, now.month)
-        hours_in_day = get_hours_in_day(self.hour_open, self.hour_close)
-        dates = self.get_dates_in_month(days_in_month=days, hours_in_day=hours_in_day, month=now.month, year=now.year)
+        dates = get_dates_in_month(request=request, days_in_month=days, month=now.month, year=now.year)
         taken_dates = Appointment.objects.filter(
             date__gte=yesterday, office__user=request.user
         )
@@ -51,7 +33,7 @@ class OfficePanelView(View):
         for dates in all_dates:
             list_of_dates = []
             for date in dates:
-                if datetime.datetime.strptime(date, '%d.%m.%Y %H:%M') > now and date not in taken_dates:
+                if datetime.datetime.strptime(date, '%d.%m.%Y %H:%M') > tomorrow and date not in taken_dates:
                     list_of_dates.append(date)
             if list_of_dates:
                 final_dates.append(list_of_dates)
@@ -59,7 +41,6 @@ class OfficePanelView(View):
         context = {
             'patients': Patient.objects.filter(owner=self.request.user.id).order_by('-date_selected')[:5],
             'dates': final_dates,
-            'hours': hours_in_day,
             'appointments': Appointment.objects.filter(office=self.request.user.id).order_by('date')[:5],
             'medical_histories': MedicalHistory.objects.filter(owner=self.request.user.id).order_by(
                 '-date_selected')[:5],

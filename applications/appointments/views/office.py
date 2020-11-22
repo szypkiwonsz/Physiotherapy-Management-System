@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -14,6 +15,9 @@ from applications.appointments.forms import AppointmentOfficeUpdateForm, Appoint
 from applications.appointments.models import Appointment
 from applications.appointments.utils import database_old_datetime_format_to_new
 from applications.users.decorators import office_required
+from applications.users.models import OfficeDay
+from utils.add_zero import add_zero
+from utils.office_opening_hours import get_office_opening_hours
 from utils.paginate import paginate
 
 
@@ -73,7 +77,40 @@ class AppointmentUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(AppointmentUpdateView, self).get_context_data(**kwargs)
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        context['opening_hours'] = get_office_opening_hours(self.request.user.office)
         return context
+
+    def appointment_date_taken(self, date):
+        messages.warning(
+            self.request,
+            f'Wybrana data {add_zero(date.day)}.{add_zero(date.month)}.{date.year} {date.hour}:00 '
+            f'jest już zajęta.'
+        )
+
+    def form_valid(self, form):
+        appointment = Appointment.objects.get(pk=self.object.pk)
+        datetime_form_value = form.cleaned_data.get('date')
+        day = OfficeDay.objects.get(office=self.request.user.office, day=datetime_form_value.weekday())
+        if datetime_form_value.hour == 23 and datetime_form_value.minute == 59:
+            messages.warning(self.request, 'Wybierz poprawną godzinę.')
+            return redirect('office_panel:appointments:update', pk=self.object.pk)
+        elif int(day.earliest_appointment_time.split(':')[0]) > int(datetime_form_value.hour) \
+                or int(day.latest_appointment_time.split(':')[0]) <= int(datetime_form_value.hour) \
+                and int(day.latest_appointment_time.split(':')[1]) <= int(datetime_form_value.minute):
+            messages.warning(self.request, 'Wybierz poprawną godzinę.')
+            return redirect('office_panel:appointments:update', pk=self.object.pk)
+        else:
+            try:
+                appointment_check = Appointment.objects.get(date=form.cleaned_data['date'])
+            except ObjectDoesNotExist:
+                appointment_check = None
+            if appointment_check and appointment_check.pk != self.object.pk:
+                self.appointment_date_taken(datetime_form_value)
+                return redirect('office_panel:appointments:update', self.object.pk)
+        appointment.confirmed = form.cleaned_data['confirmed']
+        appointment.date = form.cleaned_data['date']
+        appointment.save()
+        return redirect(self.get_success_url())
 
     def get_queryset(self):
         return Appointment.objects.filter(office=self.request.user.id)
@@ -123,13 +160,16 @@ class MakeAppointment(CreateView):
         kwargs = super(MakeAppointment, self).get_form_kwargs()
         date = self.request.GET['date']
         date_database_format = datetime.datetime.strptime(date, '%d.%m.%Y %H:%M')
-        if Appointment.objects.filter(date=date_database_format):
+        if Appointment.objects.filter(date=date_database_format, office=self.request.user.office):
             # if date from url is taken raise 404 error (in case the user changes the url)
             raise Http404
-        if int(self.request.session['hour_open']) > int(self.request.GET['date'][-5:-3]) or \
-                int(self.request.session['hour_close']) <= int(self.request.GET['date'][-5:-3]):
+        office_day = OfficeDay.objects.get(office=self.request.user.office, day=date_database_format.weekday())
+        if int(office_day.earliest_appointment_time.split(':')[0]) > int(self.request.GET['date'][-5:-3]) or \
+                int(office_day.latest_appointment_time.split(':')[0]) < int(self.request.GET['date'][-5:-3]):
             # if the visit time given in the url is smaller or greater than the possibility of making an appointment
             # raise 404 error (in case the user changes the url)
+            raise Http404
+        if datetime.datetime.strptime(date.split(' ')[0], "%d.%m.%Y").date() < datetime.datetime.today().date():
             raise Http404
         kwargs['user'] = self.request.user
         kwargs['date'] = date

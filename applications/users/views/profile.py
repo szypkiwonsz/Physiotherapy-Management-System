@@ -3,7 +3,9 @@ from django.utils.decorators import method_decorator
 from django.views import View
 
 from applications.users.decorators import login_required, patient_required, office_required
-from applications.users.forms import ProfileUpdateForm, OfficeUpdateForm, UsersUpdateForm, PatientUpdateForm
+from applications.users.forms import ProfileUpdateForm, OfficeUpdateForm, UsersUpdateForm, PatientUpdateForm, \
+    OfficeDayUpdateForm
+from applications.users.models import OfficeDay
 
 
 @method_decorator([login_required, office_required], name='dispatch')
@@ -14,11 +16,13 @@ class OfficeProfile(View):
         p_form = ProfileUpdateForm(instance=request.user.profile)
         o_form = OfficeUpdateForm(instance=request.user.office)
         u_form = UsersUpdateForm(instance=request.user)
-
+        days = [OfficeDay.objects.get(office=request.user.office, day=i) for i in range(7)]
+        days_forms = [OfficeDayUpdateForm(instance=days[i], prefix=f'days{i}') for i in range(7)]
         context = {
             'o_form': o_form,
             'p_form': p_form,
-            'u_form': u_form
+            'u_form': u_form,
+            'od_form': days_forms
         }
         return render(request, self.template_name, context)
 
@@ -26,17 +30,23 @@ class OfficeProfile(View):
         o_form = OfficeUpdateForm(request.POST, instance=request.user.office)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         u_form = UsersUpdateForm(request.POST, instance=request.user)
+        days = [OfficeDay.objects.get(office=request.user.office, day=i) for i in range(7)]
+        days_forms = [OfficeDayUpdateForm(request.POST, instance=days[i], prefix=f'days{i}') for i in range(7)]
 
         if p_form.is_valid() and o_form.is_valid() and u_form.is_valid():
             p_form.save()
             o_form.save()
             u_form.save()
+            for day_form in days_forms:
+                if day_form.is_valid():
+                    day_form.save()
             return redirect('users:office_profile')
 
         context = {
             'p_form': p_form,
             'u_form': u_form,
-            'o_form': o_form
+            'o_form': o_form,
+            'od_form': days_forms
         }
         return render(request, self.template_name, context)
 

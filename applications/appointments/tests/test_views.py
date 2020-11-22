@@ -264,6 +264,32 @@ class TestPatientAppointmentViews(TestCase):
         self.assertEquals(appointment2.office_id, 2)
         self.assertEquals(appointment2.confirmed, False)
 
+    def test_make_appointment_create_too_early_time_POST(self):
+        # the default earliest time is: 11:00
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        response = self.client.post(self.make_appointment_url, {
+            'date': '17.02.1998 08:00',
+            'first_name': self.appointment1.first_name,
+            'last_name': self.appointment1.last_name,
+            'phone_number': '000000000',
+            'choice': 'Konsultacja'
+        })
+        with self.assertRaises(Appointment.DoesNotExist):
+            Appointment.objects.get(id=3)
+
+    def test_make_appointment_create_too_late_time_POST(self):
+        # the default latest time is 18:00
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        response = self.client.post(self.make_appointment_url, {
+            'date': '17.02.1998 22:00',
+            'first_name': self.appointment1.first_name,
+            'last_name': self.appointment1.last_name,
+            'phone_number': '000000000',
+            'choice': 'Konsultacja'
+        })
+        with self.assertRaises(Appointment.DoesNotExist):
+            Appointment.objects.get(id=3)
+
     def test_make_appointment_create_date_taken_POST(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.post(self.make_appointment_url, {

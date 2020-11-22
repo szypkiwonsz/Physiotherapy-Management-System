@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 
 from applications.office_panel.models import Patient
-from applications.users.models import User
+from applications.users.models import User, Office
 
 
 class TestHomeViews(TestCase):
@@ -13,8 +13,16 @@ class TestHomeViews(TestCase):
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
-        self.office1 = User.objects.create_user(
+        self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
+        )
+        self.office1 = Office.objects.create(
+            user=self.office_user1,
+            name='name',
+            address='address',
+            city='City',
+            phone_number='000000000',
+            website='www.website.com'
         )
 
     def test_office_home_GET_not_logged_in(self):
@@ -199,8 +207,16 @@ class TestTimetableViews(TestCase):
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
-        self.office1 = User.objects.create_user(
+        self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
+        )
+        self.office1 = Office.objects.create(
+            user=self.office_user1,
+            name='name',
+            address='address',
+            city='City',
+            phone_number='000000000',
+            website='www.website.com'
         )
 
     def test_timetable_GET_not_logged_in(self):

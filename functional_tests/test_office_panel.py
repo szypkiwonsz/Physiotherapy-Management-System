@@ -15,8 +15,16 @@ from utils.add_zero import add_zero
 class TestHomeNoData(StaticLiveServerTestCase):
 
     def setUp(self):
-        self.office1 = User.objects.create_user(
+        self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
+        )
+        self.office1 = Office.objects.create(
+            user=self.office_user1,
+            name='name',
+            address='address',
+            city='City',
+            phone_number='000000000',
+            website='www.website.com'
         )
         self.browser = webdriver.Chrome('functional_tests/chromedriver.exe')
 
@@ -110,7 +118,7 @@ class TestHome(StaticLiveServerTestCase):
             owner=self.patient1,
             office=self.office1,
             patient_email='patient@gmail.com',
-            date=datetime(datetime.today().year, datetime.today().month, datetime.today().day + 1),
+            date=datetime(2020, 8, 22, 17, 00, 00),
             first_name='Kacper',
             last_name='Sawicki',
             date_selected=datetime(2020, 8, 21, 17, 00, 00),
@@ -232,8 +240,7 @@ class TestHome(StaticLiveServerTestCase):
         appointment_text = self.browser.find_elements_by_class_name('text-description')[1].text
         self.assertEquals(
             appointment_text,
-            f'Kacper Sawicki, {add_zero(datetime.today().day + 1)}.'
-            f'{add_zero(datetime.today().month)}.{datetime.today().year}, o godz: 00:00 - Konsultacja\n'
+            f'Kacper Sawicki, 22.08.2020, o godz: 17:00 - Konsultacja\n'
             f'[Niepotwierdzona]'
         )
 
@@ -289,7 +296,7 @@ class TestHome(StaticLiveServerTestCase):
         self.assertEquals(
             medical_history_text,
             'Ostatnio dodane historie:\nHistoria medyczna - 21.08.2020, 17:00\nPacjent: Firstname Lastname\nOpis:\n'
-            'description\nZalecenia:\nrecommendations\n17.11.2020, 00:00, Konsultacja\nEdytuj Usuń\nPokaż wszystkie '
+            'description\nZalecenia:\nrecommendations\n22.08.2020, 17:00, Konsultacja\nEdytuj Usuń\nPokaż wszystkie '
             'historie Dodaj'
         )
 
@@ -386,6 +393,14 @@ class TestPatientsNoData(StaticLiveServerTestCase):
         self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
+        self.office1 = Office.objects.create(
+            user=self.office_user1,
+            name='name',
+            address='address',
+            city='City',
+            phone_number='000000000',
+            website='www.website.com'
+        )
         self.office_patient1 = Patient.objects.create(
             owner=self.office_user1,
             first_name='firstname',
@@ -478,6 +493,14 @@ class TestPatients(StaticLiveServerTestCase):
     def setUp(self):
         self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
+        )
+        self.office1 = Office.objects.create(
+            user=self.office_user1,
+            name='name',
+            address='address',
+            city='City',
+            phone_number='000000000',
+            website='www.website.com'
         )
         self.office_patient1 = Patient.objects.create(
             owner=self.office_user1,

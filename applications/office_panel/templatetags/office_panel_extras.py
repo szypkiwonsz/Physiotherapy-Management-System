@@ -1,4 +1,8 @@
+import datetime
+from datetime import date
+
 from django import template
+
 register = template.Library()
 
 
@@ -29,3 +33,8 @@ def add_zero(value):
     if int(value) < 10:
         value = '0' + str(value)
     return value
+
+
+@register.filter
+def is_past_due(str_date):
+    return date.today() > datetime.datetime.strptime(str_date.split(' ')[0], "%d.%m.%Y").date()
