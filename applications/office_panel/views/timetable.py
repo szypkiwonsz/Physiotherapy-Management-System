@@ -20,6 +20,8 @@ class TimetableView(View):
         Function override due to adding month selection.
         """
         url_without_parameters = str(request.get_full_path()).split('?')[0]
+        now = datetime.date.today()
+        today_date = now.strftime("%d.%m.%Y")
         url_parameter_y = request.GET.get('y')
         url_parameter_m = request.GET.get('m')
         if url_parameter_y and url_parameter_m:
@@ -38,7 +40,7 @@ class TimetableView(View):
                 'year': url_parameter_y,
                 'month': url_parameter_m,
                 'dates': dates,
-                'hours': get_hours_in_day(self.hour_open, self.hour_close),
+                'today_date': today_date,
                 'days': get_number_of_days_in_month(int(url_parameter_y), int(url_parameter_m)),
                 'endpoint': url_without_parameters,
                 'office_id': self.request.user.pk
@@ -60,7 +62,7 @@ class TimetableView(View):
                 'year': now.year,
                 'month': now.month,
                 'dates': dates,
-                'hours': get_hours_in_day(self.hour_open, self.hour_close),
+                'today_date': today_date,
                 'days': get_number_of_days_in_month(now.year, now.month),
                 'endpoint': url_without_parameters,
                 'office_id': self.request.user.pk
