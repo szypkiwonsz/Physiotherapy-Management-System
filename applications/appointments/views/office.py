@@ -124,13 +124,16 @@ class MakeAppointment(CreateView):
         kwargs = super(MakeAppointment, self).get_form_kwargs()
         date = self.request.GET['date']
         date_database_format = datetime.datetime.strptime(date, '%d.%m.%Y %H:%M')
-        if Appointment.objects.filter(date=date_database_format):
+        if Appointment.objects.filter(date=date_database_format, office=self.request.user.office):
             # if date from url is taken raise 404 error (in case the user changes the url)
             raise Http404
-        if int(self.request.session['hour_open']) > int(self.request.GET['date'][-5:-3]) or \
-                int(self.request.session['hour_close']) <= int(self.request.GET['date'][-5:-3]):
+        office_day = OfficeDay.objects.get(office=self.request.user.office, day=date_database_format.weekday())
+        if int(office_day.earliest_appointment_time.split(':')[0]) > int(self.request.GET['date'][-5:-3]) or \
+                int(office_day.latest_appointment_time.split(':')[0]) < int(self.request.GET['date'][-5:-3]):
             # if the visit time given in the url is smaller or greater than the possibility of making an appointment
             # raise 404 error (in case the user changes the url)
+            raise Http404
+        if datetime.datetime.strptime(date.split(' ')[0], "%d.%m.%Y").date() < datetime.datetime.today().date():
             raise Http404
         kwargs['user'] = self.request.user
         kwargs['date'] = date
