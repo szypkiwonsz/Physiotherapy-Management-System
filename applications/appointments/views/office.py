@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -14,6 +15,9 @@ from applications.appointments.forms import AppointmentOfficeUpdateForm, Appoint
 from applications.appointments.models import Appointment
 from applications.appointments.utils import database_old_datetime_format_to_new
 from applications.users.decorators import office_required
+from applications.users.models import OfficeDay
+from utils.add_zero import add_zero
+from utils.office_opening_hours import get_office_opening_hours
 from utils.paginate import paginate
 
 
@@ -75,6 +79,38 @@ class AppointmentUpdateView(UpdateView):
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
         context['opening_hours'] = get_office_opening_hours(self.request.user.office)
         return context
+
+    def appointment_date_taken(self, date):
+        messages.warning(
+            self.request,
+            f'Wybrana data {add_zero(date.day)}.{add_zero(date.month)}.{date.year} {date.hour}:00 '
+            f'jest już zajęta.'
+        )
+
+    def form_valid(self, form):
+        appointment = Appointment.objects.get(pk=self.object.pk)
+        datetime_form_value = form.cleaned_data.get('date')
+        day = OfficeDay.objects.get(office=self.request.user.office, day=datetime_form_value.weekday())
+        if datetime_form_value.hour == 23 and datetime_form_value.minute == 59:
+            messages.warning(self.request, 'Wybierz poprawną godzinę.')
+            return redirect('office_panel:appointments:update', pk=self.object.pk)
+        elif int(day.earliest_appointment_time.split(':')[0]) > int(datetime_form_value.hour) \
+                or int(day.latest_appointment_time.split(':')[0]) <= int(datetime_form_value.hour) \
+                and int(day.latest_appointment_time.split(':')[1]) <= int(datetime_form_value.minute):
+            messages.warning(self.request, 'Wybierz poprawną godzinę.')
+            return redirect('office_panel:appointments:update', pk=self.object.pk)
+        else:
+            try:
+                appointment_check = Appointment.objects.get(date=form.cleaned_data['date'])
+            except ObjectDoesNotExist:
+                appointment_check = None
+            if appointment_check and appointment_check.pk != self.object.pk:
+                self.appointment_date_taken(datetime_form_value)
+                return redirect('office_panel:appointments:update', self.object.pk)
+        appointment.confirmed = form.cleaned_data['confirmed']
+        appointment.date = form.cleaned_data['date']
+        appointment.save()
+        return redirect(self.get_success_url())
 
     def get_queryset(self):
         return Appointment.objects.filter(office=self.request.user.id)
