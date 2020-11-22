@@ -26,5 +26,16 @@
             </form>
         </div>
     </div>
+    <script>
+        let opening_hours = {
+            Monday: ["{{ opening_hours.monday.0 }}", "{{ opening_hours.monday.1 }}"],
+            Tuesday: ["{{ opening_hours.tuesday.0 }}", "{{ opening_hours.tuesday.1 }}"],
+            Wednesday: ["{{ opening_hours.wednesday.0 }}", "{{ opening_hours.wednesday.1 }}"],
+            Thursday: ["{{ opening_hours.thursday.0 }}", "{{ opening_hours.thursday.1 }}"],
+            Friday: ["{{ opening_hours.friday.0 }}", "{{ opening_hours.friday.1 }}"],
+            Saturday: ["{{ opening_hours.saturday.0 }}", "{{ opening_hours.saturday.1 }}"],
+            Sunday: ["{{ opening_hours.sunday.0 }}", "{{ opening_hours.sunday.1 }}"],
+        }
+    </script>
     <script src="{% static 'js/datetime_picker.js' %}"></script>
 {% endblock content %}
