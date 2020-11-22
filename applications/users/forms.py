@@ -1,11 +1,14 @@
+import calendar
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import SetPasswordForm
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext as _
 
+from applications.users.models import User, Profile, Office, UserPatient, OfficeDay
 from applications.users.widgets import MyClearableFileInput
-from applications.users.models import User, Profile, Office, UserPatient
+from utils.add_zero import add_zero
 
 numeric_phone_number = RegexValidator('^[0-9]*$', 'Jako numer telefonu, możesz podać jedynie cyfry.')
 
@@ -124,6 +127,36 @@ class UsersUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email']
+
+
+class OfficeDayUpdateForm(forms.ModelForm):
+    DAY_CHOICES = [(str(i), (calendar.day_name[i]).capitalize()) for i in range(7)]
+    HOUR_CHOICES = [(f'{add_zero(i)}:00', f'{add_zero(i)}:00') for i in range(24)]
+    day = forms.ChoiceField(choices=DAY_CHOICES)
+    earliest_appointment_time = forms.ChoiceField(choices=HOUR_CHOICES)
+    latest_appointment_time = forms.ChoiceField(choices=HOUR_CHOICES)
+
+    def __init__(self, *args, **kwargs):
+        super(OfficeDayUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['day'].required = False
+        self.fields['day'].widget.attrs['disabled'] = "disabled"
+
+        label = ['Dzień', 'Najwcześniejsza godzina wizyty', 'Najpóźniejsza godzina wizyty']
+        for i, field_name in enumerate(['day', 'earliest_appointment_time', 'latest_appointment_time']):
+            self.fields[field_name].help_text = None
+            self.fields[field_name].label = label[i]
+
+    def clean_day(self):
+        """Overriding the clean method, because the filed with disabled attr will post blank data."""
+        instance = getattr(self, 'instance', None)
+        if instance:
+            return instance.day
+        else:
+            return self.cleaned_data.get('day', None)
+
+    class Meta:
+        model = OfficeDay
+        fields = ['day', 'earliest_appointment_time', 'latest_appointment_time']
 
 
 class OfficeUpdateForm(forms.ModelForm):
