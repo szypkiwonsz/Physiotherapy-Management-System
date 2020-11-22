@@ -17,20 +17,6 @@ from utils.add_zero import add_zero
 class OfficePanelView(View):
     model = Patient
     template_name = 'office_panel/home.html'
-    hour_open = 11
-    hour_close = 20
-
-    @staticmethod
-    def get_dates_in_month(days_in_month, hours_in_day, month, year):
-        dates = []
-        for day in days_in_month:
-            days = []
-            day = add_zero(day)
-            for hour in hours_in_day:
-                date = f'{day}.{month}.{year} {hour}'
-                days.append(date)
-            dates.append(days)
-        return dates
 
     def get(self, request):
         now = datetime.datetime.now()
