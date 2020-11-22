@@ -5,9 +5,13 @@
 {% endblock %}
 {% block content %}
     <div class="container border rounded bg-light">
-        <div class="search">
+        <div class="row">
+            <div class="search col">
                 <button class="btn" id="date-select-down"><<</button>
                 <button class="btn" id="date-select-up">>></button>
+            </div>
+            <div class="search col"><a href="{% url 'users:office_profile' %}" class="btn btn-warning float-right"
+                                       role="button">Dostosuj godziny</a></div>
         </div>
         <div class="form timetable" id="replaceable-content">
             {% include 'office_panel/timetable/timetable_results_partial.html' %}
