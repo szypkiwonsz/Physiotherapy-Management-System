@@ -31,7 +31,6 @@ class TimetableView(View):
             dates = get_dates_in_month(
                 request=request,
                 days_in_month=get_number_of_days_in_month(int(url_parameter_y), int(url_parameter_m)),
-                hours_in_day=get_hours_in_day(self.hour_open, self.hour_close),
                 month=int(url_parameter_m),
                 year=int(url_parameter_y)
             )
@@ -53,7 +52,6 @@ class TimetableView(View):
             dates = get_dates_in_month(
                 request=request,
                 days_in_month=get_number_of_days_in_month(now.year, now.month),
-                hours_in_day=get_hours_in_day(self.hour_open, self.hour_close),
                 month=now.month,
                 year=now.year
             )
