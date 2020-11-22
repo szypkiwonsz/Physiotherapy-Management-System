@@ -21,9 +21,7 @@ class OfficePanelView(View):
     def get(self, request):
         now = datetime.datetime.now()
         yesterday = datetime.datetime(now.year, now.month, now.day - 1)
-
-        request.session['hour_open'] = add_zero(self.hour_open)
-        request.session['hour_close'] = add_zero(self.hour_close)
+        tomorrow = datetime.datetime(now.year, now.month, now.day + 1)
 
         days = get_number_of_days_in_month(now.year, now.month)
         hours_in_day = get_hours_in_day(self.hour_open, self.hour_close)

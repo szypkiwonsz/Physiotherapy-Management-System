@@ -23,8 +23,6 @@ class TimetableView(View):
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_y = request.GET.get('y')
         url_parameter_m = request.GET.get('m')
-        request.session['hour_open'] = add_zero(self.hour_open)
-        request.session['hour_close'] = add_zero(self.hour_close)
         if url_parameter_y and url_parameter_m:
             dates_taken = Appointment.objects.filter(
                 date__year=int(url_parameter_y), date__month=int(url_parameter_m), office__user=request.user
