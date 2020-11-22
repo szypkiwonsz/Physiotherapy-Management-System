@@ -52,14 +52,14 @@ class OfficeDay(models.Model):
     HOUR_CHOICES = [(f'{add_zero(i)}:00', f'{add_zero(i)}:00') for i in range(24)]
     office = models.ForeignKey(Office, on_delete=models.CASCADE)
     day = models.CharField(max_length=1, choices=DAY_CHOICES)
-    opening_hour = models.CharField(max_length=5, choices=HOUR_CHOICES, default='11:00')
-    closing_hour = models.CharField(max_length=5, choices=HOUR_CHOICES, default='20:00')
+    earliest_appointment_time = models.CharField(max_length=5, choices=HOUR_CHOICES, default='11:00')
+    latest_appointment_time = models.CharField(max_length=5, choices=HOUR_CHOICES, default='18:00')
 
     def validate_hours(self):
-        if self.opening_hour > self.closing_hour:
+        if self.earliest_appointment_time > self.latest_appointment_time:
             raise ValidationError(
                 'The closing hour must be greater than the opening hour.',
-                params={'opening_hour': self.opening_hour, 'closing_hour': self.closing_hour}
+                params={'opening_hour': self.earliest_appointment_time, 'closing_hour': self.latest_appointment_time}
             )
 
     def save(self, *args, **kwargs):
