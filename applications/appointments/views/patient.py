@@ -16,8 +16,9 @@ from applications.appointments.tasks import appointment_confirmation_email_patie
     appointment_confirmation_email_office
 from applications.appointments.utils import database_old_datetime_format_to_new
 from applications.users.decorators import patient_required
-from applications.users.models import Office
+from applications.users.models import Office, OfficeDay
 from utils.add_zero import add_zero
+from utils.office_opening_hours import get_office_opening_hours
 from utils.paginate import paginate
 
 
@@ -47,13 +48,23 @@ class MakeAppointment(CreateView):
         time = date_and_time[1].split(':')
         return date, time
 
+    def get_context_data(self, **kwargs):
+        context = super(MakeAppointment, self).get_context_data(**kwargs)
+        context['opening_hours'] = get_office_opening_hours(self.kwargs.get('pk'))
+        return context
+
     def form_valid(self, form):
         datetime_form_value = form.cleaned_data.get('date')
-        if datetime_form_value.hour == 0:
+        day = OfficeDay.objects.get(office=self.kwargs.get('pk'), day=datetime_form_value.weekday())
+        if datetime_form_value.hour == 23 and datetime_form_value.minute == 59:
+            messages.warning(self.request, 'Wybierz poprawną godzinę.')
+            return redirect('patient_panel:appointments:make', pk=self.kwargs.get('pk'))
+        elif int(day.earliest_appointment_time.split(':')[0]) > int(datetime_form_value.hour) \
+                or int(day.latest_appointment_time.split(':')[0]) <= int(datetime_form_value.hour):
             messages.warning(self.request, 'Wybierz poprawną godzinę.')
             return redirect('patient_panel:appointments:make', pk=self.kwargs.get('pk'))
         else:
-            appointment = Appointment.objects.filter(date=datetime_form_value)
+            appointment = Appointment.objects.filter(date=datetime_form_value, office=self.kwargs.get('pk'))
             if appointment:
                 self.appointment_date_taken(datetime_form_value)
                 return redirect('patient_panel:appointments:make', pk=self.kwargs.get('pk'))
@@ -177,7 +188,14 @@ class AppointmentUpdateView(UpdateView):
 
     def form_valid(self, form):
         appointment = Appointment.objects.get(pk=self.object.pk)
-        if appointment.date.hour == 0:
+        datetime_form_value = form.cleaned_data.get('date')
+        day = OfficeDay.objects.get(office=self.object.office.pk, day=datetime_form_value.weekday())
+        if datetime_form_value.hour == 23 and datetime_form_value.minute == 59:
+            messages.warning(self.request, 'Wybierz poprawną godzinę.')
+            return redirect('patient_panel:appointments:update', pk=self.object.pk)
+        elif int(day.earliest_appointment_time.split(':')[0]) > int(datetime_form_value.hour) \
+                or int(day.latest_appointment_time.split(':')[0]) <= int(datetime_form_value.hour) \
+                and int(day.latest_appointment_time.split(':')[1]) <= int(datetime_form_value.minute):
             messages.warning(self.request, 'Wybierz poprawną godzinę.')
             return redirect('patient_panel:appointments:update', pk=self.object.pk)
         else:
@@ -186,7 +204,7 @@ class AppointmentUpdateView(UpdateView):
             except ObjectDoesNotExist:
                 appointment_check = None
             if appointment_check and appointment_check.pk != self.object.pk:
-                self.appointment_date_taken(appointment.date)
+                self.appointment_date_taken(datetime_form_value)
                 return redirect('patient_panel:appointments:update', self.object.pk)
         appointment.confirmed = False
         appointment.date = form.cleaned_data['date']
