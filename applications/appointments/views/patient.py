@@ -167,6 +167,7 @@ class AppointmentUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(AppointmentUpdateView, self).get_context_data(**kwargs)
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        context['opening_hours'] = get_office_opening_hours(self.object.office.pk)
         return context
 
     def appointment_date_taken(self, date):
