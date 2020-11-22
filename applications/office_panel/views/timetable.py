@@ -7,9 +7,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 
 from applications.appointments.models import Appointment
-from applications.office_panel.utils import get_number_of_days_in_month, get_hours_in_day
+from applications.office_panel.utils import get_number_of_days_in_month, get_dates_in_month
 from applications.users.decorators import login_required, office_required
-from utils.add_zero import add_zero
 
 
 @method_decorator([login_required, office_required], name='dispatch')
@@ -27,7 +26,8 @@ class TimetableView(View):
             dates_taken = Appointment.objects.filter(
                 date__year=int(url_parameter_y), date__month=int(url_parameter_m), office__user=request.user
             )
-            dates = self.get_dates_in_month(
+            dates = get_dates_in_month(
+                request=request,
                 days_in_month=get_number_of_days_in_month(int(url_parameter_y), int(url_parameter_m)),
                 hours_in_day=get_hours_in_day(self.hour_open, self.hour_close),
                 month=int(url_parameter_m),
@@ -48,7 +48,8 @@ class TimetableView(View):
             dates_taken = Appointment.objects.filter(
                 date__year=now.year, date__month=now.month, office__user=request.user
             )
-            dates = self.get_dates_in_month(
+            dates = get_dates_in_month(
+                request=request,
                 days_in_month=get_number_of_days_in_month(now.year, now.month),
                 hours_in_day=get_hours_in_day(self.hour_open, self.hour_close),
                 month=now.month,
