@@ -42,7 +42,6 @@ class OfficePanelView(View):
         context = {
             'patients': Patient.objects.filter(owner=self.request.user.id).order_by('-date_selected')[:5],
             'dates': final_dates,
-            'hours': hours_in_day,
             'appointments': Appointment.objects.filter(office=self.request.user.id).order_by('date')[:5],
             'medical_histories': MedicalHistory.objects.filter(owner=self.request.user.id).order_by(
                 '-date_selected')[:5],
