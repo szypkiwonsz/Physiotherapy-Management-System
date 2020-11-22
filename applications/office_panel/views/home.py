@@ -24,8 +24,7 @@ class OfficePanelView(View):
         tomorrow = datetime.datetime(now.year, now.month, now.day + 1)
 
         days = get_number_of_days_in_month(now.year, now.month)
-        hours_in_day = get_hours_in_day(self.hour_open, self.hour_close)
-        dates = self.get_dates_in_month(days_in_month=days, hours_in_day=hours_in_day, month=now.month, year=now.year)
+        dates = get_dates_in_month(request=request, days_in_month=days, month=now.month, year=now.year)
         taken_dates = Appointment.objects.filter(
             date__gte=yesterday, office__user=request.user
         )
