@@ -1,3 +1,7 @@
-.idea
-__pycache__
+.idea/
+__pycache__/
+migrations/
 debug.log
+xargs
+db.sqlite3
+chromedriver.exe
