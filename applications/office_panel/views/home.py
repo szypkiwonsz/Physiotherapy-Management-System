@@ -8,9 +8,8 @@ from django.views import View
 from applications.appointments.models import Appointment
 from applications.medical_history.models import MedicalHistory
 from applications.office_panel.models import Patient
-from applications.office_panel.utils import get_number_of_days_in_month, get_hours_in_day
+from applications.office_panel.utils import get_number_of_days_in_month, get_dates_in_month
 from applications.users.decorators import office_required
-from utils.add_zero import add_zero
 
 
 @method_decorator([login_required, office_required], name='dispatch')
