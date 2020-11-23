@@ -12,43 +12,50 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*gzc0x2^c-edlx2l#b6nlvr7=(^_y-rwe*=n8e*me^h0$bmsny'
+DEBUG = bool(os.environ.get('DEBUG', True))
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
-# TEMPLATE_DEBUG = DEBUG
+LOGIN_REDIRECT_URL = 'panel'
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-]
+DATE_INPUT_FORMATS = ['%d.%m.%Y %H:%M']
+DATE_FORMAT = ['%d.%m.%Y %H:%M']
+
+if not DEBUG:
+    ALLOWED_HOSTS = [
+        'fizjo-system.herokuapp.com',
+    ]
+
+# Custom Django auth settings
+
+AUTH_USER_MODEL = 'users.User'
+
+# Third party apps configuration
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Application definition
 
 INSTALLED_APPS = [
-    'applications.office_panel.apps.OfficePanelConfig',
-    'crispy_forms',
-    'applications.users.apps.UsersConfig',
-    'applications.home_page.apps.HomePageConfig',
-    'applications.patient_panel.apps.PatientPanelConfig',
-    'applications.appointments.apps.AppointmentConfig',
-    'applications.medical_history.apps.MedicalHistoryConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'storages',
-    'easy_thumbnails'
+    'easy_thumbnails',
+    'applications.office_panel.apps.OfficePanelConfig',
+    'applications.users.apps.UsersConfig',
+    'applications.home_page.apps.HomePageConfig',
+    'applications.patient_panel.apps.PatientPanelConfig',
+    'applications.appointments.apps.AppointmentConfig',
+    'applications.medical_history.apps.MedicalHistoryConfig'
 ]
 
 MIDDLEWARE = [
@@ -59,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'Physiotherapy_Management_System.urls'
@@ -83,7 +91,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Physiotherapy_Management_System.wsgi.application'
 
 # Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -92,8 +99,11 @@ DATABASES = {
     }
 }
 
+if not DEBUG:
+    db_from_env = dj_database_url.config()
+    DATABASES['default'].update(db_from_env)
+
 # Password validation
-# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -111,7 +121,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 LANGUAGE_CODE = 'pl'
 
@@ -124,27 +133,18 @@ USE_L10N = False
 USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATIC_URL = '/static/'
 
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
 )
 
-# Custom Django auth settings
-
-AUTH_USER_MODEL = 'users.User'
-
-# Third party apps configuration
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-LOGIN_REDIRECT_URL = 'panel'
-
-DATE_INPUT_FORMATS = ['%d.%m.%Y %H:%M']
-DATE_FORMAT = ['%d.%m.%Y %H:%M']
-
 # Email settings
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -152,7 +152,8 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 
-# Media file settings
+# Media files
+
 if DEBUG:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'assets/media')
     MEDIA_URL = '/media/'
@@ -168,9 +169,9 @@ else:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Celery settings
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+
+CELERY_BROKER_URL = os.environ.get('CELERY_URL')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_URL')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Africa/Nairobi'
