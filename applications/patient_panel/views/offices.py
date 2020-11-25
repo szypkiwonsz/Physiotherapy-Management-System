@@ -19,6 +19,7 @@ class OfficesListView(View):
         return queryset
 
     def get(self, request):
+        """Method override due to adding pagination and filtering."""
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_q = request.GET.get('q')
         if url_parameter_q:

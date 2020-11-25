@@ -16,6 +16,7 @@ alphanumeric_last_name = RegexValidator(
 
 
 class Patient(models.Model):
+    """Patient model for the office."""
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='patients')
     first_name = models.CharField(max_length=20, unique=False, default='', validators=[alphanumeric_first_name])
     last_name = models.CharField(max_length=40, unique=False, default='', validators=[alphanumeric_last_name])

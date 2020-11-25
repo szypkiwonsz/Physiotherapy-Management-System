@@ -14,6 +14,7 @@ numeric_phone_number = RegexValidator('^[0-9]*$', 'Jako numer telefonu, możesz 
 
 
 class LoginForm(AuthenticationForm):
+    """An inheriting class for the user's login form."""
 
     def __init__(self, *args, **kwargs):
         self.error_messages['invalid_login'] = 'Niepoprawny email lub hasło. Badź konto nie zostało jeszcze aktywowane.'
@@ -27,11 +28,7 @@ class LoginForm(AuthenticationForm):
 
 
 class OfficeSignUpForm(UserCreationForm):
-    error_messages = {
-        'email_mismatch': _('Podane emaile nie zgadzają się.'),
-        'password_mismatch': _('Hasła nie pasują do siebie.'),
-    }
-
+    """Form class for user registration as an office."""
     name = forms.CharField()
     address = forms.CharField()
     city = forms.CharField()
@@ -71,11 +68,7 @@ class OfficeSignUpForm(UserCreationForm):
 
 
 class PatientSignUpForm(UserCreationForm):
-    error_messages = {
-        'email_mismatch': _('Podane emaile nie zgadzają się.'),
-        'password_mismatch': _('Hasła nie pasują do siebie.'),
-    }
-
+    """Form class for user registration as a patient."""
     email = forms.CharField(widget=forms.EmailInput)
     confirm_email = forms.CharField(widget=forms.EmailInput)
     phone_number = forms.CharField(
@@ -108,9 +101,7 @@ class PatientSignUpForm(UserCreationForm):
 
 
 class NewSetPasswordForm(SetPasswordForm):
-    error_messages = {
-        'password_mismatch': _('Hasła nie pasują do siebie.'),
-    }
+    """Form for setting a new user password."""
     new_password1 = forms.CharField(
         label=_("Nowe hasło"),
         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
@@ -124,6 +115,8 @@ class NewSetPasswordForm(SetPasswordForm):
 
 
 class UsersUpdateForm(forms.ModelForm):
+    """Class form for updating the user profile."""
+
     class Meta:
         model = User
         fields = ['email']
@@ -160,6 +153,7 @@ class OfficeDayUpdateForm(forms.ModelForm):
 
 
 class OfficeUpdateForm(forms.ModelForm):
+    """Class form for updating the office-user data."""
     website = forms.CharField(required=False)
     phone_number = forms.CharField(min_length=9, validators=[numeric_phone_number], error_messages={
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
@@ -180,7 +174,8 @@ class OfficeUpdateForm(forms.ModelForm):
 
 
 class PatientUpdateForm(forms.ModelForm):
-    phone_number = forms.CharField(label='Numer telefonu', validators=[numeric_phone_number], required=False,
+    """Class form for updating the user-patient data."""
+    phone_number = forms.CharField(label='Numer telefonu', validators=[numeric_phone_number()], required=False,
                                    min_length=9, error_messages={
             'min_length': _('Numer powinien zawierać 9 cyfr.'),
             'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
@@ -192,6 +187,7 @@ class PatientUpdateForm(forms.ModelForm):
 
 
 class ProfileUpdateForm(forms.ModelForm):
+    """Class form for updating the user data."""
     image = forms.ImageField(label="Zmień swoje zdjęcie profilowe:", widget=MyClearableFileInput)
 
     class Meta:

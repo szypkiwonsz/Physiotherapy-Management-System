@@ -98,9 +98,7 @@ class AppointmentListView(ListView):
         return queryset
 
     def get(self, request, **kwargs):
-        """
-        Function override due to adding pagination and search.
-        """
+        """Function override due to adding pagination and search."""
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_q = request.GET.get('q')
         if url_parameter_q:
@@ -178,9 +176,7 @@ class AppointmentUpdateView(UpdateView):
         )
 
     def get_initial(self):
-        """
-        Replacing the initialized date due to an error with the date saving.
-        """
+        """Replacing the initialized date due to an error with the date saving."""
         initial = super().get_initial()
         date = str(Appointment.objects.filter(id=self.object.pk).values_list('date').get()[0])
         date_object = database_old_datetime_format_to_new(date)

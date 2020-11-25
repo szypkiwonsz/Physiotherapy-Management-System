@@ -16,10 +16,7 @@ class TimetableView(View):
     template_name = 'office_panel/timetable/timetable.html'
 
     def get(self, request):
-        """
-        Function override due to adding month selection.
-        """
-        url_without_parameters = str(request.get_full_path()).split('?')[0]
+        """Function override due to adding month selection."""
         now = datetime.date.today()
         today_date = now.strftime("%d.%m.%Y")
         url_parameter_y = request.GET.get('y')

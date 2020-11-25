@@ -36,6 +36,7 @@ class LoginView(View):
 
     @csrf_protected_method
     def post(self, request):
+        """Overriding the method to display information about successful login."""
         form = AuthenticationForm(request=request, data=request.POST)
         if form.is_valid():
             email = form.cleaned_data.get('username')

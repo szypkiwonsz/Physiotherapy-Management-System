@@ -11,6 +11,7 @@ from utils.add_zero import add_zero
 
 
 class User(AbstractUser):
+    """User model with the possibility of registration as an office or patient."""
     is_patient = models.BooleanField(default=False)
     is_office = models.BooleanField(default=False)
 
@@ -24,6 +25,7 @@ class User(AbstractUser):
 
 
 class UserPatient(models.Model):
+    """Patient model that can be assigned to a user"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     phone_number = models.CharField(max_length=9)
 
@@ -35,6 +37,7 @@ class UserPatient(models.Model):
 
 
 class Office(models.Model):
+    """Office model that can be assigned to a user"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
@@ -69,6 +72,7 @@ class OfficeDay(models.Model):
 
 
 class Profile(models.Model):
+    """User profile model."""
     CROP_SETTINGS = {'size': (100, 100), 'crop': 'smart'}
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)

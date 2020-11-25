@@ -16,6 +16,7 @@ alphanumeric_last_name = RegexValidator(
 
 # Create your models here.
 class Appointment(models.Model):
+    """Appointment model for the office."""
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments')
     office = models.ForeignKey(Office, on_delete=models.CASCADE)
     patient_email = models.EmailField()

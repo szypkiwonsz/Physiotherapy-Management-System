@@ -5,6 +5,7 @@ from applications.office_panel.models import Patient
 
 
 class PatientForm(forms.ModelForm):
+    """Form class for office patient."""
     address = forms.CharField(required=False)
     pesel = forms.CharField(required=False, min_length=11, error_messages={
         'min_length': _('Pesel powinien zawierać 11 cyfr.'),

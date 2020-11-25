@@ -28,6 +28,7 @@ class RegisterPatient(CreateView):
 
     @staticmethod
     def create_patient(form, user):
+        """Helper function creating a user as a patient"""
         user_patient = UserPatient.objects.create(user=user)
         user_patient.phone_number = form.cleaned_data.get('phone_number')
         user_patient.save()
@@ -49,6 +50,7 @@ class RegisterOffice(CreateView):
 
     @staticmethod
     def create_office(form, user):
+        """Helper function creating a user as a office"""
         office = Office.objects.create(user=user)
         office.name = form.cleaned_data.get('name')
         office.address = form.cleaned_data.get('address')

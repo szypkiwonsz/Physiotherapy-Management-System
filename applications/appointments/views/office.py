@@ -27,9 +27,7 @@ class AppointmentListView(View):
     template_name = 'appointments/office/appointments.html'
 
     def get(self, request):
-        """
-        Function override due to adding pagination and search.
-        """
+        """Function override due to adding pagination and search."""
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_q = request.GET.get('q')
         if url_parameter_q:
@@ -65,9 +63,7 @@ class AppointmentUpdateView(UpdateView):
     template_name = 'appointments/office/appointment_update_form.html'
 
     def get_initial(self):
-        """
-        Replacing the initialized date due to an error with the date saving.
-        """
+        """Replacing the initialized date due to an error with the date saving."""
         initial = super().get_initial()
         date = str(Appointment.objects.filter(id=self.object.pk).values_list('date').get()[0])
         date_object = database_old_datetime_format_to_new(date)
@@ -157,6 +153,7 @@ class MakeAppointment(CreateView):
         return redirect('office_panel:appointments:list')
 
     def get_form_kwargs(self, *args, **kwargs):
+        """Overriding the method to send the date from the url to the form."""
         kwargs = super(MakeAppointment, self).get_form_kwargs()
         date = self.request.GET['date']
         date_database_format = datetime.datetime.strptime(date, '%d.%m.%Y %H:%M')
