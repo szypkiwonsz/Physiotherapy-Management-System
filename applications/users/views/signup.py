@@ -5,17 +5,8 @@ from django.views.generic import TemplateView, CreateView
 
 from applications.users.forms import OfficeSignUpForm, PatientSignUpForm
 from applications.users.models import Office, UserPatient
-from applications.users.tasks import activation_email
-
-
-def user_save(form, is_patient=False, is_office=False):
-    user = form.save(commit=False)
-    # The account is not active until the user activates it.
-    user.is_active = False
-    user.is_patient = is_patient
-    user.is_office = is_office
-    user.save()
-    return user
+from applications.users.tasks import send_activation_email
+from applications.users.utils import user_save
 
 
 class Register(TemplateView):

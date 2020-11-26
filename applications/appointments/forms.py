@@ -33,10 +33,13 @@ class AppointmentPatientMakeForm(forms.ModelForm):
 
 
 class AppointmentOfficeMakeForm(AppointmentPatientMakeForm):
+    """Form for office to make an appointment."""
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         self.date = kwargs.pop('date', None)
         super(AppointmentOfficeMakeForm, self).__init__(*args, **kwargs)
+        # removing unnecessary fields
         del self.fields['first_name']
         del self.fields['last_name']
         del self.fields['phone_number']

@@ -20,4 +20,5 @@ class MedicalHistory(models.Model):
         return f'{self.patient.first_name} {self.patient.last_name}'
 
     class Meta:
+        # name on the admin page
         verbose_name_plural = 'Medical Histories'

@@ -20,6 +20,7 @@ class User(AbstractUser):
         'unique': _("Użytkownik z takim adresem email już istnieje.")
     })
 
+    # replacing username by email
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -31,9 +32,6 @@ class UserPatient(models.Model):
 
     def __str__(self):
         return self.user.email
-
-    class Meta:
-        verbose_name_plural = 'UserPatient'
 
 
 class Office(models.Model):

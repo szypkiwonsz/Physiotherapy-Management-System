@@ -85,24 +85,7 @@ class AppointmentUpdateView(UpdateView):
 
     def form_valid(self, form):
         appointment = Appointment.objects.get(pk=self.object.pk)
-        datetime_form_value = form.cleaned_data.get('date')
-        day = OfficeDay.objects.get(office=self.request.user.office, day=datetime_form_value.weekday())
-        if datetime_form_value.hour == 23 and datetime_form_value.minute == 59:
-            messages.warning(self.request, 'Wybierz poprawną godzinę.')
-            return redirect('office_panel:appointments:update', pk=self.object.pk)
-        elif int(day.earliest_appointment_time.split(':')[0]) > int(datetime_form_value.hour) \
-                or int(day.latest_appointment_time.split(':')[0]) <= int(datetime_form_value.hour) \
-                and int(day.latest_appointment_time.split(':')[1]) <= int(datetime_form_value.minute):
-            messages.warning(self.request, 'Wybierz poprawną godzinę.')
-            return redirect('office_panel:appointments:update', pk=self.object.pk)
-        else:
-            try:
-                appointment_check = Appointment.objects.get(date=form.cleaned_data['date'])
-            except ObjectDoesNotExist:
-                appointment_check = None
-            if appointment_check and appointment_check.pk != self.object.pk:
-                self.appointment_date_taken(datetime_form_value)
-                return redirect('office_panel:appointments:update', self.object.pk)
+
         appointment.confirmed = form.cleaned_data['confirmed']
         appointment.date = form.cleaned_data['date']
         appointment.save()

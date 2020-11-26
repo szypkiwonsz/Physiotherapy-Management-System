@@ -22,7 +22,7 @@ class OfficeProfile(View):
             'o_form': o_form,
             'p_form': p_form,
             'u_form': u_form,
-            'od_form': days_forms
+            'd_forms': days_forms
         }
         return render(request, self.template_name, context)
 
@@ -46,7 +46,7 @@ class OfficeProfile(View):
             'p_form': p_form,
             'u_form': u_form,
             'o_form': o_form,
-            'od_form': days_forms
+            'd_forms': days_forms
         }
         return render(request, self.template_name, context)
 

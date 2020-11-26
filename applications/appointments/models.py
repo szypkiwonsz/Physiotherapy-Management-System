@@ -37,5 +37,5 @@ class Appointment(models.Model):
         super(Appointment, self).save(*args, **kwargs)
 
     class Meta:
-        # Name on the admin page.
+        # name on the admin page
         verbose_name_plural = 'Appointments'
