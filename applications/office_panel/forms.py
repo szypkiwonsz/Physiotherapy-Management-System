@@ -28,3 +28,19 @@ class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ['first_name', 'last_name', 'phone_number', 'email', 'address', 'pesel']
+
+    error_messages = {
+        'email_unique_mismatch': _('Podany email jest już zajęty.'),
+    }
+
+    def clean(self):
+        """Overriding the method to check if email is unique."""
+        cleaned_data = super(PatientForm, self).clean()
+        email = cleaned_data.get("email")
+        emails = Patient.objects.values_list('email', flat=True).filter(owner=self.user)
+        if email in emails and email:
+            raise forms.ValidationError(
+                self.error_messages['email_unique_mismatch'],
+                code='email_unique_mismatch'
+            )
+        return cleaned_data

@@ -31,6 +31,44 @@ class AppointmentPatientMakeForm(forms.ModelForm):
         model = Appointment
         fields = ['date', 'first_name', 'last_name', 'phone_number', 'choice']
 
+    error_messages = {
+        'appointment_date_taken': _('Wybrana data jest już zajęta.'),
+        'appointment_default_time_error': _('Wybierz poprawną godzinę.'),
+        'appointment_incorrect_date': _('Wybierz poprawną godzinę.')
+    }
+
+    def clean(self):
+        """Validate appointment date provided to form."""
+        cleaned_data = super(AppointmentPatientMakeForm, self).clean()
+        try:
+            weekday = cleaned_data.get('date').weekday()
+        except AttributeError:
+            weekday = None
+        try:
+            day = OfficeDay.objects.get(office=self.office, day=weekday)
+        except OfficeDay.DoesNotExist:
+            day = None
+        # if the user selected default hour time
+        if cleaned_data.get('date') and cleaned_data.get('date').hour == 23 and cleaned_data.get('date').minute == 59:
+            raise forms.ValidationError(
+                self.error_messages['appointment_default_time_error'],
+                code='appointment_default_time_error'
+            )
+        # if hour time selected is not correct with office hours
+        elif day and int(day.earliest_appointment_time.split(':')[0]) > int(cleaned_data.get('date').hour) \
+                or day and int(day.latest_appointment_time.split(':')[0]) <= int(cleaned_data.get('date').hour):
+            raise forms.ValidationError(
+                self.error_messages['appointment_incorrect_date'],
+                code='appointment_incorrect_date'
+            )
+        # if the date of the visit is already taken
+        elif Appointment.objects.filter(date=cleaned_data.get('date'), office=self.office):
+            raise forms.ValidationError(
+                self.error_messages['appointment_date_taken'],
+                code='appointment_date_taken'
+            )
+        return cleaned_data
+
 
 class AppointmentOfficeMakeForm(AppointmentPatientMakeForm):
     """Form for office to make an appointment."""
@@ -59,3 +97,41 @@ class AppointmentOfficeUpdateForm(forms.ModelForm):
     class Meta:
         model = Appointment
         fields = ['date', 'confirmed']
+
+    error_messages = {
+        'appointment_date_taken': _('Wybrana data jest już zajęta.'),
+        'appointment_default_time_error': _('Wybierz poprawną godzinę.'),
+        'appointment_incorrect_date': _('Wybierz poprawną godzinę.')
+    }
+
+    def clean(self):
+        """Validate appointment date provided to form."""
+        cleaned_data = super(AppointmentOfficeUpdateForm, self).clean()
+        try:
+            weekday = cleaned_data.get('date').weekday()
+        except AttributeError:
+            weekday = None
+        try:
+            day = OfficeDay.objects.get(office=self.office, day=weekday)
+        except OfficeDay.DoesNotExist:
+            day = None
+        # if the user selected default hour time
+        if cleaned_data.get('date') and cleaned_data.get('date').hour == 23 and cleaned_data.get('date').minute == 59:
+            raise forms.ValidationError(
+                self.error_messages['appointment_default_time_error'],
+                code='appointment_default_time_error'
+            )
+        # if hour time selected is not correct with office hours
+        elif day and int(day.earliest_appointment_time.split(':')[0]) > int(cleaned_data.get('date').hour) \
+                or day and int(day.latest_appointment_time.split(':')[0]) <= int(cleaned_data.get('date').hour):
+            raise forms.ValidationError(
+                self.error_messages['appointment_incorrect_date'],
+                code='appointment_incorrect_date'
+            )
+        # if the date of the visit is already taken
+        elif Appointment.objects.filter(date=cleaned_data.get('date'), office=self.office):
+            raise forms.ValidationError(
+                self.error_messages['appointment_date_taken'],
+                code='appointment_date_taken'
+            )
+        return cleaned_data

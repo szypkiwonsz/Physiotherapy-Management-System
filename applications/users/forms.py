@@ -56,9 +56,16 @@ class OfficeSignUpForm(UserCreationForm):
         fields = ['name', 'address', 'city', 'phone_number', 'website', 'email', 'confirm_email', 'password1',
                   'password2']
 
-    def clean_confirm_email(self):
-        email = self.cleaned_data.get("email")
-        confirm_email = self.cleaned_data.get("confirm_email")
+    error_messages = {
+        'email_mismatch': _('Podane emaile nie zgadzają się.'),
+        'password_mismatch': _('Hasła nie pasują do siebie.'),
+    }
+
+    def clean(self):
+        """Overriding the method to check if both entered e-mails are correct."""
+        cleaned_data = super(OfficeSignUpForm, self).clean()
+        email = cleaned_data.get("email")
+        confirm_email = cleaned_data.get("confirm_email")
         if email and confirm_email and email != confirm_email:
             raise forms.ValidationError(
                 self.error_messages['email_mismatch'],
@@ -89,9 +96,16 @@ class PatientSignUpForm(UserCreationForm):
         model = User
         fields = ['phone_number', 'email', 'confirm_email', 'password1', 'password2']
 
-    def clean_confirm_email(self):
-        email = self.cleaned_data.get("email")
-        confirm_email = self.cleaned_data.get("confirm_email")
+    error_messages = {
+        'email_mismatch': _('Podane emaile nie zgadzają się.'),
+        'password_mismatch': _('Hasła nie pasują do siebie.'),
+    }
+
+    def clean(self):
+        """Overriding the method to check if both entered e-mails are correct."""
+        cleaned_data = super(PatientSignUpForm, self).clean()
+        email = cleaned_data.get("email")
+        confirm_email = cleaned_data.get("confirm_email")
         if email and confirm_email and email != confirm_email:
             raise forms.ValidationError(
                 self.error_messages['email_mismatch'],
