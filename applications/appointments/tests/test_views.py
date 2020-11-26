@@ -93,7 +93,8 @@ class TestOfficeAppointmentViews(TestCase):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.post(self.update_appointment_url, {
             'date': '17.02.2020 17:00',
-            'confirmed': True
+            'confirmed': True,
+            'choice': 'Konsultacja'
         })
         appointment_update = Appointment.objects.get(id=1)
         self.assertEquals(response.status_code, 302)
@@ -386,7 +387,7 @@ class TestPatientAppointmentViews(TestCase):
             'choice': self.appointment1.choice
         })
         appointment_update = Appointment.objects.get(id=1)
-        self.assertEquals(response.status_code, 302)
+        self.assertEquals(response.status_code, 200)
         self.assertEquals(appointment_update.confirmed, False)
         self.assertEquals(appointment_update.phone_number, '000000000')
 

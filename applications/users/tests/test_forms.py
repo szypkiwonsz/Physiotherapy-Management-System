@@ -1,12 +1,12 @@
 from django.test import TestCase
 
 from applications.users.forms import LoginForm, OfficeSignUpForm, PatientSignUpForm, NewSetPasswordForm, \
-    UsersUpdateForm, \
-    OfficeUpdateForm, PatientUpdateForm, ProfileUpdateForm, OfficeDayUpdateForm
+    UsersUpdateForm, OfficeUpdateForm, PatientUpdateForm, ProfileUpdateForm, OfficeDayUpdateForm
 from applications.users.models import User
 
 
 class TestLoginForm(TestCase):
+    
     def setUp(self):
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
@@ -26,6 +26,7 @@ class TestLoginForm(TestCase):
 
 
 class TestOfficeSignUpForm(TestCase):
+
     def test_office_signup_form_valid(self):
         form = OfficeSignUpForm(data={
             'name': 'Fizjo-Med',
@@ -92,6 +93,7 @@ class TestOfficeSignUpForm(TestCase):
 
 
 class TestPatientSignUpForm(TestCase):
+
     def test_patient_signup_form_valid(self):
         form = PatientSignUpForm(data={
             'phone_number': '000000000',
@@ -142,6 +144,7 @@ class TestPatientSignUpForm(TestCase):
 
 
 class TestNewSetPasswordForm(TestCase):
+
     def setUp(self):
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
@@ -169,6 +172,7 @@ class TestNewSetPasswordForm(TestCase):
 
 
 class TestUsersUpdateForm(TestCase):
+
     def test_user_update_form_valid(self):
         form = UsersUpdateForm(data={
             'email': 'new_email@gmail.com'
@@ -192,6 +196,7 @@ class TestUsersUpdateForm(TestCase):
 
 
 class TestOfficeUpdateForm(TestCase):
+
     def test_office_update_form_valid(self):
         form = OfficeUpdateForm(data={
             'name': 'fizjo-med',
@@ -220,6 +225,7 @@ class TestOfficeUpdateForm(TestCase):
 
 
 class TestPatientUpdateForm(TestCase):
+
     def test_patient_update_form_valid(self):
         form = PatientUpdateForm(data={
             'phone_number': '000000000'
@@ -240,6 +246,7 @@ class TestPatientUpdateForm(TestCase):
 
 
 class TestProfileUpdateForm(TestCase):
+
     # def test_profile_update_form_valid(self):
     #     pass
 
@@ -250,6 +257,7 @@ class TestProfileUpdateForm(TestCase):
 
 
 class TestOfficeDayUpdateForm(TestCase):
+
     def test_patient_update_form_valid(self):
         form = OfficeDayUpdateForm(data={
             'day': 0,

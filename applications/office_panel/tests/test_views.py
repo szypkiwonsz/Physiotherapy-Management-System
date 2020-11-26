@@ -202,6 +202,7 @@ class TestPatientViews(TestCase):
 
 
 class TestTimetableViews(TestCase):
+
     def setUp(self):
         self.timetable_url = reverse('office_panel:timetable')
         self.patient1 = User.objects.create_user(

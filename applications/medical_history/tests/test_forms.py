@@ -9,6 +9,7 @@ from applications.users.models import User, Office
 
 
 class TestMedicalHistoryForm(TestCase):
+
     def setUp(self):
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True

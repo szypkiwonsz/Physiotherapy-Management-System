@@ -6,6 +6,7 @@ from applications.users.models import User, UserPatient, Office, OfficeDay
 
 
 class TestUserPatientModels(TestCase):
+
     def setUp(self):
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
@@ -20,6 +21,7 @@ class TestUserPatientModels(TestCase):
 
 
 class TestOfficeModels(TestCase):
+
     def setUp(self):
         self.office1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
@@ -38,6 +40,7 @@ class TestOfficeModels(TestCase):
 
 
 class TestProfileModels(TestCase):
+
     def setUp(self):
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
@@ -53,6 +56,7 @@ class TestProfileModels(TestCase):
 
 
 class TestOfficeDayModels(TestCase):
+
     def setUp(self):
         self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
@@ -80,3 +84,6 @@ class TestOfficeDayModels(TestCase):
             OfficeDay.objects.create(
                 day=0, office=self.office1, earliest_appointment_time='12:00', latest_appointment_time='11:00'
             )
+
+    def test_string_representation(self):
+        pass

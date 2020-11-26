@@ -5,6 +5,7 @@ from applications.medical_history.views import office, patient
 
 
 class TestOfficeMedicalHistoryUrls(SimpleTestCase):
+
     def test_medical_history_list_url_resolves(self):
         url = reverse('office_panel:medical_history:list')
         self.assertEquals(resolve(url).func.view_class, office.MedicalHistoryListView)

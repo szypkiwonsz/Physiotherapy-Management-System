@@ -6,12 +6,14 @@ from applications.office_panel.views import timetable
 
 
 class TestOfficeHomeUrls(SimpleTestCase):
+
     def test_patient_list_url_resolves(self):
         url = reverse('office_panel:home')
         self.assertEquals(resolve(url).func.view_class, home.OfficePanelView)
 
 
 class TestOfficePatientUrls(SimpleTestCase):
+
     def test_patient_list_url_resolves(self):
         url = reverse('office_panel:patients')
         self.assertEquals(resolve(url).func.view_class, patient.PatientListView)

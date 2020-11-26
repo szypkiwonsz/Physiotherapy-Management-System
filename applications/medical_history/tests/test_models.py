@@ -7,6 +7,7 @@ from applications.users.models import User
 
 
 class TestMedicalHistoryModels(TestCase):
+
     def setUp(self):
         self.office1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
