@@ -63,7 +63,7 @@ class OfficeSignUpForm(UserCreationForm):
                 self.error_messages['email_mismatch'],
                 code='email_mismatch',
             )
-        return confirm_email
+        return cleaned_data
 
 
 class PatientSignUpForm(UserCreationForm):
@@ -103,7 +103,7 @@ class PatientSignUpForm(UserCreationForm):
                 self.error_messages['email_mismatch'],
                 code='email_mismatch',
             )
-        return confirm_email
+        return cleaned_data
 
 
 class NewSetPasswordForm(SetPasswordForm):
