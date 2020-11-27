@@ -18,6 +18,8 @@ class PatientForm(forms.ModelForm):
     email = forms.EmailField(required=False)
 
     def __init__(self, *args, **kwargs):
+        # user pk from view
+        self.user = kwargs.pop('user', None)
         super(PatientForm, self).__init__(*args, **kwargs)
 
         label = ['Imię', 'Nazwisko', 'Adres email', 'Adres zamieszkania', 'Pesel', 'Numer telefonu']
