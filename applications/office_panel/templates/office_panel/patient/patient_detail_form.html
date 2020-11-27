@@ -14,7 +14,11 @@
             <hr>
             Imie: {{ patient.first_name }}<br>
             Nazwisko: {{ patient.last_name }}<br>
-            Email: {{ patient.email }}<br>
+            {% if patient.email %}
+                Email: {{ patient.email }}<br>
+            {% else %}
+                Email: Brak danych<br>
+            {% endif %}
             {% if patient.address %}
                 Adres: {{ patient.address }}<br>
             {% else %}

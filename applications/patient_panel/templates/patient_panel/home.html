@@ -8,15 +8,15 @@
             {% if offices %}
                 <h2>Gabinety do których zostałeś ostatnio przypisany:</h2>
                 <p>(wyświetlone są tylko te w których odbyłeś już wizytę)</p>
-                <hr>
                 {% for office in offices %}
+                    <hr>
                     {{ office.name }}
                 {% endfor %}
+                <hr>
             {% else %}
                 <h2>Nie jesteś zarejestrowany w żadnym gabinecie.</h2>
                 <p>(gabinet musi dodać Cię do swojej bazy)</p>
             {% endif %}
-            <hr>
             {% if offices %}
                 <a href="{% url 'patient_panel:offices' %}" class="btn btn-warning" role="button">Pokaż wszystkie
                     gabinety</a>
