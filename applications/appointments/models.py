@@ -4,14 +4,7 @@ from django.utils import timezone
 
 from applications.office_panel.models import Patient
 from applications.users.models import User, Office
-
-numeric = RegexValidator('^[0-9]*$', 'Jako numer telefonu, możesz podać jedynie cyfry.')
-alphanumeric_first_name = RegexValidator(
-    '^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]*$', 'Imię nie może zawierać cyfr, ani znaków specjalnych'
-)
-alphanumeric_last_name = RegexValidator(
-    '^[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ]*$', 'Nazwisko nie może zawierać cyfr, ani znaków specjalnych.'
-)
+from utils.regex_validators import alphanumeric_first_name, numeric_phone_number, alphanumeric_last_name
 
 
 # Create your models here.
@@ -20,11 +13,11 @@ class Appointment(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments')
     office = models.ForeignKey(Office, on_delete=models.CASCADE)
     patient_email = models.EmailField()
-    first_name = models.CharField(max_length=20, unique=False, default='', validators=[alphanumeric_first_name])
-    last_name = models.CharField(max_length=40, unique=False, default='', validators=[alphanumeric_last_name])
+    first_name = models.CharField(max_length=20, unique=False, default='', validators=[alphanumeric_first_name()])
+    last_name = models.CharField(max_length=40, unique=False, default='', validators=[alphanumeric_last_name()])
     date = models.DateTimeField()
     date_selected = models.DateTimeField(default=timezone.now)
-    phone_number = models.CharField(max_length=9, validators=[numeric])
+    phone_number = models.CharField(max_length=9, validators=[numeric_phone_number()])
     confirmed = models.BooleanField(default=False)
     choice = models.CharField(max_length=120)
 

@@ -8,9 +8,7 @@ from django.utils.translation import gettext as _
 
 from applications.users.models import User, Profile, Office, UserPatient, OfficeDay
 from applications.users.widgets import MyClearableFileInput
-from utils.add_zero import add_zero
-
-numeric_phone_number = RegexValidator('^[0-9]*$', 'Jako numer telefonu, możesz podać jedynie cyfry.')
+from utils.regex_validators import numeric_phone_number
 
 
 class LoginForm(AuthenticationForm):
@@ -20,11 +18,6 @@ class LoginForm(AuthenticationForm):
         self.error_messages['invalid_login'] = 'Niepoprawny email lub hasło. Badź konto nie zostało jeszcze aktywowane.'
         super().__init__(*args, **kwargs)
         super(LoginForm, self).__init__(*args, **kwargs)
-
-        label = ['Email', 'Hasło']
-        for i, field_name in enumerate(['username', 'password']):
-            self.fields[field_name].help_text = None
-            self.fields[field_name].label = label[i]
 
 
 class OfficeSignUpForm(UserCreationForm):
@@ -169,7 +162,7 @@ class OfficeDayUpdateForm(forms.ModelForm):
 class OfficeUpdateForm(forms.ModelForm):
     """Class form for updating the office-user data."""
     website = forms.CharField(required=False)
-    phone_number = forms.CharField(min_length=9, validators=[numeric_phone_number], error_messages={
+    phone_number = forms.CharField(min_length=9, validators=[numeric_phone_number()], error_messages={
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
         'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
     })
