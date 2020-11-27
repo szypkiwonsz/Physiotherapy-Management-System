@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 from Physiotherapy_Management_System import settings
 from applications.appointments.models import Appointment
 from applications.office_panel.models import Patient
+from applications.users.models import OfficeDay
 
 
 class AppointmentPatientMakeForm(forms.ModelForm):
