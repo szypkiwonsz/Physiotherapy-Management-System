@@ -71,7 +71,7 @@ class PatientSignUpForm(UserCreationForm):
     email = forms.CharField(widget=forms.EmailInput)
     confirm_email = forms.CharField(widget=forms.EmailInput)
     phone_number = forms.CharField(
-        required=False, min_length=9, max_length=9, validators=[numeric_phone_number], error_messages={
+        required=False, min_length=9, max_length=9, validators=[numeric_phone_number()], error_messages={
             'min_length': _('Numer powinien zawierać 9 cyfr.'),
             'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
         })
