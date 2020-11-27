@@ -87,6 +87,7 @@ class AppointmentOfficeMakeForm(AppointmentPatientMakeForm):
 
 
 class AppointmentOfficeUpdateForm(forms.ModelForm):
+    """Form for office to update an appointment."""
     date = forms.DateTimeField(
         label='Data wizyty:',
         input_formats=settings.DATE_INPUT_FORMATS,
