@@ -7,6 +7,11 @@ from applications.office_panel.models import Patient
 
 
 class AppointmentPatientMakeForm(forms.ModelForm):
+    """Form for patient to make an appointment."""
+    CHOICES = [('Konsultacja', 'Konsultacja'),
+               ('Terapia manualna i indywidualna', 'Terapia manualna i indywidualna'),
+               ('Masaż', 'Masaż'),
+               ('Fala uderzeniowa', 'Fala uderzeniowa')]
     date = forms.DateTimeField(
         label='Data wizyty:',
         input_formats=settings.DATE_INPUT_FORMATS,
@@ -18,14 +23,11 @@ class AppointmentPatientMakeForm(forms.ModelForm):
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
         'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
     })
-    choices = ['Konsultacja', 'Terapia manualna i indywidualna', 'Masaż', 'Fala uderzeniowa']
-    choice = forms.ChoiceField(
-        label='Usługa',
-        choices=[(choices[0], choices[0]),
-                 (choices[1], choices[1]),
-                 (choices[2], choices[2]),
-                 (choices[3], choices[3])]
-    )
+    choice = forms.ChoiceField(label='Usługa', choices=CHOICES)
+
+    def __init__(self, *args, **kwargs):
+        self.office = kwargs.pop('office', None)
+        super(AppointmentPatientMakeForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Appointment
@@ -94,6 +96,13 @@ class AppointmentOfficeUpdateForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'autocomplete': 'off'})
     )
     confirmed = forms.BooleanField(required=False, label='Potwierdzona')
+
+    def __init__(self, *args, **kwargs):
+        self.office = kwargs.pop('office', None)
+        super(AppointmentOfficeUpdateForm, self).__init__(*args, **kwargs)
+        del self.fields['first_name']
+        del self.fields['last_name']
+        del self.fields['phone_number']
 
     class Meta:
         model = Appointment
