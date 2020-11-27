@@ -3,7 +3,6 @@ import calendar
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import SetPasswordForm
-from django.core.validators import RegexValidator
 from django.utils.translation import gettext as _
 
 from applications.users.models import User, Profile, Office, UserPatient, OfficeDay
@@ -25,7 +24,7 @@ class OfficeSignUpForm(UserCreationForm):
     name = forms.CharField()
     address = forms.CharField()
     city = forms.CharField()
-    phone_number = forms.CharField(min_length=9, max_length=9, validators=[numeric_phone_number], error_messages={
+    phone_number = forms.CharField(min_length=9, max_length=9, validators=[numeric_phone_number()], error_messages={
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
         'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
     })
