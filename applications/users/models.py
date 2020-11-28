@@ -60,6 +60,13 @@ class OfficeDay(models.Model):
     earliest_appointment_time = models.CharField(max_length=5, choices=HOUR_CHOICES, default='11:00')
     latest_appointment_time = models.CharField(max_length=5, choices=HOUR_CHOICES, default='18:00')
 
+    def save(self, *args, **kwargs):
+        self.validate_hours()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.office.name} - {calendar.day_name[int(self.day)]}'
+
     def validate_hours(self):
         if self.earliest_appointment_time > self.latest_appointment_time:
             raise ValidationError(
