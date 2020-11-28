@@ -2,6 +2,7 @@ import datetime
 from datetime import date
 
 from django import template
+from django.template.defaultfilters import stringfilter
 
 register = template.Library()
 
@@ -41,6 +42,7 @@ def add_zero(value):
 
 
 @register.filter
+@stringfilter
 def is_past_due(str_date):
     """Returns bool value if the entered date is earlier than today."""
     return date.today() > datetime.datetime.strptime(str_date.split(' ')[0], "%d.%m.%Y").date()
