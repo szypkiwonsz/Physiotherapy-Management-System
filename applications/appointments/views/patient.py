@@ -2,7 +2,6 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -16,8 +15,7 @@ from applications.appointments.tasks import appointment_confirmation_email_patie
     appointment_confirmation_email_office
 from applications.appointments.utils import database_old_datetime_format_to_new
 from applications.users.decorators import patient_required
-from applications.users.models import Office, OfficeDay
-from utils.add_zero import add_zero
+from applications.users.models import Office
 from utils.office_opening_hours import get_office_opening_hours
 from utils.paginate import paginate
 
@@ -57,9 +55,18 @@ class MakeAppointment(CreateView):
 
         office_email = appointment.office.user.email
         patient_email = self.request.user.email
-        appointment_confirmation_email_office.delay(patient_first_name, date, time, office_email)
-        appointment_confirmation_email_patient.delay(patient_first_name, appointment.office.name, date, time,
-                                                     patient_email)
+
+        date = datetime_form_value.strftime('%d.%m.%Y')
+        time = datetime_form_value.strftime('%H:%M')
+        # sending email as celery task
+        appointment_confirmation_email_office.delay(
+            patient_first_name, date, time, office_email
+        )
+        # sending email as celery task
+        appointment_confirmation_email_patient.delay(
+            patient_first_name, appointment.office.name, date, time,
+            patient_email
+        )
 
         messages.warning(self.request, 'Poprawnie umówiono wizytę, ale oczekuje ona na potwierdzenie.')
         return redirect('patient_panel:appointments:upcoming')
