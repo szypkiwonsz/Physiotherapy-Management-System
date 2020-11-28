@@ -5,7 +5,8 @@ from utils.add_zero import add_zero
 
 def get_days_of_week():
     """A function that returns a list of the names of the days of the week."""
-    return [(str(i), (calendar.day_name[i]).capitalize()) for i in range(7)]
+    day_name = ['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota', 'Niedziela']
+    return [(str(i), (day_name[i]).capitalize()) for i in range(7)]
 
 
 def get_hours_in_day():

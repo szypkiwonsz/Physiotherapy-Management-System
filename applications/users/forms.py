@@ -135,7 +135,6 @@ class UsersUpdateForm(forms.ModelForm):
 class OfficeDayUpdateForm(forms.ModelForm):
     """Class form for updating the office times of making appointments."""
     # changing the names of the days of the week to Polish
-    locale.setlocale(locale.LC_ALL, 'pl_PL')
     DAY_CHOICES = get_days_of_week()
     HOUR_CHOICES = get_hours_in_day()
     day = forms.ChoiceField(choices=DAY_CHOICES)
