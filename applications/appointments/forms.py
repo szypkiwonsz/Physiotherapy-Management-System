@@ -89,21 +89,15 @@ class AppointmentOfficeMakeForm(AppointmentPatientMakeForm):
         self.fields['date'].widget = forms.TextInput(attrs={'value': str(self.date), 'readonly': 'true'})
 
 
-class AppointmentOfficeUpdateForm(forms.ModelForm):
+class AppointmentOfficeUpdateForm(AppointmentOfficeMakeForm):
     """Form for office to update an appointment."""
-    date = forms.DateTimeField(
-        label='Data wizyty:',
-        input_formats=settings.DATE_INPUT_FORMATS,
-        widget=forms.TextInput(attrs={'autocomplete': 'off'})
-    )
     confirmed = forms.BooleanField(required=False, label='Potwierdzona')
 
     def __init__(self, *args, **kwargs):
-        self.office = kwargs.pop('office', None)
+        # self.office = kwargs.pop('office', None)
         super(AppointmentOfficeUpdateForm, self).__init__(*args, **kwargs)
-        del self.fields['first_name']
-        del self.fields['last_name']
-        del self.fields['phone_number']
+        self.fields['date'].widget = forms.TextInput()
+        del self.fields['patient']
 
     class Meta:
         model = Appointment
