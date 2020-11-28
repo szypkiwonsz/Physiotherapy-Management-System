@@ -247,9 +247,6 @@ class TestPatientUpdateForm(TestCase):
 
 class TestProfileUpdateForm(TestCase):
 
-    # def test_profile_update_form_valid(self):
-    #     pass
-
     def test_profile_update_form_no_data(self):
         form = ProfileUpdateForm(data={})
         self.assertFalse(form.is_valid())

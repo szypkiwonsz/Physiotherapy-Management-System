@@ -4,10 +4,6 @@ from django.urls import reverse, resolve
 from applications.users.views import signup, profile
 
 
-# class TestActivateUrls(SimpleTestCase):
-#     pass
-
-
 class TestProfileUrls(SimpleTestCase):
 
     def test_office_url_resolves(self):

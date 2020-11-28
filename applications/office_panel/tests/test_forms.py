@@ -68,22 +68,3 @@ class TestPatientForm(TestCase):
         })
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 1)
-
-    # def test_make_patient_form_email_taken(self):
-    #     office1 = User.objects.create_user(
-    #         'office', 'office@gmail.com', 'officepassword', is_office=True
-    #     )
-    #     Patient.objects.create(
-    #         owner=office1,
-    #         first_name='firstname',
-    #         last_name='lastname',
-    #         email='patient@gmail.com',
-    #     )
-    #     form = PatientForm(data={
-    #         'first_name': 'firstname',
-    #         'last_name': 'lastname',
-    #         'email': 'patient@gmail.com',
-    #         'address': 'address',
-    #         'pesel': '00000000000',
-    #         'phone_number': '000000000'
-    #     })
