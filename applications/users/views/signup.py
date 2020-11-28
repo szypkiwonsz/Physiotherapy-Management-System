@@ -28,9 +28,9 @@ class RegisterPatient(CreateView):
         user = user_save(form, is_patient=True)
         self.create_patient(form, user)
         current_site = get_current_site(self.request)
-        domain = current_site.domain
-        patient_email = form.cleaned_data.get('email')
-        activation_email.delay(user.pk, domain, patient_email)
+        send_activation_email.delay(
+            user_id=user.pk, domain=current_site.domain, user_email=form.cleaned_data.get('email')
+        )
         messages.warning(self.request, 'Potwierdź swoje konto poprzez link wysłany na email.')
         return redirect('login')
 
@@ -53,8 +53,8 @@ class RegisterOffice(CreateView):
         user = user_save(form, is_office=True)
         self.create_office(form, user)
         current_site = get_current_site(self.request)
-        domain = current_site.domain
-        office_email = form.cleaned_data.get('email')
-        activation_email.delay(user.pk, domain, office_email)
+        send_activation_email.delay(
+            user_id=user.pk, domain=current_site.domain, user_email=form.cleaned_data.get('email')
+        )
         messages.warning(self.request, 'Potwierdź swoje konto poprzez link wysłany na email.')
         return redirect('login')
