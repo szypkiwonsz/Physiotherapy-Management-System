@@ -1,4 +1,4 @@
-import calendar
+import locale
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -6,6 +6,7 @@ from django.contrib.auth.views import SetPasswordForm
 from django.utils.translation import gettext as _
 
 from applications.users.models import User, Profile, Office, UserPatient, OfficeDay
+from applications.users.utils import get_days_of_week, get_hours_in_day
 from applications.users.widgets import MyClearableFileInput
 from utils.regex_validators import numeric_phone_number
 
@@ -129,8 +130,11 @@ class UsersUpdateForm(forms.ModelForm):
 
 
 class OfficeDayUpdateForm(forms.ModelForm):
-    DAY_CHOICES = [(str(i), (calendar.day_name[i]).capitalize()) for i in range(7)]
-    HOUR_CHOICES = [(f'{add_zero(i)}:00', f'{add_zero(i)}:00') for i in range(24)]
+    """Class form for updating the office times of making appointments."""
+    # changing the names of the days of the week to Polish
+    locale.setlocale(locale.LC_ALL, 'pl_PL')
+    DAY_CHOICES = get_days_of_week()
+    HOUR_CHOICES = get_hours_in_day()
     day = forms.ChoiceField(choices=DAY_CHOICES)
     earliest_appointment_time = forms.ChoiceField(choices=HOUR_CHOICES)
     latest_appointment_time = forms.ChoiceField(choices=HOUR_CHOICES)
