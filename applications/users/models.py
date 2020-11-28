@@ -45,6 +45,10 @@ class Office(models.Model):
     def __str__(self):
         return self.user.email
 
+    class Meta:
+        # name on the admin page
+        verbose_name_plural = 'User offices'
+
 
 class OfficeDay(models.Model):
     """A model to determine the times of making an appointment in the office for a given day."""
