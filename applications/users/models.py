@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 from easy_thumbnails.fields import ThumbnailerImageField
 
-from utils.add_zero import add_zero
+from applications.users.utils import get_days_of_week, get_hours_in_day
 
 
 class User(AbstractUser):
@@ -47,10 +47,11 @@ class Office(models.Model):
 
 
 class OfficeDay(models.Model):
-    locale.setlocale(locale.LC_ALL, 'pl_PL')
-    DAY_CHOICES = [(str(i), (calendar.day_name[i]).capitalize()) for i in range(7)]
-    HOUR_CHOICES = [(f'{add_zero(i)}:00', f'{add_zero(i)}:00') for i in range(24)]
-    office = models.ForeignKey(Office, on_delete=models.CASCADE)
+    """A model to determine the times of making an appointment in the office for a given day."""
+    DAY_CHOICES = get_days_of_week()
+    HOUR_CHOICES = get_hours_in_day()
+
+    office = models.ForeignKey(Office, on_delete=models.CASCADE, related_name='office_days')
     day = models.CharField(max_length=1, choices=DAY_CHOICES)
     earliest_appointment_time = models.CharField(max_length=5, choices=HOUR_CHOICES, default='11:00')
     latest_appointment_time = models.CharField(max_length=5, choices=HOUR_CHOICES, default='18:00')

@@ -36,18 +36,21 @@ class OfficeSignUpForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(OfficeSignUpForm, self).__init__(*args, **kwargs)
 
-        label = ['Nazwa gabinetu', 'Adres', 'Miasto', 'Numer telefonu', 'Strona internetowa', 'Adres email',
-                 'Potwierdź adres email', 'Hasło',
-                 'Potwierdź hasło']
-        for i, field_name in enumerate(['name', 'address', 'city', 'phone_number', 'website', 'email', 'confirm_email',
-                                        'password1', 'password2']):
+        label = [
+            'Nazwa gabinetu', 'Adres', 'Miasto', 'Numer telefonu', 'Strona internetowa', 'Adres email',
+            'Potwierdź adres email', 'Hasło', 'Potwierdź hasło'
+        ]
+        for i, field_name in enumerate([
+            'name', 'address', 'city', 'phone_number', 'website', 'email', 'confirm_email', 'password1', 'password2'
+        ]):
             self.fields[field_name].help_text = None
             self.fields[field_name].label = label[i]
 
     class Meta:
         model = User
-        fields = ['name', 'address', 'city', 'phone_number', 'website', 'email', 'confirm_email', 'password1',
-                  'password2']
+        fields = [
+            'name', 'address', 'city', 'phone_number', 'website', 'email', 'confirm_email', 'password1', 'password2'
+        ]
 
     error_messages = {
         'email_mismatch': _('Podane emaile nie zgadzają się.'),
@@ -112,12 +115,12 @@ class NewSetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(
         label=_("Nowe hasło"),
         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
-        strip=False,
+        strip=False
     )
     new_password2 = forms.CharField(
         label=_("Potwierdź nowe hasło"),
-        strip=False,
         widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
+        strip=False
     )
 
 
