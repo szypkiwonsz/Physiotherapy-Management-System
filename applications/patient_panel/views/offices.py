@@ -15,7 +15,7 @@ class OfficesListView(View):
     template_name = 'patient_panel/offices.html'
 
     def get_queryset(self):
-        queryset = Office.objects.filter(user__patients__email=self.request.user)
+        queryset = Office.objects.filter(user__patients__email=self.request.user).distinct()
         return queryset
 
     def get(self, request):
