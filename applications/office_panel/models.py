@@ -21,6 +21,16 @@ class Patient(models.Model):
         return f'{self.first_name} {self.last_name}'
 
     def save(self, *args, **kwargs):
+        self.validate_email()
         self.first_name = self.first_name.capitalize()
         self.last_name = self.last_name.capitalize()
         super(Patient, self).save(*args, **kwargs)
+
+    def validate_email(self):
+        """The function checks if the provided patient's email is unique for the office."""
+        emails = Patient.objects.values_list('email', flat=True).filter(owner=self.owner)
+        if self.email in emails and self.email:
+            raise ValidationError(
+                'Email address is already taken.',
+                params={'email': self.email}
+            )
