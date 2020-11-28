@@ -34,19 +34,11 @@ class MakeAppointment(CreateView):
     form_class = AppointmentPatientMakeForm
     template_name = 'appointments/patient/appointment_make_form.html'
 
-    def appointment_date_taken(self, date):
-        messages.warning(
-            self.request,
-            f'Wybrana data {add_zero(date.day)}.{add_zero(date.month)}.{date.year} {date.hour}:00 '
-            f'jest już zajęta.'
-        )
-
-    @staticmethod
-    def date_and_time_from_datetime(datetime_value):
-        date_and_time = str(datetime_value).split(' ')
-        date = date_and_time[0].split('-')
-        time = date_and_time[1].split(':')
-        return date, time
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(MakeAppointment, self).get_form_kwargs()
+        # passing office pk to form.
+        kwargs['office'] = self.kwargs.get('pk')
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super(MakeAppointment, self).get_context_data(**kwargs)
@@ -155,12 +147,11 @@ class AppointmentUpdateView(UpdateView):
         context['opening_hours'] = get_office_opening_hours(self.object.office.pk)
         return context
 
-    def appointment_date_taken(self, date):
-        messages.warning(
-            self.request,
-            f'Wybrana data {add_zero(date.day)}.{add_zero(date.month)}.{date.year} {date.hour}:00 '
-            f'jest już zajęta.'
-        )
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(AppointmentUpdateView, self).get_form_kwargs()
+        # passing office pk to form.
+        kwargs['office'] = self.object.office.pk
+        return kwargs
 
     def get_initial(self):
         """Replacing the initialized date due to an error with the date saving."""

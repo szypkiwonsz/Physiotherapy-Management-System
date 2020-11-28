@@ -62,6 +62,12 @@ class PatientCreateView(CreateView):
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
         return context
 
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(PatientCreateView, self).get_form_kwargs()
+        # passing user pk to form.
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         patient = form.save(commit=False)
         patient.owner = self.request.user
@@ -90,6 +96,12 @@ class PatientUpdateView(UpdateView):
         # previous url for back button
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
         return context
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(PatientUpdateView, self).get_form_kwargs()
+        # passing user pk to form.
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get_queryset(self):
         return self.request.user.patients.all()
