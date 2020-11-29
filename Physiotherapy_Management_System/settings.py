@@ -38,6 +38,12 @@ AUTH_USER_MODEL = 'users.User'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+# Custom auth migration module path due to bug on heroku
+
+MIGRATION_MODULES = {
+  'auth': 'applications.users.migrations.auth'
+}
+
 # Application definition
 
 INSTALLED_APPS = [
