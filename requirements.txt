@@ -13,3 +13,5 @@ whitenoise==5.1.0
 django-storages==1.10.1
 easy-thumbnails==2.7
 celery==5.0.1
+redis==3.5.3
+boto3==1.15.12
