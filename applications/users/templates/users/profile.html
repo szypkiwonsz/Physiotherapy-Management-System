@@ -1,4 +1,4 @@
-{% extends 'base/base_panel_patient.html' %}
+{% extends user.is_patient|yesno:'base/base_panel_patient.html,base/base_panel_office.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
 {% block head %}
