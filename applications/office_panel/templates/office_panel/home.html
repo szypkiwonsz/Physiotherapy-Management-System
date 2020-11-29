@@ -50,8 +50,10 @@
                         {% with date_list|len_str as len_date_list %}
                             <span>
                     {% with date|split:' ' as date_split %}
-                        <a type="submit" href="{% url 'office_panel:appointments:make' pk=office_id %}?date={{ date }}"
-                           class="btn btn-success btn mt-1 btn-timetable">{{ date_split|index:1 }}</a>
+                            <a href="{% url 'office_panel:appointments:make' pk=office_id %}?date={{ date }}"
+                               class="btn btn-success btn mt-1 btn-timetable" role="button">
+                                {{ date_split|index:1 }}
+                            </a>
                     {% endwith %}
                             </span>
                             {% if forloop.counter|divisibleby:len_date_list %}
