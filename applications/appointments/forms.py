@@ -117,7 +117,6 @@ class AppointmentOfficeUpdateForm(AppointmentOfficeMakeForm):
 
     def clean(self):
         """Validate appointment date provided to form."""
-        print(self.office)
         cleaned_data = super(AppointmentOfficeUpdateForm, self).clean()
         try:
             appointment = Appointment.objects.get(date=cleaned_data.get('date'), office=self.office)
@@ -131,8 +130,6 @@ class AppointmentOfficeUpdateForm(AppointmentOfficeMakeForm):
             day = OfficeDay.objects.get(office=self.office, day=weekday)
         except OfficeDay.DoesNotExist:
             day = None
-        print(self.appointment)
-        print(appointment)
         # if the user selected default hour time
         if cleaned_data.get('date') and cleaned_data.get('date').hour == 23 and cleaned_data.get('date').minute == 59:
             raise forms.ValidationError(
