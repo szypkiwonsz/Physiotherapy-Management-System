@@ -1,9 +1,11 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
+
 from applications.home_page.views import HomeView, HelpView, OfficesView
 
 
 class TestUrls(SimpleTestCase):
+
     def test_home_url_resolves(self):
         url = reverse('home_page:home')
         self.assertEquals(resolve(url).func.view_class, HomeView)

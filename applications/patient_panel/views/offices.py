@@ -15,10 +15,11 @@ class OfficesListView(View):
     template_name = 'patient_panel/offices.html'
 
     def get_queryset(self):
-        queryset = Office.objects.filter(user__patients__email=self.request.user)
+        queryset = Office.objects.filter(user__patients__email=self.request.user).distinct()
         return queryset
 
     def get(self, request):
+        """Method override due to adding pagination and filtering."""
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_q = request.GET.get('q')
         if url_parameter_q:

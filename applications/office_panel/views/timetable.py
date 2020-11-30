@@ -16,13 +16,11 @@ class TimetableView(View):
     template_name = 'office_panel/timetable/timetable.html'
 
     def get(self, request):
-        """
-        Function override due to adding month selection.
-        """
-        url_without_parameters = str(request.get_full_path()).split('?')[0]
+        """Function override due to adding month selection."""
         now = datetime.date.today()
-        today_date = now.strftime("%d.%m.%Y")
+        # selected year
         url_parameter_y = request.GET.get('y')
+        # selected month
         url_parameter_m = request.GET.get('m')
         if url_parameter_y and url_parameter_m:
             dates_taken = Appointment.objects.filter(
@@ -39,13 +37,9 @@ class TimetableView(View):
                 'year': url_parameter_y,
                 'month': url_parameter_m,
                 'dates': dates,
-                'today_date': today_date,
-                'days': get_number_of_days_in_month(int(url_parameter_y), int(url_parameter_m)),
-                'endpoint': url_without_parameters,
                 'office_id': self.request.user.pk
             }
         else:
-            now = datetime.datetime.now()
             dates_taken = Appointment.objects.filter(
                 date__year=now.year, date__month=now.month, office__user=request.user
             )
@@ -60,9 +54,6 @@ class TimetableView(View):
                 'year': now.year,
                 'month': now.month,
                 'dates': dates,
-                'today_date': today_date,
-                'days': get_number_of_days_in_month(now.year, now.month),
-                'endpoint': url_without_parameters,
                 'office_id': self.request.user.pk
             }
 

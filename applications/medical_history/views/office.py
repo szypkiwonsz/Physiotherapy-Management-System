@@ -20,9 +20,7 @@ class MedicalHistoryListView(View):
     template_name = 'medical_history/office/medical_history.html'
 
     def get(self, request):
-        """
-        Function override due to adding pagination and search.
-        """
+        """Function override due to adding pagination and search."""
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_q = request.GET.get('q')
         if url_parameter_q:
@@ -62,11 +60,13 @@ class MakeMedicalHistory(CreateView):
 
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super(MakeMedicalHistory, self).get_form_kwargs()
+        # passing user pk to form.
         kwargs['user'] = self.request.user
         return kwargs
 
     def get_context_data(self, **kwargs):
         context = super(MakeMedicalHistory, self).get_context_data(**kwargs)
+        # previous url for back button.
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
         return context
 
@@ -96,11 +96,13 @@ class MedicalHistoryUpdateView(UpdateView):
 
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super(MedicalHistoryUpdateView, self).get_form_kwargs()
+        # passing user pk to form.
         kwargs['user'] = self.request.user
         return kwargs
 
     def get_context_data(self, **kwargs):
         context = super(MedicalHistoryUpdateView, self).get_context_data(**kwargs)
+        # previous url for back button.
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
         return context
 
@@ -118,6 +120,7 @@ class MedicalHistoryDeleteView(DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super(MedicalHistoryDeleteView, self).get_context_data(**kwargs)
+        # previous url for back button.
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
         return context
 

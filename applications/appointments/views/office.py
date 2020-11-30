@@ -2,7 +2,6 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -27,9 +26,7 @@ class AppointmentListView(View):
     template_name = 'appointments/office/appointments.html'
 
     def get(self, request):
-        """
-        Function override due to adding pagination and search.
-        """
+        """Function override due to adding pagination and search."""
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_q = request.GET.get('q')
         if url_parameter_q:
@@ -65,9 +62,7 @@ class AppointmentUpdateView(UpdateView):
     template_name = 'appointments/office/appointment_update_form.html'
 
     def get_initial(self):
-        """
-        Replacing the initialized date due to an error with the date saving.
-        """
+        """Replacing the initialized date due to an error with the date saving."""
         initial = super().get_initial()
         date = str(Appointment.objects.filter(id=self.object.pk).values_list('date').get()[0])
         date_object = database_old_datetime_format_to_new(date)
@@ -80,6 +75,12 @@ class AppointmentUpdateView(UpdateView):
         context['opening_hours'] = get_office_opening_hours(self.request.user.office)
         return context
 
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(AppointmentUpdateView, self).get_form_kwargs()
+        # passing office pk to form.
+        kwargs['office'] = self.object.office.pk
+        return kwargs
+
     def appointment_date_taken(self, date):
         messages.warning(
             self.request,
@@ -89,24 +90,7 @@ class AppointmentUpdateView(UpdateView):
 
     def form_valid(self, form):
         appointment = Appointment.objects.get(pk=self.object.pk)
-        datetime_form_value = form.cleaned_data.get('date')
-        day = OfficeDay.objects.get(office=self.request.user.office, day=datetime_form_value.weekday())
-        if datetime_form_value.hour == 23 and datetime_form_value.minute == 59:
-            messages.warning(self.request, 'Wybierz poprawną godzinę.')
-            return redirect('office_panel:appointments:update', pk=self.object.pk)
-        elif int(day.earliest_appointment_time.split(':')[0]) > int(datetime_form_value.hour) \
-                or int(day.latest_appointment_time.split(':')[0]) <= int(datetime_form_value.hour) \
-                and int(day.latest_appointment_time.split(':')[1]) <= int(datetime_form_value.minute):
-            messages.warning(self.request, 'Wybierz poprawną godzinę.')
-            return redirect('office_panel:appointments:update', pk=self.object.pk)
-        else:
-            try:
-                appointment_check = Appointment.objects.get(date=form.cleaned_data['date'])
-            except ObjectDoesNotExist:
-                appointment_check = None
-            if appointment_check and appointment_check.pk != self.object.pk:
-                self.appointment_date_taken(datetime_form_value)
-                return redirect('office_panel:appointments:update', self.object.pk)
+
         appointment.confirmed = form.cleaned_data['confirmed']
         appointment.date = form.cleaned_data['date']
         appointment.save()
@@ -157,7 +141,10 @@ class MakeAppointment(CreateView):
         return redirect('office_panel:appointments:list')
 
     def get_form_kwargs(self, *args, **kwargs):
+        """Overriding the method to send the date from the url to the form."""
         kwargs = super(MakeAppointment, self).get_form_kwargs()
+        # passing office pk to form.
+        kwargs['office'] = self.kwargs.get('pk')
         date = self.request.GET['date']
         date_database_format = datetime.datetime.strptime(date, '%d.%m.%Y %H:%M')
         if Appointment.objects.filter(date=date_database_format, office=self.request.user.office):

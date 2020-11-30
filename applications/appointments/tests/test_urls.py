@@ -1,9 +1,11 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
+
 from applications.appointments.views import patient, office
 
 
 class TestPatientAppointmentsUrls(SimpleTestCase):
+
     def test_select_office_url_resolves(self):
         url = reverse('patient_panel:appointments:select')
         self.assertEquals(resolve(url).func.view_class, patient.SelectOffice)
@@ -30,6 +32,7 @@ class TestPatientAppointmentsUrls(SimpleTestCase):
 
 
 class TestOfficeAppointmentUrls(SimpleTestCase):
+
     def test_appointment_list_url_resolves(self):
         url = reverse('office_panel:appointments:list')
         self.assertEquals(resolve(url).func.view_class, office.AppointmentListView)

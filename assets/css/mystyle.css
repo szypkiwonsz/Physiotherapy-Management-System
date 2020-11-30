@@ -1,12 +1,13 @@
+a:hover, a:visited, a:link, a:active {
+    text-decoration: none;
+}
+
 .jumbotron {
     text-align: center;
     background-size: cover;
     background-image: url(../img/offices.jpg);
     border-radius: 0 0 0 0;
     overflow: hidden;
-    /*-webkit-box-shadow: 0px 10px 44px 0px rgba(0, 0, 0, 0.75);*/
-    /*-moz-box-shadow: 10px 10px 100px 0px rgba(0, 0, 0, 0.75);*/
-    /*box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.75);*/
 }
 
 .margin-hr-home-timetable {
@@ -113,12 +114,6 @@
 
     .about-text {
         font-size: 16px;
-    }
-
-    footer {
-        padding: 15px;
-        margin-bottom: -60px;
-        margin-top: 5px;
     }
 
     #hr-about {
@@ -231,12 +226,6 @@
 
     .about-text {
         font-size: 13px;
-    }
-
-    footer {
-        padding: 7px;
-        margin-bottom: -60px;
-        margin-top: 0;
     }
 
     #hr-about {
@@ -376,24 +365,15 @@
     margin-left: -15px;
 }
 
-.textxd {
-    padding: 200px;
-}
-
 #messages-office {
     margin-top: -37px;
     padding-left: 10%;
     padding-right: 10%;
 }
 
-#uslugi {
+#services {
     padding-left: 10%;
     padding-right: 10%;
-}
-
-#footer {
-    border-bottom-style: solid;
-    border-width: 1px;
 }
 
 .container-office {
@@ -408,11 +388,6 @@
 
 .row {
     display: flex;
-}
-
-.column {
-    flex: 50%;
-    padding: 5px;
 }
 
 #center-office {
@@ -430,10 +405,6 @@
     transform: translate(-50%, -50%);
 }
 
-a:hover, a:visited, a:link, a:active {
-    text-decoration: none;
-}
-
 .btn {
     word-wrap: break-word;
     white-space: normal;
@@ -442,28 +413,6 @@ a:hover, a:visited, a:link, a:active {
 .text-description {
     word-wrap: break-word;
     white-space: normal;
-}
-
-.bcg-white {
-    background-color: #fdfdfd;
-}
-
-@keyframes blinker {
-    from {
-        opacity: 1.0;
-    }
-    to {
-        opacity: 0.0;
-    }
-}
-
-.blink {
-    text-decoration: blink;
-    animation-name: blinker;
-    animation-duration: 0.6s;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
-    animation-direction: alternate;
 }
 
 .has-search .form-control {

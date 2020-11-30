@@ -5,6 +5,7 @@ from applications.office_panel.models import Patient
 
 
 class PatientForm(forms.ModelForm):
+    """Form class for office patient."""
     address = forms.CharField(required=False)
     pesel = forms.CharField(required=False, min_length=11, error_messages={
         'min_length': _('Pesel powinien zawierać 11 cyfr.'),
@@ -17,6 +18,8 @@ class PatientForm(forms.ModelForm):
     email = forms.EmailField(required=False)
 
     def __init__(self, *args, **kwargs):
+        # user pk from view
+        self.user = kwargs.pop('user', None)
         super(PatientForm, self).__init__(*args, **kwargs)
 
         label = ['Imię', 'Nazwisko', 'Adres email', 'Adres zamieszkania', 'Pesel', 'Numer telefonu']
@@ -27,3 +30,19 @@ class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ['first_name', 'last_name', 'phone_number', 'email', 'address', 'pesel']
+
+    error_messages = {
+        'email_unique_mismatch': _('Podany email jest już zajęty.'),
+    }
+
+    def clean(self):
+        """Overriding the method to check if email is unique."""
+        cleaned_data = super(PatientForm, self).clean()
+        email = cleaned_data.get("email")
+        emails = Patient.objects.values_list('email', flat=True).filter(owner=self.user)
+        if email in emails and email:
+            raise forms.ValidationError(
+                self.error_messages['email_unique_mismatch'],
+                code='email_unique_mismatch'
+            )
+        return cleaned_data

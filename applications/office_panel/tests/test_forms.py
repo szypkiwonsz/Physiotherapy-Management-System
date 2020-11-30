@@ -4,6 +4,7 @@ from applications.office_panel.forms import PatientForm
 
 
 class TestPatientForm(TestCase):
+
     def test_make_patient_form_valid(self):
         form = PatientForm(data={
             'first_name': 'firstname',

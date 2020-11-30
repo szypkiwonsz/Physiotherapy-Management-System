@@ -9,6 +9,7 @@ from applications.users.tokens import account_activation_token
 
 
 def activate(request, uidb64, token):
+    """Function that activates the user account."""
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)

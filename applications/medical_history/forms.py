@@ -8,6 +8,7 @@ from applications.office_panel.models import Patient
 class MedicalHistoryForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
+        # user pk from view.
         self.user = kwargs.pop('user', None)
         super(MedicalHistoryForm, self).__init__(*args, **kwargs)
 

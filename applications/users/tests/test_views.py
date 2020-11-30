@@ -4,10 +4,6 @@ from django.urls import reverse
 from applications.users.models import User, Office, UserPatient
 
 
-# class TestActivateViews(TestCase):
-#     pass
-
-
 class TestProfileViews(TestCase):
 
     def setUp(self):

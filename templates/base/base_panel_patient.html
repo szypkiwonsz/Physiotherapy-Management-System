@@ -62,7 +62,7 @@
 </nav>
 <div class="container" id="messages">
     {% if messages %}
-        <div class="container" id="uslugi">
+        <div class="container" id="services">
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} text-center">
                     {{ message }}
@@ -84,6 +84,5 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
-<script src="{% static "js/navbar.js" %}"></script>
 </body>
 </html>

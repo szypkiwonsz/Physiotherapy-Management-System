@@ -17,16 +17,13 @@ from utils.paginate import paginate
 class PatientListView(ListView):
     model = Patient
     template_name = 'office_panel/patient/patients.html'
-    paginate_by = 2
 
     def get_queryset(self):
         queryset = self.request.user.patients.select_related('owner')
         return queryset
 
     def get(self, request, **kwargs):
-        """
-        Function override due to adding pagination and search.
-        """
+        """Function override due to adding pagination and search."""
         url_without_parameters = str(request.get_full_path()).split('?')[0]
         url_parameter_q = request.GET.get('q')
         if url_parameter_q:
@@ -34,7 +31,6 @@ class PatientListView(ListView):
                 'patients': self.get_queryset().order_by('-date_selected').filter(last_name__icontains=url_parameter_q),
             }
         else:
-
             ctx = {
                 'patients': self.get_queryset().order_by('-date_selected'),
             }
@@ -52,7 +48,6 @@ class PatientListView(ListView):
             )
             data_dict = {"html_from_view": html}
             return JsonResponse(data=data_dict, safe=False)
-
         return render(request, self.template_name, ctx)
 
 
@@ -63,8 +58,15 @@ class PatientCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(PatientCreateView, self).get_context_data(**kwargs)
+        # previous url for back button
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
         return context
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(PatientCreateView, self).get_form_kwargs()
+        # passing user pk to form.
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         patient = form.save(commit=False)
@@ -83,9 +85,6 @@ class PatientDetailView(DetailView):
         patients = Patient.objects.all()
         return patients
 
-    def get_success_url(self):
-        return reverse('office_panel:patient_update', kwargs={'pk': self.object.pk})
-
 
 @method_decorator([login_required, office_required], name='dispatch')
 class PatientUpdateView(UpdateView):
@@ -94,8 +93,15 @@ class PatientUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(PatientUpdateView, self).get_context_data(**kwargs)
+        # previous url for back button
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
         return context
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(PatientUpdateView, self).get_form_kwargs()
+        # passing user pk to form.
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get_queryset(self):
         return self.request.user.patients.all()
@@ -111,6 +117,7 @@ class PatientDeleteView(DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super(PatientDeleteView, self).get_context_data(**kwargs)
+        # previous url for back button
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
         return context
 

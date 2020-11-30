@@ -17,7 +17,7 @@ class PatientHome(View):
 
     def get(self, request):
         context = {
-            'offices': Office.objects.filter(user__patients__email=self.request.user)[:5],
+            'offices': Office.objects.filter(user__patients__email=self.request.user).distinct()[:5],
             'appointments': Appointment.objects.filter(patient_email=self.request.user.email).order_by('date').filter(
                 date__gte=datetime.today())[:5],
             'medical_histories': MedicalHistory.objects.filter(patient__email=self.request.user).order_by(

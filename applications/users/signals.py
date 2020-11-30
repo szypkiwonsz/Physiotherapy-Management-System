@@ -7,6 +7,7 @@ from applications.users.models import User
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
+    """Creates a profile when a new user has registered."""
     if created:
         Profile.objects.create(user=instance)
 
@@ -18,6 +19,7 @@ def save_profile(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Office)
 def create_office_day(sender, instance, created, **kwargs):
+    """Creates days for the office when a user registers as a new office."""
     if created:
         OfficeDay.objects.create(office=instance, day=0)
         OfficeDay.objects.create(office=instance, day=1)

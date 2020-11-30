@@ -1,8 +1,15 @@
 from applications.users.models import OfficeDay
 
 
-def get_office_opening_hours(office_id):
-    days = [OfficeDay.objects.get(office=office_id, day=i) for i in range(7)]
+def get_office_opening_hours(office):
+    """
+    Returns a dictionary with the days of the week as keys and values ​​as the earliest and latest time to make an
+    appointment to a given office.
+
+    :param office: <int> -> id of the office
+    :return: <dict> -> days of the week with an appointment hour compartment
+    """
+    days = [OfficeDay.objects.get(office=office, day=i) for i in range(7)]
     opening_hours = {
         'monday': (days[0].earliest_appointment_time, days[0].latest_appointment_time),
         'tuesday': (days[1].earliest_appointment_time, days[1].latest_appointment_time),

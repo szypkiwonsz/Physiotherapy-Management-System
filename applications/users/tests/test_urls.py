@@ -4,11 +4,8 @@ from django.urls import reverse, resolve
 from applications.users.views import signup, profile
 
 
-# class TestActivateUrls(SimpleTestCase):
-#     pass
-
-
 class TestProfileUrls(SimpleTestCase):
+
     def test_office_url_resolves(self):
         url = reverse('users:office_profile')
         self.assertEquals(resolve(url).func.view_class, profile.OfficeProfile)
@@ -19,6 +16,7 @@ class TestProfileUrls(SimpleTestCase):
 
 
 class TestSignupUrls(SimpleTestCase):
+
     def test_register_url_resolves(self):
         url = reverse('users:signup')
         self.assertEquals(resolve(url).func.view_class, signup.Register)

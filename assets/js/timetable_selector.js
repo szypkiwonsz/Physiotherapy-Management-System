@@ -1,3 +1,4 @@
+// Script to correctly display the timetable for the selected month and year.
 const date_select_up = $("#date-select-up")
 const date_select_down = $("#date-select-down")
 const timetable_div = $('#replaceable-content')
@@ -11,7 +12,7 @@ let mm = today.getMonth() + 1;
 let ajax_call = function (endpoint, request_parameters) {
     $.getJSON(endpoint, request_parameters)
         .done(response => {
-            // fade out the artists_div, then:
+            // fade out the timetable_div, then:
             timetable_div.fadeTo('slow', 0).promise().then(() => {
                 // replace the HTML contents
                 timetable_div.html(response['html_from_view'])
@@ -23,8 +24,6 @@ let ajax_call = function (endpoint, request_parameters) {
 
 
 date_select_up.click(function () {
-    console.log(mm)
-    console.log(yyyy)
     if (mm < 12){
         mm += 1
     }
@@ -34,9 +33,8 @@ date_select_up.click(function () {
     }
 
     const request_parameters = {
-        m: mm, // value of user_input: the HTML element with ID user-input
-        y: yyyy,
-        // page: page_number
+        m: mm, // currently viewed month
+        y: yyyy, // currently viewed year
     }
 
     // if scheduled_function is NOT false, cancel the execution of the function
@@ -49,8 +47,6 @@ date_select_up.click(function () {
 })
 
 date_select_down.click(function () {
-    console.log(mm)
-    console.log(yyyy)
     if (mm > 1){
         mm -= 1
     }

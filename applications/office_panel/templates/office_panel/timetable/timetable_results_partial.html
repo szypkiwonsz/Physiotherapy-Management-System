@@ -10,8 +10,8 @@
             {% elif date|is_past_due %}
                 <button class="btn btn-secondary btn mt-1 btn-timetable">{{ date_split|index:1 }}</button>
             {% else %}
-                <a type="submit" href="{% url 'office_panel:appointments:make' pk=office_id %}?date={{ date }}"
-                   class="btn btn-success btn mt-1 btn-timetable">{{ date_split|index:1 }}</a>
+                <a href="{% url 'office_panel:appointments:make' pk=office_id %}?date={{ date }}"
+                   class="btn btn-success btn mt-1 btn-timetable" role="button">{{ date_split|index:1 }}</a>
             {% endif %}
         {% endwith %}
         </span>

@@ -1,12 +1,26 @@
-from django.test import SimpleTestCase, TestCase
+from django.test import TestCase
 
 from applications.appointments.forms import AppointmentPatientMakeForm, AppointmentOfficeUpdateForm, \
     AppointmentOfficeMakeForm
 from applications.office_panel.models import Patient
-from applications.users.models import User
+from applications.users.models import User, Office
 
 
-class TestPatientMakeAppointmentForm(SimpleTestCase):
+class TestPatientMakeAppointmentForm(TestCase):
+
+    def setUp(self):
+        self.office1 = User.objects.create_user(
+            'office', 'office@gmail.com', 'officepassword', is_office=True
+        )
+        self.appointment_office1 = Office.objects.create(
+            user=self.office1,
+            name='name',
+            address='address',
+            city='City',
+            phone_number='000000000',
+            website='www.website.com'
+        )
+
     def test_patient_make_form_valid(self):
         form = AppointmentPatientMakeForm(data={
             'date': '27.08.2020 17:00',
@@ -14,11 +28,11 @@ class TestPatientMakeAppointmentForm(SimpleTestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': 'Konsultacja'
-        })
+        }, office=self.appointment_office1)
         self.assertTrue(form.is_valid())
 
     def test_patient_make_form_no_data(self):
-        form = AppointmentPatientMakeForm(data={})
+        form = AppointmentPatientMakeForm(data={}, office=self.appointment_office1)
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 5)
 
@@ -29,7 +43,7 @@ class TestPatientMakeAppointmentForm(SimpleTestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': 'Konsultacja'
-        })
+        }, office=self.appointment_office1)
         self.assertFalse(form.is_valid())
 
     def test_patient_make_form_wrong_phone_number(self):
@@ -39,15 +53,24 @@ class TestPatientMakeAppointmentForm(SimpleTestCase):
             'last_name': 'Sawicki',
             'phone_number': '00000',
             'choice': 'Konsultacja'
-        })
+        }, office=self.appointment_office1)
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 1)
 
 
 class TestOfficeAppointmentMakeForm(TestCase):
+
     def setUp(self):
         self.office1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
+        )
+        self.appointment_office1 = Office.objects.create(
+            user=self.office1,
+            name='name',
+            address='address',
+            city='City',
+            phone_number='000000000',
+            website='www.website.com'
         )
         self.office_patient1 = Patient.objects.create(
             owner=self.office1,
@@ -62,23 +85,38 @@ class TestOfficeAppointmentMakeForm(TestCase):
             'date': '27.08.2020 17:00',
             'choice': 'Konsultacja',
             'patient': patient
-        }, user=self.office1)
+        }, user=self.office1, office=self.appointment_office1)
         self.assertTrue(form.is_valid())
 
     def test_patient_make_form_no_data(self):
-        form = AppointmentOfficeMakeForm(data={})
+        form = AppointmentOfficeMakeForm(data={}, office=self.appointment_office1)
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 3)
 
 
-class TestOfficeUpdateAppointmentForm(SimpleTestCase):
+class TestOfficeUpdateAppointmentForm(TestCase):
+
+    def setUp(self):
+        self.office1 = User.objects.create_user(
+            'office', 'office@gmail.com', 'officepassword', is_office=True
+        )
+        self.appointment_office1 = Office.objects.create(
+            user=self.office1,
+            name='name',
+            address='address',
+            city='City',
+            phone_number='000000000',
+            website='www.website.com'
+        )
+
     def test_office_update_form_valid(self):
         form = AppointmentOfficeUpdateForm(data={
             'date': '27.08.2020 17:00',
-        })
+            'choice': 'Konsultacja'
+        }, office=self.appointment_office1)
         self.assertTrue(form.is_valid())
 
     def test_office_update_form_no_data(self):
-        form = AppointmentOfficeUpdateForm(data={})
+        form = AppointmentOfficeUpdateForm(data={}, office=self.appointment_office1)
         self.assertFalse(form.is_valid())
-        self.assertEquals(len(form.errors), 1)
+        self.assertEquals(len(form.errors), 2)
