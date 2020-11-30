@@ -28,6 +28,7 @@ class AppointmentPatientMakeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.office = kwargs.pop('office', None)
+        self.appointment = kwargs.pop('appointment', None)
         super(AppointmentPatientMakeForm, self).__init__(*args, **kwargs)
 
     class Meta:
@@ -43,6 +44,10 @@ class AppointmentPatientMakeForm(forms.ModelForm):
     def clean(self):
         """Validate appointment date provided to form."""
         cleaned_data = super(AppointmentPatientMakeForm, self).clean()
+        try:
+            appointment = Appointment.objects.get(date=cleaned_data.get('date'), office=self.office)
+        except Appointment.DoesNotExist:
+            appointment = None
         try:
             weekday = cleaned_data.get('date').weekday()
         except AttributeError:
@@ -65,7 +70,7 @@ class AppointmentPatientMakeForm(forms.ModelForm):
                 code='appointment_incorrect_date'
             )
         # if the date of the visit is already taken
-        elif Appointment.objects.filter(date=cleaned_data.get('date'), office=self.office):
+        elif appointment and appointment.pk != self.appointment:
             raise forms.ValidationError(
                 self.error_messages['appointment_date_taken'],
                 code='appointment_date_taken'
@@ -94,8 +99,9 @@ class AppointmentOfficeUpdateForm(AppointmentOfficeMakeForm):
     confirmed = forms.BooleanField(required=False, label='Potwierdzona')
 
     def __init__(self, *args, **kwargs):
-        # self.office = kwargs.pop('office', None)
         super(AppointmentOfficeUpdateForm, self).__init__(*args, **kwargs)
+        self.office = kwargs.pop('office', None)
+        self.appointment = kwargs.pop('appointment', None)
         self.fields['date'].widget = forms.TextInput()
         del self.fields['patient']
 
@@ -111,7 +117,12 @@ class AppointmentOfficeUpdateForm(AppointmentOfficeMakeForm):
 
     def clean(self):
         """Validate appointment date provided to form."""
+        print(self.office)
         cleaned_data = super(AppointmentOfficeUpdateForm, self).clean()
+        try:
+            appointment = Appointment.objects.get(date=cleaned_data.get('date'), office=self.office)
+        except Appointment.DoesNotExist:
+            appointment = None
         try:
             weekday = cleaned_data.get('date').weekday()
         except AttributeError:
@@ -120,6 +131,8 @@ class AppointmentOfficeUpdateForm(AppointmentOfficeMakeForm):
             day = OfficeDay.objects.get(office=self.office, day=weekday)
         except OfficeDay.DoesNotExist:
             day = None
+        print(self.appointment)
+        print(appointment)
         # if the user selected default hour time
         if cleaned_data.get('date') and cleaned_data.get('date').hour == 23 and cleaned_data.get('date').minute == 59:
             raise forms.ValidationError(
@@ -134,7 +147,7 @@ class AppointmentOfficeUpdateForm(AppointmentOfficeMakeForm):
                 code='appointment_incorrect_date'
             )
         # if the date of the visit is already taken
-        elif Appointment.objects.filter(date=cleaned_data.get('date'), office=self.office):
+        elif appointment and appointment.pk != self.appointment:
             raise forms.ValidationError(
                 self.error_messages['appointment_date_taken'],
                 code='appointment_date_taken'

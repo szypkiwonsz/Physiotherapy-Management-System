@@ -77,8 +77,10 @@ class AppointmentUpdateView(UpdateView):
 
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super(AppointmentUpdateView, self).get_form_kwargs()
-        # passing office pk to form.
+        # passing office pk to form
         kwargs['office'] = self.object.office.pk
+        # passing appointment object pk to form
+        kwargs['appointment'] = self.object.pk
         return kwargs
 
     def appointment_date_taken(self, date):
@@ -143,7 +145,7 @@ class MakeAppointment(CreateView):
     def get_form_kwargs(self, *args, **kwargs):
         """Overriding the method to send the date from the url to the form."""
         kwargs = super(MakeAppointment, self).get_form_kwargs()
-        # passing office pk to form.
+        # passing office pk to form
         kwargs['office'] = self.kwargs.get('pk')
         date = self.request.GET['date']
         date_database_format = datetime.datetime.strptime(date, '%d.%m.%Y %H:%M')

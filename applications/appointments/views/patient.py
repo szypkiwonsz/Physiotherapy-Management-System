@@ -34,7 +34,7 @@ class MakeAppointment(CreateView):
 
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super(MakeAppointment, self).get_form_kwargs()
-        # passing office pk to form.
+        # passing office pk to form
         kwargs['office'] = self.kwargs.get('pk')
         return kwargs
 
@@ -156,8 +156,10 @@ class AppointmentUpdateView(UpdateView):
 
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super(AppointmentUpdateView, self).get_form_kwargs()
-        # passing office pk to form.
+        # passing office pk to form
         kwargs['office'] = self.object.office.pk
+        # passing appointment object pk to form
+        kwargs['appointment'] = self.object.pk
         return kwargs
 
     def get_initial(self):
