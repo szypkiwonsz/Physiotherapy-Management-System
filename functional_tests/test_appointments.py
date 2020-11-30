@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import sleep
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -14,6 +14,7 @@ from utils.add_zero import add_zero
 class TestOfficeAppointments(StaticLiveServerTestCase):
 
     def setUp(self):
+        self.tomorrow = datetime.today() + timedelta(1)
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
@@ -31,7 +32,7 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.office1,
-            date=datetime(datetime.today().year, datetime.today().month, datetime.today().day + 1),
+            date=self.tomorrow,
             first_name='Kacper',
             last_name='Sawicki',
             patient_email='patient@gmail.com',
@@ -102,6 +103,7 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
 class TestPatientAppointments(StaticLiveServerTestCase):
 
     def setUp(self):
+        self.tomorrow = datetime.today() + timedelta(1)
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
@@ -119,7 +121,7 @@ class TestPatientAppointments(StaticLiveServerTestCase):
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.office1,
-            date=datetime(datetime.today().year, datetime.today().month, datetime.today().day + 1),
+            date=self.tomorrow,
             first_name='Kacper',
             last_name='Sawicki',
             patient_email='patient@gmail.com',
@@ -143,8 +145,9 @@ class TestPatientAppointments(StaticLiveServerTestCase):
         appointments_text = self.browser.find_element_by_class_name('text-description').text
         self.assertEquals(
             appointments_text,
-            f'name, {add_zero(datetime.today().day + 1)}.{add_zero(datetime.today().month)}.'
-            f'{datetime.today().year}, o godz: 00:00 - Konsultacja [Niepotwierdzona]'
+            f'name, {add_zero(self.tomorrow.day)}.{add_zero(self.tomorrow.month)}.'
+            f'{self.tomorrow.year}, o godz: {add_zero(self.tomorrow.hour)}:{add_zero(self.tomorrow.minute)} '
+            f'- Konsultacja [Niepotwierdzona]'
         )
 
     def test_edit_appointment_button_redirects_to_edit_appointment(self):

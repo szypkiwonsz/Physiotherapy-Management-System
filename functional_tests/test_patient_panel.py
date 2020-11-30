@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import sleep
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -183,6 +183,7 @@ class TestHomeNoData(StaticLiveServerTestCase):
 class TestHome(StaticLiveServerTestCase):
 
     def setUp(self):
+        self.tomorrow = datetime.today() + timedelta(1)
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
@@ -207,7 +208,7 @@ class TestHome(StaticLiveServerTestCase):
             owner=self.patient1,
             office=self.office1,
             patient_email='patient@gmail.com',
-            date=datetime(datetime.today().year, datetime.today().month, datetime.today().day + 1),
+            date=self.tomorrow,
             first_name='Kacper',
             last_name='Sawicki',
             date_selected=datetime(2020, 8, 21, 17, 00, 00),
@@ -260,8 +261,9 @@ class TestHome(StaticLiveServerTestCase):
         appointment_text = self.browser.find_element_by_class_name('text-description').text
         self.assertEquals(
             appointment_text,
-            f'name, {add_zero(datetime.today().day + 1)}.{add_zero(datetime.today().month)}.'
-            f'{datetime.today().year}, o godz: 00:00 - Konsultacja [Niepotwierdzona]'
+            f'name, {add_zero(self.tomorrow.day)}.{add_zero(self.tomorrow.month)}.'
+            f'{self.tomorrow.year}, o godz: {add_zero(self.tomorrow.hour)}:{add_zero(self.tomorrow.minute)} '
+            f'- Konsultacja [Niepotwierdzona]'
         )
 
     def test_show_all_upcoming_button_redirects_to_upcoming_appointments(self):
