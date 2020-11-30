@@ -33,15 +33,13 @@ class OfficePanelView(View):
 
     def get(self, request):
         now = datetime.datetime.now()
-        yesterday = datetime.datetime(now.year, now.month, now.day - 1)
-        tomorrow = datetime.datetime(now.year, now.month, now.day + 1)
 
         days = get_number_of_days_in_month(now.year, now.month)
         dates = get_dates_in_month(request=request, days_in_month=days, month=now.month, year=now.year)
-        appointments = Appointment.objects.filter(date__gte=yesterday, office__user=request.user)
+        appointments = Appointment.objects.filter(date__gte=now, office__user=request.user)
         all_dates = dates
         dates_taken = [str(x.date.strftime('%d.%m.%Y %H:%M')) for x in appointments]
-        result_dates = self.get_next_available_dates(all_dates, dates_taken, tomorrow)
+        result_dates = self.get_next_available_dates(all_dates, dates_taken, now)
 
         ctx = {
             'patients': Patient.objects.filter(owner=self.request.user.id).order_by('-date_selected')[:5],
