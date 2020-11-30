@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -40,6 +41,9 @@ class OfficeProfile(View):
             for day_form in days_forms:
                 if day_form.is_valid():
                     day_form.save()
+                else:
+                    # show error as message due to complicated code which does not display for error message
+                    messages.warning(request, 'Najpóźniejsza godzina musi być większa od najwcześniejszej.')
             return redirect('users:office_profile')
 
         context = {

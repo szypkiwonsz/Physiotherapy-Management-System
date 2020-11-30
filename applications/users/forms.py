@@ -163,6 +163,20 @@ class OfficeDayUpdateForm(forms.ModelForm):
         model = OfficeDay
         fields = ['day', 'earliest_appointment_time', 'latest_appointment_time']
 
+    error_messages = {
+        'office_days_hours_mismatch': _('Najpóźniejsza godzina musi być większa od najwcześniejszej.')
+    }
+
+    def clean(self):
+        """Overriding the method to validate office days hours."""
+        cleaned_data = super(OfficeDayUpdateForm, self).clean()
+        if cleaned_data['earliest_appointment_time'] > cleaned_data['latest_appointment_time']:
+            raise forms.ValidationError(
+                self.error_messages['office_days_hours_mismatch'],
+                code='office_days_hours_mismatch'
+            )
+        return cleaned_data
+
 
 class OfficeUpdateForm(forms.ModelForm):
     """Class form for updating the office-user data."""
