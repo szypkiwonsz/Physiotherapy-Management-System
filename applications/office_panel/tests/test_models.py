@@ -37,13 +37,3 @@ class TestOfficePanelModels(TestCase):
         # ID=2 taken because first Patient was created in setUp method
         patient = Patient.objects.get(id=2)
         self.assertEqual(patient.email, 'new_patient_email@gmail.com')
-
-    def test_save_method_incorrect_data(self):
-        # using the same email address that was used when patient was created in setUp method
-        with self.assertRaises(ValidationError):
-            Patient.objects.create(
-                owner=self.office1,
-                first_name='firstname',
-                last_name='lastname',
-                email='patient@gmail.com',
-            )
