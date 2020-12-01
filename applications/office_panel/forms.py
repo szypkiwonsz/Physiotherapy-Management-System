@@ -20,6 +20,7 @@ class PatientForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         # user pk from view
         self.user = kwargs.pop('user', None)
+        self.patient = kwargs.pop('patient', None)
         super(PatientForm, self).__init__(*args, **kwargs)
 
         label = ['Imię', 'Nazwisko', 'Adres email', 'Adres zamieszkania', 'Pesel', 'Numer telefonu']
@@ -39,8 +40,11 @@ class PatientForm(forms.ModelForm):
         """Overriding the method to check if email is unique."""
         cleaned_data = super(PatientForm, self).clean()
         email = cleaned_data.get("email")
-        emails = Patient.objects.values_list('email', flat=True).filter(owner=self.user)
-        if email in emails and email:
+        try:
+            patient = Patient.objects.get(email=email)
+        except Patient.DoesNotExist:
+            patient = None
+        if patient and email and self.patient != patient.pk:
             raise forms.ValidationError(
                 self.error_messages['email_unique_mismatch'],
                 code='email_unique_mismatch'

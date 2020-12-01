@@ -64,7 +64,7 @@ class PatientCreateView(CreateView):
 
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super(PatientCreateView, self).get_form_kwargs()
-        # passing user pk to form.
+        # passing user pk to form
         kwargs['user'] = self.request.user
         return kwargs
 
@@ -99,8 +99,10 @@ class PatientUpdateView(UpdateView):
 
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super(PatientUpdateView, self).get_form_kwargs()
-        # passing user pk to form.
+        # passing user pk to form
         kwargs['user'] = self.request.user
+        # passing object pk to form
+        kwargs['patient'] = self.object.pk
         return kwargs
 
     def get_queryset(self):
