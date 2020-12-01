@@ -34,19 +34,24 @@ class PatientForm(forms.ModelForm):
 
     error_messages = {
         'email_unique_mismatch': _('Podany email jest już zajęty.'),
+        'pesel_unique_mismatch': _('Ten numer pesel jest już przypisany do innego pacjenta.')
     }
 
     def clean(self):
-        """Overriding the method to check if email is unique."""
+        """Overriding the method to check if email or pesel is unique."""
         cleaned_data = super(PatientForm, self).clean()
-        email = cleaned_data.get("email")
-        try:
-            patient = Patient.objects.get(email=email)
-        except Patient.DoesNotExist:
-            patient = None
-        if patient and email and self.patient != patient.pk:
+        email = cleaned_data.get('email')
+        pesel = cleaned_data.get('pesel')
+        patient_by_email = Patient.objects.filter(email=email, owner=self.user).first()
+        patient_by_pesel = Patient.objects.filter(pesel=pesel, owner=self.user).first()
+        if patient_by_email and email and self.patient != patient_by_email.pk:
             raise forms.ValidationError(
                 self.error_messages['email_unique_mismatch'],
                 code='email_unique_mismatch'
+            )
+        elif patient_by_pesel and pesel and self.patient != patient_by_pesel.pk:
+            raise forms.ValidationError(
+                self.error_messages['pesel_unique_mismatch'],
+                code='pesel_unique_mismatch'
             )
         return cleaned_data
