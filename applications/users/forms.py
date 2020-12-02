@@ -170,7 +170,7 @@ class OfficeDayUpdateForm(forms.ModelForm):
     def clean(self):
         """Overriding the method to validate office days hours."""
         cleaned_data = super(OfficeDayUpdateForm, self).clean()
-        if cleaned_data['earliest_appointment_time'] > cleaned_data['latest_appointment_time']:
+        if cleaned_data.get('earliest_appointment_time', 0) > cleaned_data.get('latest_appointment_time', 0):
             raise forms.ValidationError(
                 self.error_messages['office_days_hours_mismatch'],
                 code='office_days_hours_mismatch'
