@@ -1,0 +1,100 @@
+{% extends 'base/base_panel_patient.html' %}
+{% block head %}
+    <title>Fizjo-System - Panel Pacjenta</title>
+{% endblock head %}
+{% block content %}
+    <div class="container border rounded bg-light">
+        <div class="form">
+            {% if offices %}
+                <h2>Gabinety do których zostałeś ostatnio przypisany:</h2>
+                <p>(wyświetlone są tylko te w których odbyłeś już wizytę)</p>
+                {% for office in offices %}
+                    <hr>
+                    {{ office.name }}
+                {% endfor %}
+                <hr>
+            {% else %}
+                <h2>Nie jesteś zarejestrowany w żadnym gabinecie.</h2>
+                <p>(gabinet musi dodać Cię do swojej bazy)</p>
+            {% endif %}
+            {% if offices %}
+                <a href="{% url 'patient_panel:offices' %}" class="btn btn-warning" role="button">Pokaż wszystkie
+                    gabinety</a>
+            {% else %}
+                <a href="{% url 'patient_panel:appointments:select' %}" class="btn btn-warning" role="button">Umów się
+                    na wizytę</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container border rounded mt-3 bg-light">
+        <div class="form">
+            {% if appointments %}
+                <h2>Twoje zbliżające się wizyty:</h2>
+            {% else %}
+                <h2>Nie masz umówionych żadnych wizyt.</h2>
+                <p>(kliknij przycisk poniżej i umów swoją pierwszą wizytę.)</p>
+            {% endif %}
+            {% for appointment in appointments %}
+                <hr>
+                <div class="text-description">{{ appointment.office.name }},
+                    {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
+                    {{ appointment.choice }}
+                    {% if appointment.confirmed %}
+                        [<span id="confirmed-color">Potwierdzona</span>]
+                    {% else %}
+                        [<span id="unconfirmed-color">Niepotwierdzona</span>]
+                    {% endif %}
+                </div>
+                <div class="right-button">
+                    <a href="{% url 'patient_panel:appointments:update' appointment.pk %}" class="btn btn-info"
+                       role="button">Edytuj</a>
+                    <a href="{% url 'patient_panel:appointments:delete' appointment.pk %}" class="btn btn-danger"
+                       role="button">Odwołaj</a>
+                </div>
+            {% endfor %}
+            <hr>
+            {% if appointments %}
+                <a href="{% url 'patient_panel:appointments:upcoming' %}" class="btn btn-warning"
+                   role="button">Pokaż wszystkie wizyty</a>
+            {% else %}
+                <a href="{% url 'patient_panel:appointments:select' %}" class="btn btn-warning"
+                   role="button">Umów się na wizytę</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container border rounded mt-3 bg-light">
+        <div class="form">
+            {% if medical_histories %}
+                <h2>Twoje historie medyczne:</h2>
+            {% else %}
+                <h2>Nie masz żadnych historii medycznych.</h2>
+                <p>(żaden gabinet nie dodał twojej historii medycznej.)</p>
+            {% endif %}
+            {% for medical_history in medical_histories %}
+                <hr>
+                {{ medical_history.owner.office.name }}<br>
+                Data dodania: {{ medical_history.date_selected|date:"d.m.Y" }}, o godz:
+                {{ medical_history.date_selected|date:"H:i" }}<br>
+                {% if medical_history.appointment %}
+                    {{ medical_history.appointment.date|date:"d.m.Y" }},
+                    {{ medical_history.appointment.date|date:"H:i" }},
+                    <div class="text-description">{{ medical_history.appointment.choice }}</div>
+                {% endif %}
+                <div class="border-left rounded p-1 mt-3">Opis:
+                    <div class="text-description">{{ medical_history.description }}</div>
+                </div>
+                <div class="border-left rounded p-1 mt-3">Zalecenia:
+                    <div class="text-description">{{ medical_history.recommendations }}</div>
+                </div>
+            {% endfor %}
+            <hr>
+            {% if medical_histories %}
+                <a href="{% url 'patient_panel:medical_history:list' %}" class="btn btn-warning"
+                   role="button">Pokaż wszystkie wizyty</a>
+            {% else %}
+                <a href="{% url 'patient_panel:appointments:select' %}" class="btn btn-warning"
+                   role="button">Umów się na wizytę</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}

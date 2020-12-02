@@ -3,7 +3,8 @@ Project made in Polish language
 
 [**See Project Live Here**](https://fizjo-system.herokuapp.com/)
 
-A web application built in Django that allows you to manage a physiotherapy office. It has many functionalities from the side of the office and patient panel, which are described below.
+A web application built in Django that allows you to manage a physiotherapy office. It has many functionalities from the 
+side of the office and patient panel, which are described below.
 
 ## Getting Started
 
@@ -37,6 +38,9 @@ pip install -r requirements.txt
 
 A step by step series of examples that tell you how to run a project
 
+(Note: The following command to run celery has been testes only on windows, it requires the gevent package from 
+requirements.txt)
+
 ```
 Download project
 ```
@@ -56,12 +60,24 @@ Type "python manage.py makemigrations", to make migrations
 Type "python manage.py migrate", to create database
 ```
 ```
+Set the environment variables as required in the settings.py file
+```
+```
+Run redis server
+```
+```
+Run new terminal with command "celery -A <Physiotherapy_Management_System> worker -l info -P gevent" to start celery
+```
+```
 Type "python manage.py runserver", to start the server
 ```
 ---
 ### Running tests
 
 How to run tests
+
+(Note: ChromeDriver version 80 and Google Chrome version 80 are recommended due to an error that may not run the functional 
+tests properly)
 ```
 Do the same as for running the project
 ```
@@ -88,6 +104,9 @@ Visibility of registered offices
 ```
 ```
 Possibility to register as a patient or office
+```
+```
+Sending email asynchronous using celery
 ```
 ---
 
@@ -116,6 +135,9 @@ The ability to add patients
 Confirmation of appointments arranged by patients
 ```
 ```
+Timetable with date selection to add an appointment
+```
+```
 List of visits made by patients in the office
 ```
 ```
@@ -132,6 +154,8 @@ Adding a medical history for any patient visit
 * JavaScript - Scripting language
 * [jQuery](https://jquery.com/) - JavaScript library
 * AJAX - Set of web development techniques
+* [Celery](https://docs.celeryproject.org/en/stable/) - Asynchronous tasks queue
+* [Redis](https://redis.io/documentation) - In-memory data structure store
 * Unit Tests - Software testing method
 * [Selenium](https://www.selenium.dev/) - Automated testing framework
 

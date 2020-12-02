@@ -1,0 +1,22 @@
+{% extends 'base/base_panel_office.html' %}
+{% load static %}
+{% block head %}
+    <title>Fizjo-System - Harmonogram</title>
+{% endblock %}
+{% block content %}
+    <div class="container border rounded bg-light">
+        <div class="row">
+            <div class="search col">
+                <button class="btn border rounded" id="date-select-down"><<</button>
+                <button class="btn border rounded" id="date-select-up">>></button>
+            </div>
+            <div class="search col"><a href="{% url 'users:office_profile' %}" class="btn btn-warning float-right"
+                                       role="button">Dostosuj godziny</a></div>
+        </div>
+        <div class="form timetable" id="replaceable-content">
+            {% include 'office_panel/timetable/timetable_results_partial.html' %}
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static "js/timetable_selector.js" %}"></script>
+{% endblock content %}
