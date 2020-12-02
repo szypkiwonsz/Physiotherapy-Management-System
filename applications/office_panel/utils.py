@@ -25,7 +25,6 @@ def get_dates_in_month(request, days_in_month, month, year):
     dates_in_month = []
     for day in days_in_month:
         dates = []
-        day = add_zero(day)
         date = datetime.datetime(int(year), int(month), int(day))
         office_day = OfficeDay.objects.get(office=request.user.office, day=date.weekday())
         hours_in_day = get_hours_in_day(
@@ -33,7 +32,7 @@ def get_dates_in_month(request, days_in_month, month, year):
             int(office_day.latest_appointment_time.split(':')[0])
         )
         for hour in hours_in_day:
-            date = f'{day}.{month}.{year} {hour}'
+            date = f'{add_zero(day)}.{add_zero(month)}.{year} {hour}'
             dates.append(date)
         dates_in_month.append(dates)
     return dates_in_month

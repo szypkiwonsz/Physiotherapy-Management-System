@@ -11,12 +11,19 @@ def get_office_opening_hours(office):
     """
     days = [OfficeDay.objects.get(office=office, day=i) for i in range(7)]
     opening_hours = {
-        'monday': (days[0].earliest_appointment_time, days[0].latest_appointment_time),
-        'tuesday': (days[1].earliest_appointment_time, days[1].latest_appointment_time),
-        'wednesday': (days[2].earliest_appointment_time, days[2].latest_appointment_time),
-        'thursday': (days[3].earliest_appointment_time, days[3].latest_appointment_time),
-        'friday': (days[4].earliest_appointment_time, days[4].latest_appointment_time),
-        'saturday': (days[5].earliest_appointment_time, days[5].latest_appointment_time),
-        'sunday': (days[6].earliest_appointment_time, days[6].latest_appointment_time),
+        'monday': (days[0].earliest_appointment_time,
+                   str(int(days[0].latest_appointment_time.split(':')[0]) + 1) + ':00'),
+        'tuesday': (days[1].earliest_appointment_time,
+                    str(int(days[1].latest_appointment_time.split(':')[0]) + 1) + ':00'),
+        'wednesday': (days[2].earliest_appointment_time,
+                      str(int(days[2].latest_appointment_time.split(':')[0]) + 1) + ':00'),
+        'thursday': (days[3].earliest_appointment_time,
+                     str(int(days[3].latest_appointment_time.split(':')[0]) + 1) + ':00'),
+        'friday': (days[4].earliest_appointment_time,
+                   str(int(days[4].latest_appointment_time.split(':')[0]) + 1) + ':00'),
+        'saturday': (days[5].earliest_appointment_time,
+                     str(int(days[5].latest_appointment_time.split(':')[0]) + 1) + ':00'),
+        'sunday': (days[6].earliest_appointment_time,
+                   str(int(days[6].latest_appointment_time.split(':')[0]) + 1) + ':00'),
     }
     return opening_hours
