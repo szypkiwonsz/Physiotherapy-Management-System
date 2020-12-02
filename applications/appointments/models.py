@@ -21,7 +21,7 @@ class Appointment(models.Model):
     choice = models.CharField(max_length=120)
 
     def __str__(self):
-        return str(self.owner)
+        return f'{self.date} - {self.first_name} {self.last_name}'
 
     def save(self, *args, **kwargs):
         self.first_name = self.first_name.capitalize()
