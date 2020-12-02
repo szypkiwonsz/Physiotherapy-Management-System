@@ -1,18 +1,20 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import sleep
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
 
-from appointments.models import Appointment
-from users.models import User, Office
-from utils.date_time import DateTime
+from applications.appointments.models import Appointment
+from applications.office_panel.models import Patient
+from applications.users.models import User, Office
+from utils.add_zero import add_zero
 
 
 class TestOfficeAppointments(StaticLiveServerTestCase):
 
     def setUp(self):
+        self.tomorrow = datetime.today() + timedelta(1)
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
@@ -30,12 +32,20 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.office1,
-            date=datetime(datetime.today().year, datetime.today().month, datetime.today().day + 1),
-            name='Kacper',
+            date=self.tomorrow,
+            first_name='Kacper',
+            last_name='Sawicki',
+            patient_email='patient@gmail.com',
             date_selected=datetime(2020, 8, 21, 17, 00, 00),
             phone_number='000000000',
             confirmed=False,
             choice='Konsultacja'
+        )
+        self.office_patient1 = Patient.objects.create(
+            owner=self.office_user1,
+            first_name='firstname',
+            last_name='lastname',
+            email='patient@gmail.com',
         )
         self.browser = webdriver.Chrome('functional_tests/chromedriver.exe')
 
@@ -48,7 +58,7 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
         sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[3]/div/a').click()
+        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[4]/div/a').click()
         appointments_text = self.browser.find_element_by_class_name('text-description').text
         self.assertEquals(
             appointments_text,
@@ -64,7 +74,7 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
         sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[3]/div/a').click()
+        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[4]/div/a').click()
         sleep(0.5)
         self.browser.find_element_by_xpath('//*[@id="replaceable-content"]/div[3]/a[1]').click()
         self.assertEquals(
@@ -81,7 +91,7 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
         sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[3]/div/a').click()
+        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[4]/div/a').click()
         sleep(0.5)
         self.browser.find_element_by_xpath('//*[@id="replaceable-content"]/div[3]/a[2]').click()
         self.assertEquals(
@@ -93,6 +103,7 @@ class TestOfficeAppointments(StaticLiveServerTestCase):
 class TestPatientAppointments(StaticLiveServerTestCase):
 
     def setUp(self):
+        self.tomorrow = datetime.today() + timedelta(1)
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
         )
@@ -110,8 +121,10 @@ class TestPatientAppointments(StaticLiveServerTestCase):
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.office1,
-            date=datetime(datetime.today().year, datetime.today().month, datetime.today().day + 1),
-            name='Kacper',
+            date=self.tomorrow,
+            first_name='Kacper',
+            last_name='Sawicki',
+            patient_email='patient@gmail.com',
             date_selected=datetime(2020, 8, 21, 17, 00, 00),
             phone_number='000000000',
             confirmed=False,
@@ -132,8 +145,9 @@ class TestPatientAppointments(StaticLiveServerTestCase):
         appointments_text = self.browser.find_element_by_class_name('text-description').text
         self.assertEquals(
             appointments_text,
-            f'name, {DateTime.add_zero(datetime.today().day + 1)}.{DateTime.add_zero(datetime.today().month)}.'
-            f'{datetime.today().year}, o godz: 00:00 - Konsultacja [Niepotwierdzona]'
+            f'name, {add_zero(self.tomorrow.day)}.{add_zero(self.tomorrow.month)}.'
+            f'{self.tomorrow.year}, o godz: {add_zero(self.tomorrow.hour)}:{add_zero(self.tomorrow.minute)} '
+            f'- Konsultacja [Niepotwierdzona]'
         )
 
     def test_edit_appointment_button_redirects_to_edit_appointment(self):

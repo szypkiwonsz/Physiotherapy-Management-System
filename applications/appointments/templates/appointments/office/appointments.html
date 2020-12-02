@@ -1,0 +1,21 @@
+{% extends 'base/base_panel_office.html' %}
+{% load static %}
+{% block head %}
+    <title>Fizjo-System - Wizyty</title>
+{% endblock %}
+{% block content %}
+    <div class="container border rounded bg-light">
+
+        <div class="search">
+            <div class="form-group has-search">
+                <span class="fa fa-search form-control-feedback"></span>
+                <input id="user-input" placeholder="Wyszukaj po nazwisku" class="form-control">
+            </div>
+        </div>
+        <div class="form" id="replaceable-content">
+            {% include 'appointments/office/appointments_results_partial.html' %}
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static "js/ajax_filtering.js" %}"></script>
+{% endblock content %}

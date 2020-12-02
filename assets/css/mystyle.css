@@ -1,12 +1,26 @@
+a:hover, a:visited, a:link, a:active {
+    text-decoration: none;
+}
+
 .jumbotron {
     text-align: center;
     background-size: cover;
     background-image: url(../img/offices.jpg);
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 0 0;
     overflow: hidden;
-    -webkit-box-shadow: 0px 10px 44px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 10px 10px 100px 0px rgba(0, 0, 0, 0.75);
-    box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.75);
+}
+
+.margin-hr-home-timetable {
+    margin-top: 5px;
+}
+
+.margin-hr-timetable {
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.day-number {
+    margin-top: -20px;
 }
 
 .main {
@@ -60,6 +74,35 @@
     margin: 10px;
 }
 
+@media screen and (min-width: 1500px) {
+    .home-icon-right {
+        max-height: 50px;
+        max-width: 50px;
+        float: right;
+        margin-top: -60px;
+        opacity: 70%;
+    }
+
+    .home-icon-left {
+        max-height: 50px;
+        max-width: 50px;
+        float: left;
+        margin-top: -55px;
+        opacity: 60%;
+        margin-left: 10px;
+    }
+}
+
+@media screen and (max-width: 1500px) {
+    .home-icon-right {
+        display: none;
+    }
+
+    .home-icon-left {
+        display: none;
+    }
+}
+
 @media screen and (min-width: 1000px) {
     .jumbotron {
         min-height: 700px;
@@ -73,22 +116,20 @@
         font-size: 16px;
     }
 
-    footer {
-        padding: 15px;
-        margin-bottom: -60px;
-        margin-top: 5px;
-    }
-
     #hr-about {
         background-color: rgba(53, 168, 246, 0.6);
         height: 0.1px;
     }
 
     #home-about {
-        margin-top: -10px;
+        margin-top: -32px;
         margin-left: 15%;
         margin-right: 15%;
         padding: 50px 20px 20px 20px;
+        -moz-box-shadow: 0 0 20px 0 #ccc;
+        -webkit-box-shadow: 0 0 20px 0 #ccc;
+        box-shadow: 0 0 20px 0 #ccc;
+
     }
 
     .centered-left {
@@ -153,9 +194,7 @@
     }
 
     .search {
-        margin-top: 30px;
-        margin-bottom: -25px;
-        margin-left: 20px;
+        margin: 30px 20px -25px;
         width: 31%;
     }
 
@@ -169,9 +208,14 @@
     #nav-title {
         font-size: 20px;
     }
+
+    .timetable {
+        text-align: center;
+    }
 }
 
 @media screen and (max-width: 1000px) {
+
     .d-flex {
         margin-top: -5px;
     }
@@ -182,12 +226,6 @@
 
     .about-text {
         font-size: 13px;
-    }
-
-    footer {
-        padding: 7px;
-        margin-bottom: -60px;
-        margin-top: 0;
     }
 
     #hr-about {
@@ -298,6 +336,21 @@
         margin-top: -21%;
         position: relative;
     }
+
+    .timetable {
+        margin-left: -10px;
+        margin-right: -10px;
+        text-align: center;
+    }
+
+    .btn-timetable {
+        font-size: 12px;
+        height: 80px;
+        min-width: 32px;
+        padding: 0;
+        margin-top: 20px;
+        line-height: 80px;
+    }
 }
 
 #confirmed-color {
@@ -312,24 +365,15 @@
     margin-left: -15px;
 }
 
-.textxd {
-    padding: 200px;
-}
-
 #messages-office {
     margin-top: -37px;
     padding-left: 10%;
     padding-right: 10%;
 }
 
-#uslugi {
+#services {
     padding-left: 10%;
     padding-right: 10%;
-}
-
-#footer {
-    border-bottom-style: solid;
-    border-width: 1px;
 }
 
 .container-office {
@@ -344,11 +388,6 @@
 
 .row {
     display: flex;
-}
-
-.column {
-    flex: 50%;
-    padding: 5px;
 }
 
 #center-office {
@@ -366,10 +405,6 @@
     transform: translate(-50%, -50%);
 }
 
-a:hover, a:visited, a:link, a:active {
-    text-decoration: none;
-}
-
 .btn {
     word-wrap: break-word;
     white-space: normal;
@@ -378,28 +413,6 @@ a:hover, a:visited, a:link, a:active {
 .text-description {
     word-wrap: break-word;
     white-space: normal;
-}
-
-.bcg-white {
-    background-color: #fdfdfd;
-}
-
-@keyframes blinker {
-    from {
-        opacity: 1.0;
-    }
-    to {
-        opacity: 0.0;
-    }
-}
-
-.blink {
-    text-decoration: blink;
-    animation-name: blinker;
-    animation-duration: 0.6s;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
-    animation-direction: alternate;
 }
 
 .has-search .form-control {

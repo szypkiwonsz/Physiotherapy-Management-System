@@ -2,7 +2,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
 
-from users.models import User
+from applications.users.models import User
 
 
 class TestLogin(StaticLiveServerTestCase):

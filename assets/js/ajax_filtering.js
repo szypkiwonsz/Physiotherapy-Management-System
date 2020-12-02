@@ -1,6 +1,6 @@
 const user_input = $("#user-input")
 const search_icon = $('#search-icon')
-const artists_div = $('#replaceable-content')
+const content_div = $('#replaceable-content')
 const endpoint = $("#endpoint").attr("value")
 const page_number = $("#page").attr("value")
 const delay_by_in_ms = 700
@@ -9,12 +9,12 @@ let scheduled_function = false
 let ajax_call = function (endpoint, request_parameters) {
     $.getJSON(endpoint, request_parameters)
         .done(response => {
-            // fade out the artists_div, then:
-            artists_div.fadeTo('slow', 0).promise().then(() => {
+            // fade out the content_div, then:
+            content_div.fadeTo('slow', 0).promise().then(() => {
                 // replace the HTML contents
-                artists_div.html(response['html_from_view'])
+                content_div.html(response['html_from_view'])
                 // fade-in the div with new contents
-                artists_div.fadeTo('slow', 1)
+                content_div.fadeTo('slow', 1)
                 // stop animating search icon
                 search_icon.removeClass('blink')
             })
@@ -26,7 +26,7 @@ user_input.on('keyup', function () {
 
     const request_parameters = {
         q: $(this).val(), // value of user_input: the HTML element with ID user-input
-        page: page_number
+        page: page_number // the number of the currently displayed page
     }
 
     // start animating the search icon with the CSS class
