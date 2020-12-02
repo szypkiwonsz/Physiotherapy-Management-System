@@ -1,6 +1,7 @@
 from datetime import datetime
 from time import sleep
 
+from dateutil.relativedelta import relativedelta
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
@@ -635,6 +636,7 @@ class TestTimetable(StaticLiveServerTestCase):
         )
 
     def test_timetable_previous_month_button_show_previous_month(self):
+        self.remove_month_date = self.now - relativedelta(months=1)
         self.browser.get(self.live_server_url + reverse('login'))
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
@@ -646,10 +648,11 @@ class TestTimetable(StaticLiveServerTestCase):
         timetable_date = self.browser.find_element_by_class_name('font-weight-bold').text
         self.assertEquals(
             timetable_date,
-            f'{self.now.month - 1}.{self.now.year}'
+            f'{add_zero(self.remove_month_date.month)}.{self.remove_month_date.year}'
         )
 
     def test_timetable_next_month_button_show_next_month(self):
+        self.add_month_date = self.now + relativedelta(months=1)
         self.browser.get(self.live_server_url + reverse('login'))
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
@@ -661,5 +664,5 @@ class TestTimetable(StaticLiveServerTestCase):
         timetable_date = self.browser.find_element_by_class_name('font-weight-bold').text
         self.assertEquals(
             timetable_date,
-            f'{self.now.month + 1}.{self.now.year}'
+            f'{add_zero(self.add_month_date.month)}.{self.add_month_date.year}'
         )
