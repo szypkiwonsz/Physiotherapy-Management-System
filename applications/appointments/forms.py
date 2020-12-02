@@ -64,7 +64,7 @@ class AppointmentPatientMakeForm(forms.ModelForm):
             )
         # if hour time selected is not correct with office hours
         elif day and int(day.earliest_appointment_time.split(':')[0]) > int(cleaned_data.get('date').hour) \
-                or day and int(day.latest_appointment_time.split(':')[0]) <= int(cleaned_data.get('date').hour):
+                or day and int(day.latest_appointment_time.split(':')[0]) < int(cleaned_data.get('date').hour):
             raise forms.ValidationError(
                 self.error_messages['appointment_incorrect_date'],
                 code='appointment_incorrect_date'
@@ -138,7 +138,7 @@ class AppointmentOfficeUpdateForm(AppointmentOfficeMakeForm):
             )
         # if hour time selected is not correct with office hours
         elif day and int(day.earliest_appointment_time.split(':')[0]) > int(cleaned_data.get('date').hour) \
-                or day and int(day.latest_appointment_time.split(':')[0]) <= int(cleaned_data.get('date').hour):
+                or day and int(day.latest_appointment_time.split(':')[0]) < int(cleaned_data.get('date').hour):
             raise forms.ValidationError(
                 self.error_messages['appointment_incorrect_date'],
                 code='appointment_incorrect_date'
