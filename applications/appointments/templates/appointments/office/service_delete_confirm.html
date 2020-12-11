@@ -1,0 +1,26 @@
+{% extends 'base/base_panel_office.html' %}
+{% load crispy_forms_tags %}
+{% block head %}
+    <title>Fizjo-System - Usuń Usługę</title>
+{% endblock %}
+{% block content %}
+    <div class="container border rounded bg-light">
+        <div class="form">
+            <h2 class="mb-3">Potwierdź usunięcie usługi.</h2>
+            <hr>
+            <p class="lead">Jesteś pewny, że chcesz usunąć usługę: <strong>{{ service.name }}</strong>?
+            </p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Tak, usuń</button>
+                {% if previous_url %}
+                    <a href="{{ previous_url }}" class="btn btn-outline-secondary" role="button">Powrót</a>
+                {% else %}
+                    <a href="{% url 'office_panel:appointments:service_list' %}" class="btn btn-outline-secondary"
+                       role="button">Powrót
+                    </a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+{% endblock %}
