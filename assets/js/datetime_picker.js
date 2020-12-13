@@ -45,12 +45,9 @@ jQuery.datetimepicker.setLocale('pl');
 jQuery('#id_date').datetimepicker({
     minDate: '+1970/01/02', // yesterday is minimum date(for today use 0 or -1970/01/01)
     maxDate: '+1970/01/15', // tomorrow is maximum date calendar
-    allowTimes: [
-        '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
-        '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
-    ],
     format: 'd.m.Y H:i',
     defaultTime: '23:59',
+    step: appointment_time_interval,
     onChangeDateTime: logic,
     onShow: logic,
 });
