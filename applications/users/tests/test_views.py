@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from applications.users.models import User, Office, UserPatient
+from applications.users.models import User, UserOffice, UserPatient
 
 
 class TestProfileViews(TestCase):
@@ -16,7 +16,7 @@ class TestProfileViews(TestCase):
         self.office1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.office_user_office1 = Office.objects.create(
+        self.office_user_office1 = UserOffice.objects.create(
             user=self.office1,
             name='name',
             address='address',
@@ -60,7 +60,7 @@ class TestProfileViews(TestCase):
         })
         office_update = User.objects.get(id=2)
         self.assertEquals(response.status_code, 302)
-        self.assertEquals(office_update.office.website, 'www.newwebsite.com')
+        self.assertEquals(user.useroffice.website, 'www.newwebsite.com')
 
     def test_patient_profile_GET_not_logged_in(self):
         response = self.client.get(self.patient_profile_url)
@@ -150,7 +150,7 @@ class TestSignupViews(TestCase):
         office_user = User.objects.get(id=1)
         self.assertEquals(response.status_code, 302)
         self.assertEquals(office_user.email, 'random_office_email@gmail.com')
-        self.assertEquals(office_user.office.name, 'name')
+        self.assertEquals(office_user.useroffice.name, 'name')
 
     def test_register_patient_GET_not_logged_in(self):
         response = self.client.get(self.patient_signup_url)

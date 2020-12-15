@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 from applications.office_panel.models import Patient
-from applications.users.models import User, Office
+from applications.users.models import User, UserOffice
 from utils.regex_validators import alphanumeric_first_name, numeric_phone_number, alphanumeric_last_name
 
 
@@ -10,7 +10,7 @@ from utils.regex_validators import alphanumeric_first_name, numeric_phone_number
 class Appointment(models.Model):
     """Appointment model for the office."""
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments')
-    office = models.ForeignKey(Office, on_delete=models.CASCADE)
+    office = models.ForeignKey(UserOffice, on_delete=models.CASCADE)
     patient_email = models.EmailField()
     first_name = models.CharField(max_length=20, unique=False, default='', validators=[alphanumeric_first_name()])
     last_name = models.CharField(max_length=40, unique=False, default='', validators=[alphanumeric_last_name()])

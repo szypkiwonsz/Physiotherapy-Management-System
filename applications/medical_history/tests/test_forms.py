@@ -5,7 +5,7 @@ from django.test import TestCase
 from applications.appointments.models import Appointment
 from applications.medical_history.forms import MedicalHistoryForm
 from applications.office_panel.models import Patient
-from applications.users.models import User, Office
+from applications.users.models import User, UserOffice
 
 
 class TestMedicalHistoryForm(TestCase):
@@ -24,7 +24,7 @@ class TestMedicalHistoryForm(TestCase):
             email='patient@gmail.com',
             phone_number='000000000'
         )
-        self.appointment_office1 = Office.objects.create(
+        self.appointment_office1 = UserOffice.objects.create(
             user=self.office1,
             name='name',
             address='address',

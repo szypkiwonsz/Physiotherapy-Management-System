@@ -3,9 +3,9 @@ from datetime import datetime
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from applications.appointments.models import Appointment
+from applications.appointments.models import Appointment, Service
 from applications.office_panel.models import Patient
-from applications.users.models import User, Office
+from applications.users.models import User, UserOffice
 
 
 class TestOfficeAppointmentViews(TestCase):
@@ -28,7 +28,7 @@ class TestOfficeAppointmentViews(TestCase):
             last_name='lastname',
             email='patient@gmail.com',
         )
-        self.appointment_office1 = Office.objects.create(
+        self.appointment_office1 = UserOffice.objects.create(
             user=self.office1,
             name='name',
             address='address',
@@ -158,7 +158,7 @@ class TestPatientAppointmentViews(TestCase):
         self.office1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.appointment_office1 = Office.objects.create(
+        self.appointment_office1 = UserOffice.objects.create(
             user=self.office1,
             name='name',
             address='address',

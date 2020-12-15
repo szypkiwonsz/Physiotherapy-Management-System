@@ -72,7 +72,7 @@
             {% endif %}
             {% for medical_history in medical_histories %}
                 <hr>
-                {{ medical_history.owner.office.name }}<br>
+                {{ medical_history.owner.useroffice.name }}<br>
                 Data dodania: {{ medical_history.date_selected|date:"d.m.Y" }}, o godz:
                 {{ medical_history.date_selected|date:"H:i" }}<br>
                 {% if medical_history.appointment %}

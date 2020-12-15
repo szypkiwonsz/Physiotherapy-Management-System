@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 
 from applications.office_panel.models import Patient
-from applications.users.models import User, Office
+from applications.users.models import User, UserOffice
 
 
 class TestHomeViews(TestCase):
@@ -16,7 +16,7 @@ class TestHomeViews(TestCase):
         self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.office1 = Office.objects.create(
+        self.office1 = UserOffice.objects.create(
             user=self.office_user1,
             name='name',
             address='address',
@@ -211,7 +211,7 @@ class TestTimetableViews(TestCase):
         self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.office1 = Office.objects.create(
+        self.office1 = UserOffice.objects.create(
             user=self.office_user1,
             name='name',
             address='address',

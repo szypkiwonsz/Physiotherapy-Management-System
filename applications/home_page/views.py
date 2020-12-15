@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, ListView
 
-from applications.users.models import Office
+from applications.users.models import UserOffice
 
 
 class HomeView(TemplateView):
@@ -12,6 +12,6 @@ class HelpView(TemplateView):
 
 
 class OfficesView(ListView):
-    model = Office
+    model = UserOffice
     template_name = 'home_page/offices.html'
     context_object_name = 'offices'

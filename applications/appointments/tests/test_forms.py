@@ -2,8 +2,9 @@ from django.test import TestCase
 
 from applications.appointments.forms import AppointmentPatientMakeForm, AppointmentOfficeUpdateForm, \
     AppointmentOfficeMakeForm
+from applications.appointments.models import Service
 from applications.office_panel.models import Patient
-from applications.users.models import User, Office
+from applications.users.models import User, UserOffice
 
 
 class TestPatientMakeAppointmentForm(TestCase):
@@ -12,7 +13,7 @@ class TestPatientMakeAppointmentForm(TestCase):
         self.office1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.appointment_office1 = Office.objects.create(
+        self.appointment_office1 = UserOffice.objects.create(
             user=self.office1,
             name='name',
             address='address',
@@ -64,7 +65,7 @@ class TestOfficeAppointmentMakeForm(TestCase):
         self.office1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.appointment_office1 = Office.objects.create(
+        self.appointment_office1 = UserOffice.objects.create(
             user=self.office1,
             name='name',
             address='address',
@@ -100,7 +101,7 @@ class TestOfficeUpdateAppointmentForm(TestCase):
         self.office1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.appointment_office1 = Office.objects.create(
+        self.appointment_office1 = UserOffice.objects.create(
             user=self.office1,
             name='name',
             address='address',

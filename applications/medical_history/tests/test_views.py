@@ -7,7 +7,7 @@ from django.utils import timezone
 from applications.appointments.models import Appointment
 from applications.medical_history.models import MedicalHistory
 from applications.office_panel.models import Patient
-from applications.users.models import User, Office
+from applications.users.models import User, UserOffice
 
 
 class TestOfficeMedicalHistoryViews(TestCase):
@@ -38,7 +38,7 @@ class TestOfficeMedicalHistoryViews(TestCase):
             recommendations='recommendations',
             date_selected=timezone.now(),
         )
-        self.appointment_office1 = Office.objects.create(
+        self.appointment_office1 = UserOffice.objects.create(
             user=self.office1,
             name='name',
             address='address',

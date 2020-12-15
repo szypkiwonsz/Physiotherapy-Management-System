@@ -5,17 +5,18 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import UpdateView, DeleteView, CreateView
 
-from applications.appointments.forms import AppointmentOfficeUpdateForm, AppointmentOfficeMakeForm
+from applications.appointments.forms import AppointmentOfficeUpdateForm, AppointmentOfficeMakeForm, ServiceForm
 from applications.appointments.models import Appointment
+from applications.appointments.models import Service
 from applications.appointments.utils import database_old_datetime_format_to_new
+from applications.office_panel.utils import get_dates_taken
 from applications.users.decorators import office_required
-from applications.users.models import OfficeDay
-from utils.add_zero import add_zero
+from applications.users.models import OfficeDay, UserOffice
 from utils.office_opening_hours import get_office_opening_hours
 from utils.paginate import paginate
 

@@ -15,14 +15,14 @@ from applications.appointments.tasks import appointment_confirmation_email_patie
     appointment_confirmation_email_office
 from applications.appointments.utils import database_old_datetime_format_to_new
 from applications.users.decorators import patient_required
-from applications.users.models import Office
+from applications.users.models import UserOffice, OfficeDay
 from utils.office_opening_hours import get_office_opening_hours
 from utils.paginate import paginate
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class SelectOffice(ListView):
-    model = Office
+    model = UserOffice
     template_name = 'appointments/patient/appointment_select_office.html'
     context_object_name = 'offices'
 

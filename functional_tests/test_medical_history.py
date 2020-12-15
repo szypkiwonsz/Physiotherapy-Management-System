@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import sleep
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -8,7 +8,7 @@ from selenium import webdriver
 from applications.appointments.models import Appointment
 from applications.medical_history.models import MedicalHistory
 from applications.office_panel.models import Patient
-from applications.users.models import User, Office
+from applications.users.models import User, UserOffice
 
 
 class TestOfficeMedicalHistory(StaticLiveServerTestCase):
@@ -26,7 +26,7 @@ class TestOfficeMedicalHistory(StaticLiveServerTestCase):
             last_name='lastname',
             email='patient@gmail.com',
         )
-        self.office1 = Office.objects.create(
+        self.office1 = UserOffice.objects.create(
             user=self.office_user1,
             name='name',
             address='address',

@@ -15,7 +15,7 @@ class TestAppointmentModels(TestCase):
         self.office1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.appointment_office1 = Office.objects.create(
+        self.appointment_office1 = UserOffice.objects.create(
             user=self.office1,
             name='name',
             address='address',

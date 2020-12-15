@@ -1,11 +1,9 @@
-import locale
-
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import SetPasswordForm
 from django.utils.translation import gettext as _
 
-from applications.users.models import User, Profile, Office, UserPatient, OfficeDay
+from applications.users.models import User, Profile, UserOffice, UserPatient, OfficeDay
 from applications.users.utils import get_days_of_week, get_hours_in_day
 from applications.users.widgets import MyClearableFileInput
 from utils.regex_validators import numeric_phone_number
@@ -195,8 +193,8 @@ class OfficeUpdateForm(forms.ModelForm):
             self.fields[field_name].label = label[i]
 
     class Meta:
-        model = Office
-        fields = ['name', 'address', 'city', 'phone_number', 'website']
+        model = UserOffice
+        fields = ['name', 'address', 'city', 'phone_number', 'website', 'appointment_time_interval']
 
 
 class PatientUpdateForm(forms.ModelForm):

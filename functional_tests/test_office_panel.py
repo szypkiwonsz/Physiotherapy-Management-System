@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import sleep
 
 from dateutil.relativedelta import relativedelta
@@ -6,10 +6,10 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
 
-from applications.appointments.models import Appointment
+from applications.appointments.models import Appointment, Service
 from applications.medical_history.models import MedicalHistory
 from applications.office_panel.models import Patient
-from applications.users.models import User, Office
+from applications.users.models import User, UserOffice
 from utils.add_zero import add_zero
 
 
@@ -19,7 +19,7 @@ class TestHomeNoData(StaticLiveServerTestCase):
         self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.office1 = Office.objects.create(
+        self.office1 = UserOffice.objects.create(
             user=self.office_user1,
             name='name',
             address='address',
@@ -101,7 +101,7 @@ class TestHome(StaticLiveServerTestCase):
         self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.office1 = Office.objects.create(
+        self.office1 = UserOffice.objects.create(
             user=self.office_user1,
             name='name',
             address='address',
@@ -394,7 +394,7 @@ class TestPatientsNoData(StaticLiveServerTestCase):
         self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.office1 = Office.objects.create(
+        self.office1 = UserOffice.objects.create(
             user=self.office_user1,
             name='name',
             address='address',
@@ -495,7 +495,7 @@ class TestPatients(StaticLiveServerTestCase):
         self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.office1 = Office.objects.create(
+        self.office1 = UserOffice.objects.create(
             user=self.office_user1,
             name='name',
             address='address',
@@ -596,7 +596,7 @@ class TestTimetable(StaticLiveServerTestCase):
         self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.office1 = Office.objects.create(
+        self.office1 = UserOffice.objects.create(
             user=self.office_user1,
             name='name',
             address='address',
