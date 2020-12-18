@@ -24,5 +24,35 @@
             {% endfor %}
             <hr>
         </div>
+    {% if services.has_other_pages %}
+    <ul class="pagination">
+        {% if services.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ services.previous_page_number }}">&laquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1">&laquo;</a>
+            </li>
+        {% endif %}
+        {% for i in services.paginator.page_range %}
+            {% if services.number == i %}
+                <li class="page-item active"><a class="page-link">{{ i }} <span class="sr-only">(current)</span></a>
+                </li>
+            {% else %}
+                <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if services.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ services.next_page_number }}">&raquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link">&raquo;</a>
+            </li>
+        {% endif %}
+    </ul>
+{% endif %}
     </div>
 {% endblock content %}
