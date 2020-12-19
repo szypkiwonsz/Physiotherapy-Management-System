@@ -1,6 +1,7 @@
 // Script to correctly display the timetable for the selected month and year.
 const date_select_up = $("#date-select-up")
 const date_select_down = $("#date-select-down")
+const service_select = $("#service")
 const timetable_div = $('#replaceable-content')
 const endpoint = $("#endpoint").attr("value")
 const delay_by_in_ms = 0
@@ -35,6 +36,7 @@ date_select_up.click(function () {
     const request_parameters = {
         m: mm, // currently viewed month
         y: yyyy, // currently viewed year
+        s: $("#service").val()
     }
 
     // if scheduled_function is NOT false, cancel the execution of the function
@@ -58,7 +60,23 @@ date_select_down.click(function () {
     const request_parameters = {
         m: mm, // value of user_input: the HTML element with ID user-input
         y: yyyy,
-        // page: page_number
+        s: $("#service").val()
+    }
+
+    // if scheduled_function is NOT false, cancel the execution of the function
+    if (scheduled_function) {
+        clearTimeout(scheduled_function)
+    }
+
+    // setTimeout returns the ID of the function to be executed
+    scheduled_function = setTimeout(ajax_call, delay_by_in_ms, endpoint, request_parameters)
+})
+
+service_select.change(function() {
+      const request_parameters = {
+        m: mm, // value of user_input: the HTML element with ID user-input
+        y: yyyy,
+          s: $("#service").val()
     }
 
     // if scheduled_function is NOT false, cancel the execution of the function
