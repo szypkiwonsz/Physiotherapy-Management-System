@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
@@ -31,3 +32,21 @@ class Appointment(models.Model):
     class Meta:
         # name on the admin page
         verbose_name_plural = 'Appointments'
+
+
+class Service(models.Model):
+    office = models.ForeignKey(UserOffice, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    duration = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f'{self.name}'
+
+    def validate_unique(self, exclude=None):
+        qs = Service.objects.filter(office=self.office_id)
+        if qs.filter(name=self.name).exists():
+            raise ValidationError('Name must be unique per office.')
+
+    def save(self, *args, **kwargs):
+        self.validate_unique()
+        super(Service, self).save(*args, **kwargs)
