@@ -8,6 +8,8 @@
     <div class="container border rounded bg-light">
         <div class="form">
             <h2>Stwórz wizytę</h2>
+            <div class="right-button"><a href="{% url 'office_panel:patient_add' %}" class="btn btn-warning"
+                                 role="button">Dodaj pacjenta</a></div>
             <hr>
             <form method="post" id="register-office" novalidate="novalidate">
                 {% csrf_token %}
