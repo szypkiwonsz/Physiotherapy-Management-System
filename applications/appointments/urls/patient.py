@@ -13,6 +13,6 @@ urlpatterns = [
         path('timetable/', login_required(patient_required(timetable.TimetableView.as_view())), name='timetable'),
         path('change/', patient.AppointmentUpdateView.as_view(), name='update'),
         path('cancel/', patient.AppointmentCancelView.as_view(), name='delete'),
-        path('make/', patient.MakeAppointment.as_view(), name='make')
+        path('<str:date>/<str:service>/make/', patient.MakeAppointment.as_view(), name='make')
     ]))
 ]
