@@ -61,6 +61,7 @@ class AppointmentListView(View):
 class AppointmentUpdateView(UpdateView):
     form_class = AppointmentOfficeUpdateForm
     template_name = 'appointments/office/appointment_update_form.html'
+    success_url = reverse_lazy('office_panel:appointments:list')
 
     def get_initial(self):
         """Replacing the initialized date due to an error with the date saving."""
@@ -101,9 +102,6 @@ class AppointmentUpdateView(UpdateView):
 
     def get_queryset(self):
         return Appointment.objects.filter(office=self.request.user.id)
-
-    def get_success_url(self):
-        return reverse('office_panel:appointments:list')
 
 
 @method_decorator([login_required, office_required], name='dispatch')
