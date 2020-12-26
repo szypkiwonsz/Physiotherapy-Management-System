@@ -2,6 +2,7 @@ import calendar
 
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext as _
 from easy_thumbnails.fields import ThumbnailerImageField
@@ -41,6 +42,8 @@ class UserOffice(models.Model):
     city = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=9)
     website = models.CharField(max_length=20)
+    appointment_time_interval = models.PositiveIntegerField(default=20, validators=[MinValueValidator(10),
+                                                                                    MaxValueValidator(60)])
 
     def __str__(self):
         return self.user.email
