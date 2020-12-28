@@ -16,6 +16,7 @@ class Appointment(models.Model):
     first_name = models.CharField(max_length=20, unique=False, default='', validators=[alphanumeric_first_name()])
     last_name = models.CharField(max_length=40, unique=False, default='', validators=[alphanumeric_last_name()])
     date = models.DateTimeField()
+    date_end = models.DateTimeField()
     date_selected = models.DateTimeField(default=timezone.now)
     phone_number = models.CharField(max_length=9, validators=[numeric_phone_number()])
     confirmed = models.BooleanField(default=False)
