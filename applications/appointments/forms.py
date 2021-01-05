@@ -23,16 +23,18 @@ class AppointmentPatientMakeForm(forms.ModelForm):
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
         'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
     })
-    service = forms.CharField(label='Usługa')
 
     def __init__(self, *args, **kwargs):
         self.office = kwargs.pop('office', None)
         self.appointment = kwargs.pop('appointment', None)
         self.date = kwargs.pop('date', None)
-        self.service_name = kwargs.pop('service', None)
+        self.service = kwargs.pop('service', None)
         super(AppointmentPatientMakeForm, self).__init__(*args, **kwargs)
         self.fields['date'].widget = forms.TextInput(attrs={'value': str(self.date), 'readonly': 'true'})
-        self.fields['service'].widget = forms.TextInput(attrs={'value': str(self.service_name), 'readonly': 'true'})
+        self.fields['service'] = forms.ModelChoiceField(queryset=Service.objects.filter(office=self.office),
+                                                        required=True, initial=self.service)
+        self.fields['service'].widget.attrs['disabled'] = 'True'
+        self.fields['service'].label = 'Usługa'
 
     class Meta:
         model = Appointment
@@ -48,7 +50,11 @@ class AppointmentPatientMakeForm(forms.ModelForm):
         """Validate appointment date provided to form."""
         cleaned_data = super(AppointmentPatientMakeForm, self).clean()
         dates_taken = Appointment.objects.filter(office=self.office)
-        service = Service.objects.filter(name=self.service_name, office=self.office).first()
+        # checking in case of UpdateForm where self.service is None
+        if self.service:
+            service = Service.objects.filter(name=self.service.name, office=self.office).first()
+        else:
+            service = None
         appointment = Appointment.objects.filter(date=cleaned_data.get('date'), office=self.office).first()
         if service:
             dates_taken = get_dates_taken(dates_taken, service)
