@@ -25,9 +25,13 @@ class Appointment(models.Model):
     def __str__(self):
         return f'{self.date} - {self.first_name} {self.last_name}'
 
+    def calculate_date_end(self):
+        self.date_end = self.date + datetime.timedelta(minutes=int(self.service.duration))
+
     def save(self, *args, **kwargs):
         self.first_name = self.first_name.capitalize()
         self.last_name = self.last_name.capitalize()
+        self.calculate_date_end()
         super(Appointment, self).save(*args, **kwargs)
 
     class Meta:
