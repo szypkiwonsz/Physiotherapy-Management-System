@@ -130,3 +130,19 @@ class AppointmentPatientUpdateForm(AppointmentOfficeUpdateForm):
     class Meta:
         model = Appointment
         fields = ['first_name', 'last_name', 'phone_number', 'date']
+
+
+class ServiceForm(forms.ModelForm):
+    """Form for office to add and update an appointment."""
+
+    def __init__(self, *args, **kwargs):
+        super(ServiceForm, self).__init__(*args, **kwargs)
+        self.fields['duration'].help_text = 'czas podany w minutach'
+
+        label = ['Nazwa', 'Czas trwania']
+        for i, field_name in enumerate(['name', 'duration']):
+            self.fields[field_name].label = label[i]
+
+    class Meta:
+        model = Service
+        fields = ['name', 'duration']
