@@ -52,12 +52,12 @@ class TestPatientMakeAppointmentForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': 'Konsultacja'
-        }, office=self.appointment_office1, appointment=None, date='15.12.2020 11:40', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=None, date='15.12.2020 11:40', service_name='Konsultacja')
         self.assertTrue(form.is_valid())
 
     def test_patient_make_form_no_data(self):
         form = AppointmentPatientMakeForm(
-            data={}, office=self.appointment_office1, appointment=None, date='15.12.2020 11:40', service='Konsultacja'
+            data={}, office=self.appointment_office1, appointment=None, date='15.12.2020 11:40', service_name='Konsultacja'
         )
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 5)
@@ -69,7 +69,7 @@ class TestPatientMakeAppointmentForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': 'Konsultacja'
-        }, office=self.appointment_office1, appointment=None, date='15.12.2020 11:40', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=None, date='15.12.2020 11:40', service_name='Konsultacja')
         self.assertFalse(form.is_valid())
 
     def test_patient_make_form_wrong_phone_number(self):
@@ -79,7 +79,7 @@ class TestPatientMakeAppointmentForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '00000',
             'choice': 'Konsultacja'
-        }, office=self.appointment_office1, appointment=None, date='06.01.2021 14:00', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=None, date='06.01.2021 14:00', service_name='Konsultacja')
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 1)
 
@@ -90,7 +90,7 @@ class TestPatientMakeAppointmentForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': 'Konsultacja'
-        }, office=self.appointment_office1, appointment=None, date='13.01.2012 16:00', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=None, date='13.01.2012 16:00', service_name='Konsultacja')
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 1)
 
@@ -137,13 +137,13 @@ class TestPatientAppointmentUpdateForm(TestCase):
             'first_name': 'FirstName',
             'last_name': 'LastName',
             'phone_number': 111111111
-        }, office=self.appointment_office1, appointment=2, date='15.12.2020 11:40', service='Konsultacja'
+        }, office=self.appointment_office1, appointment=2, date='15.12.2020 11:40', service_name='Konsultacja'
         )
         self.assertTrue(form.is_valid())
 
     def test_patient_update_form_no_data(self):
         form = AppointmentPatientUpdateForm(
-            data={}, office=self.appointment_office1, appointment=2, date='15.12.2020 11:40', service='Konsultacja'
+            data={}, office=self.appointment_office1, appointment=2, date='15.12.2020 11:40', service_name='Konsultacja'
         )
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 5)
@@ -155,7 +155,7 @@ class TestPatientAppointmentUpdateForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': self.service
-        }, office=self.appointment_office1, appointment=2, date='13.01.2012 16:00', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=2, date='13.01.2012 16:00', service_name='Konsultacja')
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 1)
 
@@ -166,7 +166,7 @@ class TestPatientAppointmentUpdateForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': self.service
-        }, office=self.appointment_office1, appointment=1, date='13.01.2012 16:00', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=1, date='13.01.2012 16:00', service_name='Konsultacja')
         self.assertTrue(form.is_valid())
 
     def test_patient_update_form_default_date(self):
@@ -176,7 +176,7 @@ class TestPatientAppointmentUpdateForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': self.service
-        }, office=self.appointment_office1, appointment=1, date='15.12.2020 23:59', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=1, date='15.12.2020 23:59', service_name='Konsultacja')
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 1)
 
@@ -187,7 +187,7 @@ class TestPatientAppointmentUpdateForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': self.service
-        }, office=self.appointment_office1, appointment=1, date='15.12.2020 23:59', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=1, date='15.12.2020 23:59', service_name='Konsultacja')
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 1)
 
@@ -238,12 +238,12 @@ class TestOfficeAppointmentMakeForm(TestCase):
             'choice': 'Konsultacja',
             'patient': patient
         }, office=self.appointment_office1, appointment=None, date='13.01.2012 16:00',
-            service='Konsultacja')
+            service_name='Konsultacja')
         self.assertTrue(form.is_valid())
 
     def test_patient_make_form_no_data(self):
         form = AppointmentOfficeMakeForm(data={}, office=self.appointment_office1, appointment=None,
-                                         date='13.01.2012 16:00', service='Konsultacja')
+                                         date='13.01.2012 16:00', service_name='Konsultacja')
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 3)
 
@@ -254,7 +254,7 @@ class TestOfficeAppointmentMakeForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': 'Konsultacja'
-        }, office=self.appointment_office1, appointment=None, date='13.01.2012 16:00', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=None, date='13.01.2012 16:00', service_name='Konsultacja')
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 1)
 
@@ -296,13 +296,13 @@ class TestOfficeUpdateAppointmentForm(TestCase):
         form = AppointmentOfficeUpdateForm(data={
             'date': '27.08.2020 17:00',
             'choice': self.service
-        }, office=self.appointment_office1, appointment=2, date='15.12.2020 11:40', service='Konsultacja'
+        }, office=self.appointment_office1, appointment=2, date='15.12.2020 11:40', service_name='Konsultacja'
         )
         self.assertTrue(form.is_valid())
 
     def test_office_update_form_no_data(self):
         form = AppointmentOfficeUpdateForm(
-            data={}, office=self.appointment_office1, appointment=2, date='15.12.2020 11:40', service='Konsultacja'
+            data={}, office=self.appointment_office1, appointment=2, date='15.12.2020 11:40', service_name='Konsultacja'
         )
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 2)
@@ -314,7 +314,7 @@ class TestOfficeUpdateAppointmentForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': self.service
-        }, office=self.appointment_office1, appointment=2, date='13.01.2012 16:00', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=2, date='13.01.2012 16:00', service_name='Konsultacja')
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 1)
 
@@ -325,7 +325,7 @@ class TestOfficeUpdateAppointmentForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': self.service
-        }, office=self.appointment_office1, appointment=1, date='13.01.2012 16:00', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=1, date='13.01.2012 16:00', service_name='Konsultacja')
         self.assertTrue(form.is_valid())
 
     def test_patient_update_form_default_date(self):
@@ -335,7 +335,7 @@ class TestOfficeUpdateAppointmentForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': self.service
-        }, office=self.appointment_office1, appointment=1, date='15.12.2020 23:59', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=1, date='15.12.2020 23:59', service_name='Konsultacja')
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 1)
 
@@ -346,7 +346,7 @@ class TestOfficeUpdateAppointmentForm(TestCase):
             'last_name': 'Sawicki',
             'phone_number': '000000000',
             'choice': self.service
-        }, office=self.appointment_office1, appointment=1, date='15.12.2020 23:59', service='Konsultacja')
+        }, office=self.appointment_office1, appointment=1, date='15.12.2020 23:59', service_name='Konsultacja')
         self.assertFalse(form.is_valid())
         self.assertEqual(len(form.errors), 1)
 

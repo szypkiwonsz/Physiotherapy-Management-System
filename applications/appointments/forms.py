@@ -23,20 +23,20 @@ class AppointmentPatientMakeForm(forms.ModelForm):
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
         'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
     })
-    choice = forms.CharField(label='Usługa')
+    service = forms.CharField(label='Usługa')
 
     def __init__(self, *args, **kwargs):
         self.office = kwargs.pop('office', None)
         self.appointment = kwargs.pop('appointment', None)
         self.date = kwargs.pop('date', None)
-        self.service = kwargs.pop('service', None)
+        self.service_name = kwargs.pop('service', None)
         super(AppointmentPatientMakeForm, self).__init__(*args, **kwargs)
         self.fields['date'].widget = forms.TextInput(attrs={'value': str(self.date), 'readonly': 'true'})
-        self.fields['choice'].widget = forms.TextInput(attrs={'value': str(self.service), 'readonly': 'true'})
+        self.fields['service'].widget = forms.TextInput(attrs={'value': str(self.service_name), 'readonly': 'true'})
 
     class Meta:
         model = Appointment
-        fields = ['date', 'first_name', 'last_name', 'phone_number', 'choice']
+        fields = ['date', 'first_name', 'last_name', 'phone_number', 'service']
 
     error_messages = {
         'appointment_date_taken': _('Wybrana data jest już zajęta.'),
@@ -48,7 +48,7 @@ class AppointmentPatientMakeForm(forms.ModelForm):
         """Validate appointment date provided to form."""
         cleaned_data = super(AppointmentPatientMakeForm, self).clean()
         dates_taken = Appointment.objects.filter(office=self.office)
-        service = Service.objects.filter(name=self.service, office=self.office).first()
+        service = Service.objects.filter(name=self.service_name, office=self.office).first()
         appointment = Appointment.objects.filter(date=cleaned_data.get('date'), office=self.office).first()
         if service:
             dates_taken = get_dates_taken(dates_taken, service)
@@ -103,10 +103,10 @@ class AppointmentOfficeUpdateForm(AppointmentOfficeMakeForm):
     def __init__(self, *args, **kwargs):
         super(AppointmentOfficeUpdateForm, self).__init__(*args, **kwargs)
         self.fields['date'].widget = forms.TextInput()
-        self.fields['choice'] = forms.ModelChoiceField(
+        self.fields['service'] = forms.ModelChoiceField(
             queryset=Service.objects.filter(office=self.office), required=True
         )
-        self.fields['choice'].label = 'Usługa'
+        self.fields['service'].label = 'Usługa'
         del self.fields['patient']
 
     class Meta:
