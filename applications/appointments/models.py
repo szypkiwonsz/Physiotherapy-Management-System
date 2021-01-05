@@ -11,6 +11,7 @@ from utils.regex_validators import alphanumeric_first_name, numeric_phone_number
 class Appointment(models.Model):
     """Appointment model for the office."""
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments')
+    service = models.ForeignKey('Service', on_delete=models.CASCADE, related_name='services', blank=True, null=True)
     office = models.ForeignKey(UserOffice, on_delete=models.CASCADE)
     patient_email = models.EmailField()
     first_name = models.CharField(max_length=20, unique=False, default='', validators=[alphanumeric_first_name()])
@@ -20,7 +21,6 @@ class Appointment(models.Model):
     date_selected = models.DateTimeField(default=timezone.now)
     phone_number = models.CharField(max_length=9, validators=[numeric_phone_number()])
     confirmed = models.BooleanField(default=False)
-    choice = models.CharField(max_length=120)
 
     def __str__(self):
         return f'{self.date} - {self.first_name} {self.last_name}'
