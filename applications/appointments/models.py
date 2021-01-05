@@ -1,3 +1,5 @@
+import datetime
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
@@ -40,6 +42,7 @@ class Appointment(models.Model):
 
 
 class Service(models.Model):
+    """Service model for the office."""
     office = models.ForeignKey(UserOffice, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     duration = models.PositiveIntegerField()
@@ -48,6 +51,7 @@ class Service(models.Model):
         return f'{self.name}'
 
     def validate_unique(self, exclude=None):
+        """Validate uniqueness service name per office."""
         qs = Service.objects.filter(office=self.office_id)
         if qs.filter(name=self.name).exists():
             raise ValidationError('Nazwa usługi musi być unikalna dla gabinetu.')
