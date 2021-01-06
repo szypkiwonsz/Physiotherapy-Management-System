@@ -2,18 +2,19 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView, UpdateView, CreateView, ListView
 
-from applications.appointments.forms import AppointmentPatientMakeForm
-from applications.appointments.models import Appointment
+from applications.appointments.forms import AppointmentPatientMakeForm, AppointmentPatientUpdateForm
+from applications.appointments.models import Appointment, Service
 from applications.appointments.tasks import appointment_confirmation_email_patient, \
     appointment_confirmation_email_office
 from applications.appointments.utils import database_old_datetime_format_to_new
+from applications.office_panel.utils import get_dates_taken
 from applications.users.decorators import patient_required
 from applications.users.models import UserOffice, OfficeDay
 from utils.office_opening_hours import get_office_opening_hours
@@ -32,12 +33,6 @@ class MakeAppointment(CreateView):
     form_class = AppointmentPatientMakeForm
     template_name = 'appointments/patient/appointment_make_form.html'
 
-    def get_form_kwargs(self, *args, **kwargs):
-        kwargs = super(MakeAppointment, self).get_form_kwargs()
-        # passing office pk to form
-        kwargs['office'] = self.kwargs.get('pk')
-        return kwargs
-
     def get_context_data(self, **kwargs):
         context = super(MakeAppointment, self).get_context_data(**kwargs)
         context['opening_hours'] = get_office_opening_hours(self.kwargs.get('pk'))
@@ -52,6 +47,8 @@ class MakeAppointment(CreateView):
         appointment.owner_id = self.request.user.id
         appointment.office_id = self.kwargs.get('pk')
         appointment.patient_email = self.request.user.email
+        service = Service.objects.get(office=self.kwargs.get('pk'), name=form.cleaned_data.get('service'))
+        appointment.service = service
         appointment.save()
 
         office_email = appointment.office.user.email
@@ -175,13 +172,15 @@ class AppointmentCancelView(DeleteView):
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class AppointmentUpdateView(UpdateView):
-    form_class = AppointmentPatientMakeForm
+    form_class = AppointmentPatientUpdateForm
     template_name = 'appointments/patient/appointment_update_form.html'
 
     def get_context_data(self, **kwargs):
         context = super(AppointmentUpdateView, self).get_context_data(**kwargs)
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
         context['opening_hours'] = get_office_opening_hours(self.object.office.pk)
+        context['appointment_time_interval'] = UserOffice.objects.values_list(
+            'appointment_time_interval', flat=True).filter(pk=self.object.office.pk).first()
         return context
 
     def get_form_kwargs(self, *args, **kwargs):
@@ -198,6 +197,8 @@ class AppointmentUpdateView(UpdateView):
         date = str(Appointment.objects.filter(id=self.object.pk).values_list('date').get()[0])
         date_object = database_old_datetime_format_to_new(date)
         initial['date'] = date_object
+        service_name = Appointment.objects.get(office=self.object.office, pk=self.object.pk).service.name
+        initial['service'] = Service.objects.get(name=service_name)
         return initial
 
     def form_valid(self, form):
@@ -207,7 +208,7 @@ class AppointmentUpdateView(UpdateView):
         appointment.first_name = form.cleaned_data['first_name']
         appointment.last_name = form.cleaned_data['last_name']
         appointment.phone_number = form.cleaned_data['phone_number']
-        appointment.choice = form.cleaned_data['choice']
+        appointment.service = form.cleaned_data['service']
         appointment.save()
         return redirect(self.get_success_url())
 
