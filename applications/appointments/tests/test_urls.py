@@ -11,7 +11,7 @@ class TestPatientAppointmentsUrls(SimpleTestCase):
         self.assertEquals(resolve(url).func.view_class, patient.SelectOffice)
 
     def test_make_appointment_url_resolves(self):
-        url = reverse('patient_panel:appointments:make', args=[1])
+        url = reverse('patient_panel:appointments:make', args=[1, '15.12.2020 11:40', 'Masaż'])
         self.assertEquals(resolve(url).func.view_class, patient.MakeAppointment)
 
     def test_appointment_list_url_resolves(self):
@@ -46,5 +46,24 @@ class TestOfficeAppointmentUrls(SimpleTestCase):
         self.assertEquals(resolve(url).func.view_class, office.AppointmentDeleteView)
 
     def test_appointment_make_url_resolves(self):
-        url = reverse('office_panel:appointments:make', args=[1])
+        url = reverse('office_panel:appointments:make', args=[1, '15.12.2020 11:40', 'Masaż'])
         self.assertEquals(resolve(url).func.view_class, office.MakeAppointment)
+
+
+class TestServiceUrls(SimpleTestCase):
+
+    def test_service_list_url_resolves(self):
+        url = reverse('office_panel:appointments:service_list')
+        self.assertEquals(resolve(url).func.view_class, office.ServiceListView)
+
+    def test_service_change_url_resolves(self):
+        url = reverse('office_panel:appointments:service_edit', args=[1])
+        self.assertEquals(resolve(url).func.view_class, office.ServiceUpdateView)
+
+    def test_service_delete_url_resolves(self):
+        url = reverse('office_panel:appointments:service_delete', args=[1])
+        self.assertEquals(resolve(url).func.view_class, office.ServiceDeleteView)
+
+    def test_service_make_url_resolves(self):
+        url = reverse('office_panel:appointments:service_add')
+        self.assertEquals(resolve(url).func.view_class, office.AddServiceView)

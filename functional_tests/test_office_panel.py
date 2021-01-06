@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from time import sleep
 
-from dateutil.relativedelta import relativedelta
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
@@ -10,7 +9,6 @@ from applications.appointments.models import Appointment, Service
 from applications.medical_history.models import MedicalHistory
 from applications.office_panel.models import Patient
 from applications.users.models import User, UserOffice
-from utils.add_zero import add_zero
 
 
 class TestHomeNoData(StaticLiveServerTestCase):
@@ -115,17 +113,23 @@ class TestHome(StaticLiveServerTestCase):
             last_name='lastname',
             email='patient@gmail.com',
         )
+        self.service = Service.objects.create(
+            office=self.office1,
+            name='Konsultacja',
+            duration=10
+        )
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.office1,
             patient_email='patient@gmail.com',
             date=datetime(2020, 8, 22, 17, 00, 00),
+            date_end=datetime(2020, 8, 22, 17, 00, 00) + timedelta(minutes=20),
             first_name='Kacper',
             last_name='Sawicki',
             date_selected=datetime(2020, 8, 21, 17, 00, 00),
             phone_number='000000000',
             confirmed=False,
-            choice='Konsultacja'
+            service=self.service
         )
         self.medical_history1 = MedicalHistory.objects.create(
             owner=self.office_user1,
@@ -222,7 +226,7 @@ class TestHome(StaticLiveServerTestCase):
 
     def test_timetable_show_timetable_redirects_to_timetable(self):
         self.browser.get(self.live_server_url + reverse('login'))
-        timetable_url = self.live_server_url + reverse('office_panel:timetable')
+        timetable_url = self.live_server_url + reverse('office_panel:appointments:timetable')
         self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
         self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
         self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
@@ -587,82 +591,4 @@ class TestPatients(StaticLiveServerTestCase):
         self.assertEquals(
             self.browser.current_url,
             patient_delete_url
-        )
-
-
-class TestTimetable(StaticLiveServerTestCase):
-
-    def setUp(self):
-        self.office_user1 = User.objects.create_user(
-            'office', 'office@gmail.com', 'officepassword', is_office=True
-        )
-        self.office1 = UserOffice.objects.create(
-            user=self.office_user1,
-            name='name',
-            address='address',
-            city='City',
-            phone_number='000000000',
-            website='www.website.com'
-        )
-        self.patient1 = User.objects.create_user(
-            'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
-        )
-        self.appointment1 = Appointment.objects.create(
-            owner=self.patient1,
-            office=self.office1,
-            patient_email='patient@gmail.com',
-            date=datetime(datetime.today().year, datetime.today().month, 2),
-            first_name='Kacper',
-            last_name='Sawicki',
-            date_selected=datetime(2020, 8, 21, 17, 00, 00),
-            phone_number='000000000',
-            confirmed=False,
-            choice='Konsultacja'
-        )
-        self.browser = webdriver.Chrome('functional_tests/chromedriver.exe')
-        self.now = datetime.now()
-
-    def test_timetable(self):
-        self.browser.get(self.live_server_url + reverse('login'))
-        self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
-        self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
-        self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[3]/div/a').click()
-        timetable_date = self.browser.find_element_by_class_name('font-weight-bold').text
-        self.assertEquals(
-            timetable_date,
-            f'{self.now.month}.{self.now.year}'
-        )
-
-    def test_timetable_previous_month_button_show_previous_month(self):
-        self.remove_month_date = self.now - relativedelta(months=1)
-        self.browser.get(self.live_server_url + reverse('login'))
-        self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
-        self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
-        self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[3]/div/a').click()
-        self.browser.find_element_by_xpath('//*[@id="date-select-down"]').click()
-        sleep(2)
-        timetable_date = self.browser.find_element_by_class_name('font-weight-bold').text
-        self.assertEquals(
-            timetable_date,
-            f'{add_zero(self.remove_month_date.month)}.{self.remove_month_date.year}'
-        )
-
-    def test_timetable_next_month_button_show_next_month(self):
-        self.add_month_date = self.now + relativedelta(months=1)
-        self.browser.get(self.live_server_url + reverse('login'))
-        self.browser.find_element_by_xpath('//*[@id="id_username"]').send_keys('office@gmail.com')
-        self.browser.find_element_by_xpath('//*[@id="id_password"]').send_keys('officepassword')
-        self.browser.find_element_by_xpath('/html/body/div[2]/div/form/button').click()
-        sleep(0.5)
-        self.browser.find_element_by_xpath('//*[@id="page-content-wrapper"]/div[3]/div/a').click()
-        self.browser.find_element_by_xpath('//*[@id="date-select-up"]').click()
-        sleep(2)
-        timetable_date = self.browser.find_element_by_class_name('font-weight-bold').text
-        self.assertEquals(
-            timetable_date,
-            f'{add_zero(self.add_month_date.month)}.{self.add_month_date.year}'
         )

@@ -13,7 +13,7 @@ class TestOfficeAppointmentViews(TestCase):
     def setUp(self):
         self.client = Client()
         self.appointment_list_url = reverse('office_panel:appointments:list')
-        self.make_appointment_url = reverse('office_panel:appointments:make', args=[2])
+        self.make_appointment_url = reverse('office_panel:appointments:make', args=[2, '15.12.2020 11:40', 'Masaż'])
         self.update_appointment_url = reverse('office_panel:appointments:update', args=[1])
         self.delete_appointment_url = reverse('office_panel:appointments:delete', args=[1])
         self.patient1 = User.objects.create_user(
@@ -36,6 +36,11 @@ class TestOfficeAppointmentViews(TestCase):
             phone_number='000000000',
             website='www.website.com'
         )
+        self.service = Service.objects.create(
+            office=self.appointment_office1,
+            name='Konsultacja',
+            duration=10
+        )
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.appointment_office1,
@@ -46,7 +51,7 @@ class TestOfficeAppointmentViews(TestCase):
             date_selected=datetime(2012, 1, 13, 23, 51, 34),
             phone_number='000000000',
             confirmed=False,
-            choice='Konsultacja'
+            service=self.service
         )
 
     def test_appointment_list_GET_not_logged_in(self):
@@ -92,9 +97,9 @@ class TestOfficeAppointmentViews(TestCase):
     def test_appointment_update_POST(self):
         self.client.login(username='office@gmail.com', password='officepassword')
         response = self.client.post(self.update_appointment_url, {
-            'date': '17.02.2020 17:00',
+            'date': '06.01.2021 15:00',
             'confirmed': True,
-            'choice': 'Konsultacja'
+            'service': self.service.pk
         })
         appointment_update = Appointment.objects.get(id=1)
         self.assertEquals(response.status_code, 302)
@@ -147,7 +152,10 @@ class TestPatientAppointmentViews(TestCase):
     def setUp(self):
         self.client = Client()
         self.select_office_url = reverse('patient_panel:appointments:select')
-        self.make_appointment_url = reverse('patient_panel:appointments:make', args=[2])
+        self.make_appointment_url = reverse(
+            'patient_panel:appointments:make', args=[2, f'{str(datetime.now().strftime("%d.%m.%Y"))} '
+                                                        f'11:00', 'Konsultacja']
+        )
         self.upcoming_appointments_list_url = reverse('patient_panel:appointments:upcoming')
         self.old_appointments_list_url = reverse('patient_panel:appointments:old')
         self.update_appointment_url = reverse('patient_panel:appointments:update', args=[1])
@@ -166,6 +174,11 @@ class TestPatientAppointmentViews(TestCase):
             phone_number='000000000',
             website='www.website.com'
         )
+        self.service = Service.objects.create(
+            office=self.appointment_office1,
+            name='Konsultacja',
+            duration=10
+        )
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.appointment_office1,
@@ -176,7 +189,7 @@ class TestPatientAppointmentViews(TestCase):
             date_selected=datetime(2012, 1, 13, 23, 51, 34),
             phone_number='000000000',
             confirmed=False,
-            choice='Konsultacja'
+            service=self.service
         )
         self.appointment2 = Appointment.objects.create(
             owner=self.patient1,
@@ -188,7 +201,7 @@ class TestPatientAppointmentViews(TestCase):
             date_selected=datetime(2018, 1, 13, 23, 51, 34),
             phone_number='000000000',
             confirmed=False,
-            choice='Konsultacja'
+            service=self.service
         )
 
     def test_select_office_GET_not_logged_in(self):
@@ -234,14 +247,15 @@ class TestPatientAppointmentViews(TestCase):
     def test_make_appointment_create_POST(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.post(self.make_appointment_url, {
-            'date': '17.02.1998 17:00',
+            'date': str(datetime.now().strftime('%d.%m.%Y') + ' 11:00'),
             'first_name': self.appointment1.first_name,
             'last_name': self.appointment1.last_name,
-            'phone_number': '000000000',
-            'choice': 'Konsultacja'
+            'phone_number': '000000001',
+            'service': self.service.pk
         })
         appointment2 = Appointment.objects.get(id=3)
-        self.assertEquals(appointment2.date, datetime(1998, 2, 17, 17, 00, 00))
+        self.assertEquals(
+            appointment2.date, datetime.strptime(str(datetime.now().strftime('%d.%m.%Y') + ' 11:00'), '%d.%m.%Y %H:%M'))
         self.assertEquals(appointment2.office_id, 2)
         self.assertEquals(appointment2.confirmed, False)
 
@@ -249,11 +263,10 @@ class TestPatientAppointmentViews(TestCase):
         # the default earliest time is: 11:00
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.post(self.make_appointment_url, {
-            'date': '17.02.1998 08:00',
+            'date': '25.12.2020 11:00',
             'first_name': self.appointment1.first_name,
             'last_name': self.appointment1.last_name,
             'phone_number': '000000000',
-            'choice': 'Konsultacja'
         })
         with self.assertRaises(Appointment.DoesNotExist):
             Appointment.objects.get(id=3)
@@ -262,11 +275,9 @@ class TestPatientAppointmentViews(TestCase):
         # the default latest time is 18:00
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.post(self.make_appointment_url, {
-            'date': '17.02.1998 22:00',
             'first_name': self.appointment1.first_name,
             'last_name': self.appointment1.last_name,
-            'phone_number': '000000000',
-            'choice': 'Konsultacja'
+            'phone_number': '000000000'
         })
         with self.assertRaises(Appointment.DoesNotExist):
             Appointment.objects.get(id=3)
@@ -278,7 +289,7 @@ class TestPatientAppointmentViews(TestCase):
             'first_name': self.appointment1.first_name,
             'last_name': self.appointment1.last_name,
             'phone_number': '000000000',
-            'choice': 'Konsultacja'
+            'service': 'Konsultacja'
         })
         with self.assertRaises(Appointment.DoesNotExist):
             Appointment.objects.get(id=3)
@@ -346,11 +357,11 @@ class TestPatientAppointmentViews(TestCase):
     def test_update_appointment_POST(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
         response = self.client.post(self.update_appointment_url, {
-            'date': '17.02.2020 17:00',
+            'date': '17.12.2020 17:00',
             'first_name': self.appointment1.first_name,
             'last_name': self.appointment1.last_name,
             'phone_number': '111111111',
-            'choice': self.appointment1.choice
+            'service': self.service.pk
         })
         appointment_update = Appointment.objects.get(id=1)
         self.assertEquals(response.status_code, 302)
@@ -364,7 +375,7 @@ class TestPatientAppointmentViews(TestCase):
             'first_name': self.appointment1.first_name,
             'last_name': self.appointment1.last_name,
             'phone_number': '111111111',
-            'choice': self.appointment1.choice
+            'service': self.service
         })
         appointment_update = Appointment.objects.get(id=1)
         self.assertEquals(response.status_code, 200)
@@ -393,8 +404,223 @@ class TestPatientAppointmentViews(TestCase):
 
     def test_delete_appointment_POST(self):
         self.client.login(username='patient@gmail.com', password='patientpassword')
-        response_with_post = self.client.get(self.delete_appointment_url)
-        self.assertEquals(response_with_post.status_code, 200)
         response = self.client.post(self.delete_appointment_url)
+        self.assertEquals(response.status_code, 302)
         response_with_deleted_post = self.client.get(self.update_appointment_url)
         self.assertEquals(response_with_deleted_post.status_code, 404)
+
+
+class TestOfficeTimetableViews(TestCase):
+
+    def setUp(self):
+        self.timetable_url = reverse('office_panel:appointments:timetable')
+        self.patient1 = User.objects.create_user(
+            'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
+        )
+        self.office1 = User.objects.create_user(
+            'office', 'office@gmail.com', 'officepassword', is_office=True
+        )
+        self.timetable_office1 = UserOffice.objects.create(
+            user=self.office1,
+            name='name',
+            address='address',
+            city='City',
+            phone_number='000000000',
+            website='www.website.com'
+        )
+
+    def test_timetable_GET_not_logged_in(self):
+        response = self.client.get(self.timetable_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/timetable.html')
+
+    def test_timetable_GET_logged_as_patient(self):
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        response = self.client.get(self.timetable_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/timetable.html')
+
+    def test_timetable_GET_logged_as_office(self):
+        self.client.login(username='office@gmail.com', password='officepassword')
+        response = self.client.get(self.timetable_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'appointments/timetable.html')
+
+
+class TestPatientTimetableViews(TestCase):
+
+    def setUp(self):
+        self.timetable_url = reverse('patient_panel:appointments:timetable', args=[1])
+        self.patient1 = User.objects.create_user(
+            'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
+        )
+        self.office1 = User.objects.create_user(
+            'office', 'office@gmail.com', 'officepassword', is_office=True
+        )
+        self.timetable_office1 = UserOffice.objects.create(
+            user=self.office1,
+            name='name',
+            address='address',
+            city='City',
+            phone_number='000000000',
+            website='www.website.com'
+        )
+
+    def test_timetable_GET_not_logged_in(self):
+        response = self.client.get(self.timetable_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/timetable.html')
+
+    def test_timetable_GET_logged_as_patient(self):
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        response = self.client.get(self.timetable_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'appointments/timetable.html')
+
+    def test_timetable_GET_logged_as_office(self):
+        self.client.login(username='office@gmail.com', password='officepassword')
+        response = self.client.get(self.timetable_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/timetable.html')
+
+
+class TestServiceViews(TestCase):
+
+    def setUp(self):
+        self.add_service_url = reverse('office_panel:appointments:service_add')
+        self.delete_service_url = reverse('office_panel:appointments:service_delete', args=[1])
+        self.edit_service_url = reverse('office_panel:appointments:service_edit', args=[1])
+        self.list_service_url = reverse('office_panel:appointments:service_list')
+        self.patient1 = User.objects.create_user(
+            'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
+        )
+        self.office1 = User.objects.create_user(
+            'office', 'office@gmail.com', 'officepassword', is_office=True
+        )
+        self.service_office1 = UserOffice.objects.create(
+            user=self.office1,
+            name='name',
+            address='address',
+            city='City',
+            phone_number='000000000',
+            website='www.website.com'
+        )
+        self.service1 = Service.objects.create(
+            office=self.service_office1,
+            name='Konsultacja',
+            duration=10
+        )
+
+    def test_add_service_GET_not_logged_in(self):
+        response = self.client.get(self.add_service_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/office/service_add_form.html')
+
+    def test_add_service_GET_logged_as_patient(self):
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        response = self.client.get(self.add_service_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/office/service_add_form.html')
+
+    def test_add_service_GET_logged_as_office(self):
+        self.client.login(username='office@gmail.com', password='officepassword')
+        response = self.client.get(self.add_service_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'appointments/office/service_add_form.html')
+
+    def test_add_service_POST(self):
+        self.client.login(username='office@gmail.com', password='officepassword')
+        response = self.client.post(self.add_service_url, {
+            'name': 'Masaż',
+            'duration': '10'
+        })
+        service_added = Service.objects.get(id=2)
+        self.assertEquals(response.status_code, 302)
+        self.assertEquals(service_added.name, 'Masaż')
+        self.assertEquals(service_added.duration, 10)
+
+    def test_delete_service_GET_not_logged_in(self):
+        response = self.client.get(self.delete_service_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/office/service_delete_confirm.html')
+
+    def test_delete_service_GET_logged_as_patient(self):
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        response = self.client.get(self.delete_service_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/office/service_delete_confirm.html')
+
+    def test_delete_service_GET_logged_as_office(self):
+        self.client.login(username='office@gmail.com', password='officepassword')
+        response = self.client.get(self.delete_service_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'appointments/office/service_delete_confirm.html')
+
+    def test_delete_service_POST(self):
+        self.client.login(username='office@gmail.com', password='officepassword')
+        response = self.client.post(self.delete_service_url)
+        self.assertEquals(response.status_code, 302)
+        response_with_deleted_service = self.client.get(self.delete_service_url)
+        self.assertEquals(response_with_deleted_service.status_code, 404)
+
+    def test_edit_service_GET_not_logged_in(self):
+        response = self.client.get(self.edit_service_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/office/service_update_form.html')
+
+    def test_edit_service_GET_logged_as_patient(self):
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        response = self.client.get(self.edit_service_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/office/service_update_form.html')
+
+    def test_edit_service_GET_logged_as_office(self):
+        self.client.login(username='office@gmail.com', password='officepassword')
+        response = self.client.get(self.edit_service_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'appointments/office/service_update_form.html')
+
+    def test_edit_service_POST(self):
+        self.client.login(username='office@gmail.com', password='officepassword')
+        response = self.client.post(self.edit_service_url, {
+            'name': 'Zabieg',
+            'duration': '10'
+        })
+        self.assertEquals(response.status_code, 302)
+        service_edited = Service.objects.get(id=1)
+        self.assertEquals(service_edited.name, 'Zabieg')
+
+    def test_list_service_GET_not_logged_in(self):
+        response = self.client.get(self.list_service_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/office/services.html')
+
+    def test_list_service_GET_logged_as_patient(self):
+        self.client.login(username='patient@gmail.com', password='patientpassword')
+        response = self.client.get(self.list_service_url)
+
+        self.assertEquals(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'appointments/office/services.html')
+
+    def test_list_service_GET_logged_as_office(self):
+        self.client.login(username='office@gmail.com', password='officepassword')
+        response = self.client.get(self.list_service_url)
+
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'appointments/office/services.html')

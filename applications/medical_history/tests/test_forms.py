@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.test import TestCase
 
-from applications.appointments.models import Appointment
+from applications.appointments.models import Appointment, Service
 from applications.medical_history.forms import MedicalHistoryForm
 from applications.office_panel.models import Patient
 from applications.users.models import User, UserOffice
@@ -32,6 +32,11 @@ class TestMedicalHistoryForm(TestCase):
             phone_number='000000000',
             website='www.website.com'
         )
+        self.service = Service.objects.create(
+            office=self.appointment_office1,
+            name='Konsultacja',
+            duration=10
+        )
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.appointment_office1,
@@ -41,7 +46,7 @@ class TestMedicalHistoryForm(TestCase):
             date_selected=datetime(2012, 1, 13, 23, 51, 34),
             phone_number='000000000',
             confirmed=False,
-            choice='Konsultacja'
+            service=self.service
         )
 
     def test_medical_history_make_form_valid(self):

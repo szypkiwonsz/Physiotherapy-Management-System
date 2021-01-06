@@ -6,7 +6,7 @@ from applications.users.models import User
 
 
 class TestLoginForm(TestCase):
-    
+
     def setUp(self):
         self.patient1 = User.objects.create_user(
             'patient', 'patient@gmail.com', 'patientpassword', is_patient=True
@@ -203,14 +203,15 @@ class TestOfficeUpdateForm(TestCase):
             'address': 'random',
             'city': 'random',
             'phone_number': '000000000',
-            'website': 'www.fizjo-med.eu'
+            'website': 'www.fizjo-med.eu',
+            'appointment_time_interval': 10
         })
         self.assertTrue(form.is_valid())
 
     def test_office_update_form_no_data(self):
         form = OfficeUpdateForm(data={})
         self.assertFalse(form.is_valid())
-        self.assertEquals(len(form.errors), 4)
+        self.assertEquals(len(form.errors), 5)
 
     def test_office_update_form_wrong_phone_number(self):
         form = OfficeUpdateForm(data={
@@ -218,7 +219,8 @@ class TestOfficeUpdateForm(TestCase):
             'address': 'random',
             'city': 'random',
             'phone_number': '00000000',
-            'website': 'www.fizjo-med.eu'
+            'website': 'www.fizjo-med.eu',
+            'appointment_time_interval': 10
         })
         self.assertFalse(form.is_valid())
         self.assertEquals(len(form.errors), 1)
@@ -255,7 +257,7 @@ class TestProfileUpdateForm(TestCase):
 
 class TestOfficeDayUpdateForm(TestCase):
 
-    def test_patient_update_form_valid(self):
+    def test_office_day_update_form_valid(self):
         form = OfficeDayUpdateForm(data={
             'day': 0,
             'earliest_appointment_time': '10:00',
@@ -263,6 +265,6 @@ class TestOfficeDayUpdateForm(TestCase):
         })
         self.assertTrue(form.is_valid())
 
-    def test_patient_update_form_no_data(self):
+    def test_office_day_update_form_no_data(self):
         form = OfficeDayUpdateForm(data={})
         self.assertFalse(form.is_valid())

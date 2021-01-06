@@ -56,9 +56,10 @@ class TestProfileViews(TestCase):
             'city': self.office_user_office1.city,
             'phone_number': self.office_user_office1.phone_number,
             'website': 'www.newwebsite.com',
+            'appointment_time_interval': 10,
             'email': self.office_user_office1.user.email
         })
-        office_update = User.objects.get(id=2)
+        user = User.objects.get(id=2)
         self.assertEquals(response.status_code, 302)
         self.assertEquals(user.useroffice.website, 'www.newwebsite.com')
 
