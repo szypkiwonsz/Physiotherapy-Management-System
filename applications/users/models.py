@@ -42,8 +42,9 @@ class UserOffice(models.Model):
     city = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=9)
     website = models.CharField(max_length=20)
-    appointment_time_interval = models.PositiveIntegerField(default=20, validators=[MinValueValidator(10),
-                                                                                    MaxValueValidator(60)])
+    appointment_time_interval = models.PositiveIntegerField(
+        default=20, validators=[MinValueValidator(10), MaxValueValidator(60)]
+    )
 
     def __str__(self):
         return self.user.email
