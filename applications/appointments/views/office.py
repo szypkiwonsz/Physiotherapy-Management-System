@@ -168,3 +168,67 @@ class MakeAppointment(CreateView):
         kwargs['user'] = self.request.user
         kwargs['date'] = date
         return kwargs
+
+
+@method_decorator([login_required, office_required], name='dispatch')
+class AddServiceView(CreateView):
+    form_class = ServiceForm
+    template_name = 'appointments/office/service_add_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AddServiceView, self).get_context_data(**kwargs)
+        # previous url for back button.
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
+
+    def form_valid(self, form):
+        service = form.save(commit=False)
+        service.office_id = self.request.user.useroffice.pk
+        service.save()
+        messages.success(
+            self.request, f'Poprawnie dodałeś nową usługę.'
+        )
+        return redirect('office_panel:appointments:service_list')
+
+
+@method_decorator([login_required, office_required], name='dispatch')
+class ServiceListView(View):
+    model = Service
+    template_name = 'appointments/office/services.html'
+
+    def get(self, request):
+        """Function override due to adding pagination."""
+        services = Service.objects.filter(office=self.request.user.id)
+        paginated_services = paginate(request, services, 10)
+        ctx = {
+            'services': paginated_services,
+        }
+        return render(request, self.template_name, ctx)
+
+
+@method_decorator([login_required, office_required], name='dispatch')
+class ServiceUpdateView(UpdateView):
+    form_class = ServiceForm
+    template_name = 'appointments/office/service_update_form.html'
+    success_url = reverse_lazy('office_panel:appointments:service_list')
+
+    def get_queryset(self):
+        queryset = Service.objects.filter(pk=self.kwargs.get('pk'))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ServiceUpdateView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
+
+
+@method_decorator([login_required, office_required], name='dispatch')
+class ServiceDeleteView(DeleteView):
+    model = Service
+    template_name = 'appointments/office/service_delete_confirm.html'
+    success_url = reverse_lazy('office_panel:appointments:service_list')
+
+    def get_context_data(self, **kwargs):
+        context = super(ServiceDeleteView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
