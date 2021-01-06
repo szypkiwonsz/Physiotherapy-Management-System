@@ -334,7 +334,7 @@ a:hover, a:visited, a:link, a:active {
     }
 
     .margin-timetable-times {
-        margin-bottom: 90px;
+        margin-bottom: 30px;
     }
 
     .msg-mobile {
@@ -363,6 +363,10 @@ a:hover, a:visited, a:link, a:active {
         padding: 0;
         margin-top: 20px;
         line-height: 80px;
+    }
+
+    .margin-hr-timetable {
+        margin-bottom: -20px;
     }
 }
 
