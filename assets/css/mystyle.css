@@ -176,6 +176,11 @@ a:hover, a:visited, a:link, a:active {
         margin-top: -30px;
     }
 
+    .right-service-select {
+        margin-bottom: -7px;
+        margin-top: -45px;
+    }
+
     #office-image {
         width: 80%;
         height: 180px;
@@ -211,6 +216,10 @@ a:hover, a:visited, a:link, a:active {
 
     .timetable {
         text-align: center;
+    }
+
+    .margin-timetable-times {
+        margin-bottom: 20px;
     }
 }
 
@@ -322,6 +331,10 @@ a:hover, a:visited, a:link, a:active {
         margin-top: 30px;
         margin-bottom: -10px;
         width: 100%;
+    }
+
+    .margin-timetable-times {
+        margin-bottom: 90px;
     }
 
     .msg-mobile {
