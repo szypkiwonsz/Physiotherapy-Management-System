@@ -33,7 +33,7 @@ class AppointmentPatientMakeForm(forms.ModelForm):
         self.fields['date'].widget = forms.TextInput(attrs={'value': str(self.date), 'readonly': 'true'})
         self.fields['service'] = forms.ModelChoiceField(queryset=Service.objects.filter(office=self.office),
                                                         required=True, initial=self.service)
-        self.fields['service'].widget.attrs['disabled'] = 'True'
+        self.fields['service'].widget.attrs['readonly'] = 'True'
         self.fields['service'].label = 'Usługa'
 
     class Meta:
