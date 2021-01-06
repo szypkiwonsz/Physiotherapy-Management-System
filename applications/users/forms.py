@@ -187,9 +187,14 @@ class OfficeUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(OfficeUpdateForm, self).__init__(*args, **kwargs)
 
-        label = ['Nazwa', 'Adres', 'Miasto', 'Numer telefonu', 'Strona internetowa']
-        for i, field_name in enumerate(['name', 'address', 'city', 'phone_number', 'website']):
-            self.fields[field_name].help_text = None
+        label = ['Nazwa', 'Adres', 'Miasto', 'Numer telefonu', 'Strona internetowa', 'Czas pomiędzy wizytami']
+        for i, field_name in enumerate(
+                ['name', 'address', 'city', 'phone_number', 'website', 'appointment_time_interval']
+        ):
+            if field_name == 'appointment_time_interval':
+                self.fields[field_name].help_text = 'czas podany w minutach'
+            else:
+                self.fields[field_name].help_text = None
             self.fields[field_name].label = label[i]
 
     class Meta:
