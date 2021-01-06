@@ -44,3 +44,13 @@ def get_dates_in_month(office_id, days_in_month, month, year):
             dates.append(date)
         dates_in_month.append(dates)
     return dates_in_month
+
+
+def get_dates_taken(dates_taken, service):
+    final_dates_taken = []
+    for date in dates_taken:
+        date = [str(x.strftime('%d.%m.%Y %H:%M')) for x in
+                pd.date_range(date.date - datetime.timedelta(minutes=service.duration - 1),
+                              date.date_end - datetime.timedelta(minutes=1), freq="1min")]
+        final_dates_taken += date
+    return final_dates_taken
