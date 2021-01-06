@@ -41,6 +41,7 @@ class MakeAppointment(CreateView):
     def get_context_data(self, **kwargs):
         context = super(MakeAppointment, self).get_context_data(**kwargs)
         context['opening_hours'] = get_office_opening_hours(self.kwargs.get('pk'))
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
         return context
 
     def form_valid(self, form):

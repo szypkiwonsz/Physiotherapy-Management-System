@@ -9,12 +9,19 @@
         <div class="form">
             <h2>Stwórz wizytę</h2>
             <div class="right-button"><a href="{% url 'office_panel:patient_add' %}" class="btn btn-warning"
-                                 role="button">Dodaj pacjenta</a></div>
+                                         role="button">Dodaj pacjenta</a></div>
             <hr>
             <form method="post" id="register-office" novalidate="novalidate">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <button type="submit" class="btn btn-success">Stwórz wizytę</button>
+                {% if previous_url %}
+                    <a href="{{ previous_url }}" class="btn btn-outline-secondary" role="button">Powrót</a>
+                {% else %}
+                    <a href="{% url 'patient_panel:appointments:timetable' %}" class="btn btn-outline-secondary"
+                       role="button">Powrót
+                    </a>
+                {% endif %}
             </form>
         </div>
     </div>

@@ -131,6 +131,12 @@ class MakeAppointment(CreateView):
     template_name = 'appointments/office/appointment_make_form.html'
     success_url = reverse_lazy('office_panel:appointments:list')
 
+    def get_context_data(self, **kwargs):
+        context = super(MakeAppointment, self).get_context_data(**kwargs)
+        # previous url for back button.
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
+
     def form_valid(self, form):
         appointment = form.save(commit=False)
         appointment.first_name = form.cleaned_data.get('patient').first_name
