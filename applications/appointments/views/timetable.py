@@ -54,8 +54,8 @@ class TimetableView(View):
             }
         else:
             ctx = {
-                'year': now.year,
-                'month': now.month,
+                'year': now.year if not url_parameter_y else url_parameter_y,
+                'month': now.month if not url_parameter_y else url_parameter_m,
                 'office_id': office_id,
                 'services': Service.objects.values_list('name', flat=True).filter(office=office_id)
             }
