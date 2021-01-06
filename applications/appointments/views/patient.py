@@ -72,6 +72,35 @@ class MakeAppointment(CreateView):
         messages.warning(self.request, 'Poprawnie umówiono wizytę, ale oczekuje ona na potwierdzenie.')
         return redirect('patient_panel:appointments:upcoming')
 
+    def get_form_kwargs(self, *args, **kwargs):
+        """Overriding the method to send the date from the url to the form."""
+        kwargs = super(MakeAppointment, self).get_form_kwargs()
+        # passing office pk to form
+        kwargs['office'] = self.kwargs.get('pk')
+        date = self.kwargs.get('date')
+        service = self.kwargs.get('service')
+        services = Service.objects.values_list('name', flat=True).filter(office=self.kwargs.get('pk'))
+        if service not in services:
+            raise Http404
+        service_obj = Service.objects.filter(name=service, office=self.kwargs.get('pk')).first()
+        date_database_format = datetime.strptime(date, '%d.%m.%Y %H:%M')
+        dates_taken = Appointment.objects.filter(office=self.kwargs.get('pk'))
+        dates_taken = get_dates_taken(dates_taken, service_obj)
+        if date in dates_taken:
+            # if date from url is taken raise 404 error (in case the user changes the url)
+            raise Http404
+        office_day = OfficeDay.objects.get(office=self.kwargs.get('pk'), day=date_database_format.weekday())
+        if int(office_day.earliest_appointment_time.split(':')[0]) > int(date[-5:-3]) or \
+                int(office_day.latest_appointment_time.split(':')[0]) < int(date[-5:-3]):
+            # if the visit time given in the url is smaller or greater than the possibility of making an appointment
+            # raise 404 error (in case the user changes the url)
+            raise Http404
+        if datetime.strptime(date.split(' ')[0], "%d.%m.%Y").date() < datetime.today().date():
+            raise Http404
+        kwargs['date'] = date
+        kwargs['service'] = service_obj
+        return kwargs
+
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class AppointmentListView(ListView):
