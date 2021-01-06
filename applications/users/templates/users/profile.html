@@ -22,16 +22,23 @@
             {{ p_form|crispy }}
             <button type="submit" class="btn btn-success mb-3">Zmień</button>
     </div>
-    <div class="container border rounded bg-light p-3 mb-3">
-        {% for form in d_forms %}
-            <div class="row inline {{ d_forms.prefix }}">
-                <div class="col-lg-4"> {{ form.day|as_crispy_field }}</div>
-                <div class="col-lg-4">{{ form.earliest_appointment_time|as_crispy_field }}</div>
-                <div class="col-lg-4">{{ form.latest_appointment_time|as_crispy_field }}</div>
-            </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-success">Zmień</button>
-    </div>
+    {% if user.is_office %}
+        <div class="container border rounded bg-light p-3 mb-3">
+            {% for form in d_forms %}
+                <div class="row inline {{ d_forms.prefix }}">
+                    <div class="col-lg-4"> {{ form.day|as_crispy_field }}</div>
+                    <div class="col-lg-4">{{ form.earliest_appointment_time|as_crispy_field }}</div>
+                    <div class="col-lg-4">{{ form.latest_appointment_time|as_crispy_field }}</div>
+                </div>
+            {% endfor %}
+            <small class="text-muted">
+                W przypadku ustawienia takich samych obu godzin, dzień będzie wyłączony z harmonogramu!
+            </small>
+            <br>
+            <button type="submit" class="btn btn-success mt-3">Zmień</button>
+
+        </div>
+    {% endif %}
     <div class="container border rounded bg-light p-3 mb-3">
         {{ o_form|crispy }}
         <button type="submit" class="btn btn-success">Zmień</button>
