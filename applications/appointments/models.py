@@ -53,7 +53,7 @@ class Service(models.Model):
     def validate_unique(self, exclude=None):
         """Validate uniqueness service name per office."""
         qs = Service.objects.filter(office=self.office_id)
-        if qs.filter(name=self.name).exists():
+        if qs.filter(name=self.name).exists() and self.pk != qs.filter(name=self.name).first().pk:
             raise ValidationError('Nazwa usługi musi być unikalna dla gabinetu.')
 
     def save(self, *args, **kwargs):
