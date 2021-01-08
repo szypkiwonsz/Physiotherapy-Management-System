@@ -16,3 +16,4 @@ celery==5.0.1
 redis==3.5.3
 boto3==1.15.12
 gevent==20.9.0
+pandas==1.1.4
