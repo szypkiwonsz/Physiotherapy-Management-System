@@ -198,7 +198,7 @@ class AppointmentUpdateView(UpdateView):
         date_object = database_old_datetime_format_to_new(date)
         initial['date'] = date_object
         service_name = Appointment.objects.get(office=self.object.office, pk=self.object.pk).service.name
-        initial['service'] = Service.objects.get(name=service_name)
+        initial['service'] = Service.objects.get(name=service_name, office=self.object.office)
         return initial
 
     def form_valid(self, form):

@@ -70,7 +70,7 @@ class AppointmentUpdateView(UpdateView):
         date_object = database_old_datetime_format_to_new(date)
         service_name = Appointment.objects.get(office=self.request.user.useroffice, pk=self.object.pk).service.name
         initial['date'] = date_object
-        initial['service'] = Service.objects.get(name=service_name)
+        initial['service'] = Service.objects.get(name=service_name, office=self.request.user.useroffice)
         return initial
 
     def get_context_data(self, **kwargs):
