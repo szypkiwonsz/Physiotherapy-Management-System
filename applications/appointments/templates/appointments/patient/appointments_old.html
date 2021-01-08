@@ -11,7 +11,7 @@
                     <hr>
                     {{ appointment.office.name }},
                     {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
-                    {{ appointment.choice }}
+                    {{ appointment.service.name }}
                     <div class="right-button">
                         <a href="{% url 'patient_panel:appointments:update' appointment.pk %}" class="btn btn-info"
                            role="button">Zmień</a>

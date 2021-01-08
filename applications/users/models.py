@@ -2,6 +2,7 @@ import calendar
 
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext as _
 from easy_thumbnails.fields import ThumbnailerImageField
@@ -33,7 +34,7 @@ class UserPatient(models.Model):
         return self.user.email
 
 
-class Office(models.Model):
+class UserOffice(models.Model):
     """Office model that can be assigned to a user"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=50)
@@ -41,6 +42,9 @@ class Office(models.Model):
     city = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=9)
     website = models.CharField(max_length=20)
+    appointment_time_interval = models.PositiveIntegerField(
+        default=20, validators=[MinValueValidator(10), MaxValueValidator(60)]
+    )
 
     def __str__(self):
         return self.user.email
@@ -55,7 +59,7 @@ class OfficeDay(models.Model):
     DAY_CHOICES = get_days_of_week()
     HOUR_CHOICES = get_hours_in_day()
 
-    office = models.ForeignKey(Office, on_delete=models.CASCADE, related_name='office_days')
+    office = models.ForeignKey(UserOffice, on_delete=models.CASCADE, related_name='office_days')
     day = models.CharField(max_length=1, choices=DAY_CHOICES)
     earliest_appointment_time = models.CharField(max_length=5, choices=HOUR_CHOICES, default='11:00')
     latest_appointment_time = models.CharField(max_length=5, choices=HOUR_CHOICES, default='18:00')

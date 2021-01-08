@@ -15,9 +15,9 @@ class OfficeProfile(View):
 
     def get(self, request):
         p_form = ProfileUpdateForm(instance=request.user.profile)
-        o_form = OfficeUpdateForm(instance=request.user.office)
+        o_form = OfficeUpdateForm(instance=request.user.useroffice)
         u_form = UsersUpdateForm(instance=request.user)
-        days = [OfficeDay.objects.get(office=request.user.office, day=i) for i in range(7)]
+        days = [OfficeDay.objects.get(office=request.user.useroffice, day=i) for i in range(7)]
         days_forms = [OfficeDayUpdateForm(instance=days[i], prefix=f'days{i}') for i in range(7)]
         context = {
             'o_form': o_form,
@@ -28,10 +28,10 @@ class OfficeProfile(View):
         return render(request, self.template_name, context)
 
     def post(self, request):
-        o_form = OfficeUpdateForm(request.POST, instance=request.user.office)
+        o_form = OfficeUpdateForm(request.POST, instance=request.user.useroffice)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         u_form = UsersUpdateForm(request.POST, instance=request.user)
-        days = [OfficeDay.objects.get(office=request.user.office, day=i) for i in range(7)]
+        days = [OfficeDay.objects.get(office=request.user.useroffice, day=i) for i in range(7)]
         days_forms = [OfficeDayUpdateForm(request.POST, instance=days[i], prefix=f'days{i}') for i in range(7)]
 
         if p_form.is_valid() and o_form.is_valid() and u_form.is_valid():

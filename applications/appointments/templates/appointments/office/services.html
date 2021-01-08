@@ -1,0 +1,68 @@
+{% extends 'base/base_panel_office.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block head %}
+    <title>Fizjo-System - Usługi</title>
+{% endblock head %}
+{% block content %}
+    <div class="container border rounded bg-light">
+        <div class="form">
+            {% if services %}
+                <div class="text-description"><h2>Usługi oferowane przez twój gabinet:</h2></div>
+                <div class="right-button"><a href="{% url 'office_panel:appointments:service_add' %}"
+                                             class="btn btn-warning"
+                                             role="button">Dodaj usługę</a></div>
+                {% for service in services %}
+                    <hr>
+                    <div class="text-description">
+                        {{ service.name }},
+                        czas trwania: {{ service.duration }}min
+                    </div>
+                    <div class="right-button">
+                        <a href="{% url 'office_panel:appointments:service_edit' service.pk %}" class="btn btn-info"
+                           role="button">Edytuj</a>
+                        <a href="{% url 'office_panel:appointments:service_delete' service.pk %}"
+                           class="btn btn-danger"
+                           role="button">Usuń</a>
+                    </div>
+                {% endfor %}
+                <hr>
+            {% else %}
+                <h2>Nie masz żadnych usług dodanych dla gabinetu.</h2>
+                <hr>
+                <a href="{% url 'office_panel:appointments:service_add' %}" class="btn btn-warning" role="button">Dodaj
+                    usługę</a>
+            {% endif %}
+        </div>
+        {% if services.has_other_pages %}
+            <ul class="pagination">
+                {% if services.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ services.previous_page_number }}">&laquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" tabindex="-1">&laquo;</a>
+                    </li>
+                {% endif %}
+                {% for i in services.paginator.page_range %}
+                    {% if services.number == i %}
+                        <li class="page-item active"><a class="page-link">{{ i }} <span class="sr-only">(current)</span></a>
+                        </li>
+                    {% else %}
+                        <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if services.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ services.next_page_number }}">&raquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">&raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock content %}

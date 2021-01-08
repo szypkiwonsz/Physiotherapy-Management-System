@@ -16,6 +16,19 @@ class TestHomePageNotLoggedIn(StaticLiveServerTestCase):
     def tearDown(self):
         self.browser.close()
 
+    def test_login_button_redirects_to_login(self):
+        self.browser.get(self.live_server_url)
+        login_url = self.live_server_url + reverse('login')
+        self.browser.find_element_by_xpath(
+            '//*[@id="basicExampleNav"]/ul[2]/li[1]/a').click()
+        sleep(0.5)
+        self.browser.find_element_by_xpath(
+            '//*[@id="basicExampleNav"]/ul[2]/li[1]/a').click()
+        self.assertEquals(
+            self.browser.current_url,
+            login_url
+        )
+
     def test_panel_button_redirects_to_login(self):
         self.browser.get(self.live_server_url)
         login_url = self.live_server_url + reverse('login')

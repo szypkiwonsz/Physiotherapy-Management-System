@@ -143,6 +143,9 @@ List of visits made by patients in the office
 ```
 Adding a medical history for any patient visit
 ```
+```
+The ability to add services available for appointments
+```
 ---
 ## Built With
 

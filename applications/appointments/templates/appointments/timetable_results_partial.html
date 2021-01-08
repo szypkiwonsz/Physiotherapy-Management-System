@@ -1,0 +1,36 @@
+{% load office_panel_extras %}
+{% load static %}
+<div class="font-weight-bold border border-rounded margin-timetable-times"> {{ month|add_zero }}.{{ year }}</div>
+{% for date_list in dates %}
+    <div class="d-flex flex-row flex-nowrap">
+        {% for date in date_list %}
+            {% with date_list|len_str as len_hours %}
+                <span>
+        {% with date|split:' ' as date_split %}
+            {% if date in dates_taken and not date|is_past_due %}
+                <button class="btn card-body btn-danger btn btn-timetable ml-1 mr-1">{{ date_split|index:1 }}</button>
+            {% elif date|is_past_due %}
+            {% else %}
+                {% if user.is_patient %}
+                    <a href="{% url 'patient_panel:appointments:make' pk=office_id date=date service=service %}"
+                       class="btn btn-success card-body btn btn-timetable ml-1 mr-1"
+                       role="button">{{ date_split|index:1 }}</a>
+                {% else %}
+                    <a href="{% url 'office_panel:appointments:make' pk=office_id date=date service=service %}"
+                       class="btn btn-success card-body btn btn-timetable ml-1 mr-1"
+                       role="button">{{ date_split|index:1 }}</a>
+                {% endif %}
+            {% endif %}
+        {% endwith %}
+        </span>
+            {% endwith %}
+        {% endfor %}
+    </div>
+    {% with date_list.0 as date %}
+        {% if not date|is_past_due %}
+            <span class="font-weight-bold day-number">{{ date|index:0|remove_zero }}{{ date|index:1 }}</span>
+            <hr class="margin-hr-timetable">
+            <br>
+        {% endif %}
+    {% endwith %}
+{% endfor %}

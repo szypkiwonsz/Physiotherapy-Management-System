@@ -1,5 +1,6 @@
 {% extends 'base/base_panel_office.html' %}
 {% load office_panel_extras %}
+{% load static %}
 {% block head %}
     <title>Fizjo-System - Panel Gabinetu</title>
 {% endblock head %}
@@ -37,36 +38,26 @@
     </div>
     <div class="container border rounded mt-3 bg-light">
         <div class="form">
-            {% if dates %}
+            {% if not dates %}
                 <h2>Najbliższe wolne terminy:</h2>
                 (godziny przyjęć możesz dostosować na swoim profilu.)
             {% else %}
                 <h2>Brak wolnych terminów w tym miesiącu.</h2>
             {% endif %}
-            <hr>
-            <div class="timetable">
-                {% for date_list in dates|slice:':2' %}
-                    {% for date in date_list %}
-                        {% with date_list|len_str as len_date_list %}
-                            <span>
-                    {% with date|split:' ' as date_split %}
-                            <a href="{% url 'office_panel:appointments:make' pk=office_id %}?date={{ date }}"
-                               class="btn btn-success btn mt-1 btn-timetable" role="button">
-                                {{ date_split|index:1 }}
-                            </a>
-                    {% endwith %}
-                            </span>
-                            {% if forloop.counter|divisibleby:len_date_list %}
-                                <span class="font-weight-bold day-number"><div>
-                                {{ date|index:0 }}{{ date|index:1 }}.{{ date|index:3 }}{{ date|index:4 }}
-                            </div></span>
-                                <hr class="margin-hr-home-timetable">
-                            {% endif %}
-                        {% endwith %}
+            <div class="text-right right-service-select">
+                <select class="browser-default custom-select mt-2 col-lg-3" name="cars" id="service">
+                    <option selected="selected">Wybierz usługę</option>
+                    {% for service in services %}
+                        <option value="{{ service }}">{{ service }}</option>
                     {% endfor %}
-                {% endfor %}
+                </select>
             </div>
-            <a href="{% url 'office_panel:timetable' %}" class="btn btn-warning" role="button">Pokaż cały harmonogram
+            <hr>
+            <div id="replaceable-content">
+                {% include 'office_panel/home_timetable_results_partial.html' %}
+            </div>
+            <a href="{% url 'office_panel:appointments:timetable' %}" class="btn btn-warning" role="button">Pokaż cały
+                harmonogram
             </a>
         </div>
     </div>
@@ -83,7 +74,7 @@
                     {{ appointment.first_name }}
                     {{ appointment.last_name }},
                     {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
-                    {{ appointment.choice }}
+                    {{ appointment.service.name }}
                     <br>
                     {% if appointment.confirmed %}
                         [<span id="confirmed-color">Potwierdzona</span>]
@@ -134,7 +125,7 @@
                     <div class="mt-3">
                         {{ medical_history.appointment.date|date:"d.m.Y" }},
                         {{ medical_history.appointment.date|date:"H:i" }},
-                        {{ medical_history.appointment.choice }}
+                        {{ medical_history.appointment.service.name }}
                     </div>
                 {% endif %}
                 <div class="right-button">
@@ -158,4 +149,7 @@
             {% endif %}
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static "js/force_reload.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/timetable_selector.js" %}"></script>
 {% endblock content %}

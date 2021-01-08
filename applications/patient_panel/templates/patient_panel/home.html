@@ -38,7 +38,7 @@
                 <hr>
                 <div class="text-description">{{ appointment.office.name }},
                     {{ appointment.date|date:"d.m.Y" }}, o godz: {{ appointment.date|date:"H:i" }} -
-                    {{ appointment.choice }}
+                    {{ appointment.service.name }}
                     {% if appointment.confirmed %}
                         [<span id="confirmed-color">Potwierdzona</span>]
                     {% else %}
@@ -72,13 +72,13 @@
             {% endif %}
             {% for medical_history in medical_histories %}
                 <hr>
-                {{ medical_history.owner.office.name }}<br>
+                {{ medical_history.owner.useroffice.name }}<br>
                 Data dodania: {{ medical_history.date_selected|date:"d.m.Y" }}, o godz:
                 {{ medical_history.date_selected|date:"H:i" }}<br>
                 {% if medical_history.appointment %}
                     {{ medical_history.appointment.date|date:"d.m.Y" }},
                     {{ medical_history.appointment.date|date:"H:i" }},
-                    <div class="text-description">{{ medical_history.appointment.choice }}</div>
+                    <div class="text-description">{{ medical_history.appointment.service.name }}</div>
                 {% endif %}
                 <div class="border-left rounded p-1 mt-3">Opis:
                     <div class="text-description">{{ medical_history.description }}</div>
