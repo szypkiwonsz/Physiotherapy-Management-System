@@ -50,12 +50,14 @@
             bg-light">Panel Główny</a>
             <a href="{% url 'office_panel:patients' %}" class="list-group-item list-group-item-action
             bg-light">Pacjenci</a>
-            <a href="{% url 'office_panel:timetable' %}" class="list-group-item list-group-item-action
+            <a href="{% url 'office_panel:appointments:timetable' %}" class="list-group-item list-group-item-action
             bg-light">Harmonogram</a>
             <a href="{% url 'office_panel:appointments:list' %}" class="list-group-item list-group-item-action
             bg-light">Wizyty</a>
             <a href="{% url 'office_panel:medical_history:list' %}" class="list-group-item list-group-item-action
             bg-light">Historie Medyczne</a>
+            <a href="{% url 'office_panel:appointments:service_list' %}" class="list-group-item list-group-item-action
+            bg-light">Usługi</a>
         </div>
     </div>
     <div id="page-content-wrapper">

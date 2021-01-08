@@ -1,26 +1,26 @@
 {% extends 'base/base_panel_office.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 {% block head %}
-    <title>Fizjo-System - Usuń Wizytę</title>
-{% endblock %}
+    <title>Fizjo-System - Dodaj Usługę</title>
+{% endblock head %}
 {% block content %}
     <div class="container border rounded bg-light">
         <div class="form">
-            <h2 class="mb-3">Potwierdź usunięcie wizyty.</h2>
+            <h2>Dodaj usługę</h2>
             <hr>
-            <p class="lead">Jesteś pewny, że chcesz usunąć wizytę pacjenta: <strong>{{ appointment.name }}</strong>?
-            </p>
-            <form method="post">
+            <form method="post" id="register-office" novalidate="novalidate">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Tak, usuń</button>
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-success">Dodaj usługę</button>
                 {% if previous_url %}
                     <a href="{{ previous_url }}" class="btn btn-outline-secondary" role="button">Powrót</a>
                 {% else %}
-                    <a href="{% url 'office_panel:appointments:list' %}" class="btn btn-outline-secondary"
+                    <a href="{% url 'office_panel:appointments:service_list' %}" class="btn btn-outline-secondary"
                        role="button">Powrót
                     </a>
                 {% endif %}
             </form>
         </div>
     </div>
-{% endblock %}
+{% endblock content %}

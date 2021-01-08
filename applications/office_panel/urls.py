@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from applications.office_panel.views import home, patient, timetable
+from applications.office_panel.views import home, patient
 
 app_name = 'office_panel'
 urlpatterns = [
@@ -13,6 +13,5 @@ urlpatterns = [
         path('<int:pk>/delete/', patient.PatientDeleteView.as_view(), name='patient_delete'),
     ])),
     path('medical_history/', include('applications.medical_history.urls.office')),
-    path('appointments/', include('applications.appointments.urls.office')),
-    path('timetable/', timetable.TimetableView.as_view(), name='timetable')
+    path('appointments/', include('applications.appointments.urls.office'))
 ]

@@ -1,11 +1,9 @@
-import locale
-
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import SetPasswordForm
 from django.utils.translation import gettext as _
 
-from applications.users.models import User, Profile, Office, UserPatient, OfficeDay
+from applications.users.models import User, Profile, UserOffice, UserPatient, OfficeDay
 from applications.users.utils import get_days_of_week, get_hours_in_day
 from applications.users.widgets import MyClearableFileInput
 from utils.regex_validators import numeric_phone_number
@@ -189,14 +187,19 @@ class OfficeUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(OfficeUpdateForm, self).__init__(*args, **kwargs)
 
-        label = ['Nazwa', 'Adres', 'Miasto', 'Numer telefonu', 'Strona internetowa']
-        for i, field_name in enumerate(['name', 'address', 'city', 'phone_number', 'website']):
-            self.fields[field_name].help_text = None
+        label = ['Nazwa', 'Adres', 'Miasto', 'Numer telefonu', 'Strona internetowa', 'Czas pomiędzy wizytami']
+        for i, field_name in enumerate(
+                ['name', 'address', 'city', 'phone_number', 'website', 'appointment_time_interval']
+        ):
+            if field_name == 'appointment_time_interval':
+                self.fields[field_name].help_text = 'czas podany w minutach'
+            else:
+                self.fields[field_name].help_text = None
             self.fields[field_name].label = label[i]
 
     class Meta:
-        model = Office
-        fields = ['name', 'address', 'city', 'phone_number', 'website']
+        model = UserOffice
+        fields = ['name', 'address', 'city', 'phone_number', 'website', 'appointment_time_interval']
 
 
 class PatientUpdateForm(forms.ModelForm):
