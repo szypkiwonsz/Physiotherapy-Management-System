@@ -4,10 +4,10 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
 
-from applications.appointments.models import Appointment
+from applications.appointments.models import Appointment, Service
 from applications.medical_history.models import MedicalHistory
 from applications.office_panel.models import Patient
-from applications.users.models import User, Office
+from applications.users.models import User, UserOffice
 
 
 class TestOfficeMedicalHistoryViews(TestCase):
@@ -38,13 +38,18 @@ class TestOfficeMedicalHistoryViews(TestCase):
             recommendations='recommendations',
             date_selected=timezone.now(),
         )
-        self.appointment_office1 = Office.objects.create(
+        self.appointment_office1 = UserOffice.objects.create(
             user=self.office1,
             name='name',
             address='address',
             city='City',
             phone_number='000000000',
             website='www.website.com'
+        )
+        self.service = Service.objects.create(
+            office=self.appointment_office1,
+            name='Konsultacja',
+            duration=10
         )
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
@@ -55,7 +60,7 @@ class TestOfficeMedicalHistoryViews(TestCase):
             date_selected=datetime(2012, 1, 13, 23, 51, 34),
             phone_number='000000000',
             confirmed=False,
-            choice='Konsultacja'
+            service=self.service
         )
 
     def test_medical_history_list_GET_not_logged_in(self):

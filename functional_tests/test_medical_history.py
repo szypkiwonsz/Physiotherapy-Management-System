@@ -1,14 +1,14 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import sleep
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 from selenium import webdriver
 
-from applications.appointments.models import Appointment
+from applications.appointments.models import Appointment, Service
 from applications.medical_history.models import MedicalHistory
 from applications.office_panel.models import Patient
-from applications.users.models import User, Office
+from applications.users.models import User, UserOffice
 
 
 class TestOfficeMedicalHistory(StaticLiveServerTestCase):
@@ -26,7 +26,7 @@ class TestOfficeMedicalHistory(StaticLiveServerTestCase):
             last_name='lastname',
             email='patient@gmail.com',
         )
-        self.office1 = Office.objects.create(
+        self.office1 = UserOffice.objects.create(
             user=self.office_user1,
             name='name',
             address='address',
@@ -34,17 +34,23 @@ class TestOfficeMedicalHistory(StaticLiveServerTestCase):
             phone_number='000000000',
             website='www.website.com'
         )
+        self.service = Service.objects.create(
+            office=self.office1,
+            name='Konsultacja',
+            duration=10
+        )
         self.appointment1 = Appointment.objects.create(
             owner=self.patient1,
             office=self.office1,
             patient_email='patient@gmail.com',
             date=datetime(datetime.today().year, datetime.today().month, 2),
+            date_end=datetime(datetime.today().year, datetime.today().month, 2) + timedelta(minutes=20),
             first_name='Kacper',
             last_name='Sawicki',
             date_selected=datetime(2020, 8, 21, 17, 00, 00),
             phone_number='000000000',
             confirmed=False,
-            choice='Konsultacja'
+            service=self.service
         )
         self.medical_history1 = MedicalHistory.objects.create(
             owner=self.office_user1,

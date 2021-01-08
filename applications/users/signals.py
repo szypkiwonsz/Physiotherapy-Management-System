@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from applications.users.models import Profile, Office, OfficeDay
+from applications.users.models import Profile, UserOffice, OfficeDay
 from applications.users.models import User
 
 
@@ -17,7 +17,7 @@ def save_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 
-@receiver(post_save, sender=Office)
+@receiver(post_save, sender=UserOffice)
 def create_office_day(sender, instance, created, **kwargs):
     """Creates days for the office when a user registers as a new office."""
     if created:

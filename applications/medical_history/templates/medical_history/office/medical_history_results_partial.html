@@ -19,7 +19,7 @@
             <div class="mt-3">
                 {{ medical_history.appointment.date|date:"d.m.Y" }},
                 {{ medical_history.appointment.date|date:"H:i" }},
-                {{ medical_history.appointment.choice }}
+                {{ medical_history.appointment.service.name }}
             </div>
         {% endif %}
         <div class="right-button">

@@ -2,7 +2,7 @@ from PIL import Image
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from applications.users.models import User, UserPatient, Office, OfficeDay
+from applications.users.models import User, UserPatient, UserOffice, OfficeDay
 
 
 class TestUserPatientModels(TestCase):
@@ -26,7 +26,7 @@ class TestOfficeModels(TestCase):
         self.office1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.appointment_office1 = Office.objects.create(
+        self.appointment_office1 = UserOffice.objects.create(
             user=self.office1,
             name='name',
             address='address',
@@ -61,7 +61,7 @@ class TestOfficeDayModels(TestCase):
         self.office_user1 = User.objects.create_user(
             'office', 'office@gmail.com', 'officepassword', is_office=True
         )
-        self.office1 = Office.objects.create(
+        self.office1 = UserOffice.objects.create(
             user=self.office_user1,
             name='name',
             address='address',

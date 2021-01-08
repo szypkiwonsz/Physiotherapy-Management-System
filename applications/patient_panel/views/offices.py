@@ -5,17 +5,17 @@ from django.utils.decorators import method_decorator
 from django.views import View
 
 from applications.users.decorators import login_required, patient_required
-from applications.users.models import Office
+from applications.users.models import UserOffice
 from utils.paginate import paginate
 
 
 @method_decorator([login_required, patient_required], name='dispatch')
 class OfficesListView(View):
-    model = Office
+    model = UserOffice
     template_name = 'patient_panel/offices.html'
 
     def get_queryset(self):
-        queryset = Office.objects.filter(user__patients__email=self.request.user).distinct()
+        queryset = UserOffice.objects.filter(user__patients__email=self.request.user).distinct()
         return queryset
 
     def get(self, request):

@@ -1,0 +1,27 @@
+{% load office_panel_extras %}
+<div class="timetable">
+    {% if not service %}
+        <h5>Wybierz usługę, aby poprawnie wyświetlić godziny.</h5>
+        <hr>
+    {% endif %}
+    {% for date_list in dates|slice:':2' %}
+        {% for date in date_list %}
+            {% with date_list|len_str as len_date_list %}
+                <span>
+                    {% with date|split:' ' as date_split %}
+                        <a href="{% url 'office_panel:appointments:make' pk=office_id date=date service=service %}"
+                           class="btn btn-success btn mt-1 btn-timetable" role="button">
+                                {{ date_split|index:1 }}
+                            </a>
+                    {% endwith %}
+                            </span>
+                {% if forloop.counter|divisibleby:len_date_list %}
+                    <span class="font-weight-bold day-number"><div>
+                                {{ date|index:0 }}{{ date|index:1 }}.{{ date|index:3 }}{{ date|index:4 }}
+                            </div></span>
+                    <hr class="margin-hr-home-timetable">
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+    {% endfor %}
+</div>

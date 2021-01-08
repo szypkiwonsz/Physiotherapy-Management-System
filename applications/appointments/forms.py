@@ -1,18 +1,17 @@
+from datetime import datetime
+
 from django import forms
 from django.utils.translation import gettext as _
 
 from Physiotherapy_Management_System import settings
-from applications.appointments.models import Appointment
+from applications.appointments.models import Appointment, Service
 from applications.office_panel.models import Patient
+from applications.office_panel.utils import get_dates_taken
 from applications.users.models import OfficeDay
 
 
 class AppointmentPatientMakeForm(forms.ModelForm):
     """Form for patient to make an appointment."""
-    CHOICES = [('Konsultacja', 'Konsultacja'),
-               ('Terapia manualna i indywidualna', 'Terapia manualna i indywidualna'),
-               ('Masaż', 'Masaż'),
-               ('Fala uderzeniowa', 'Fala uderzeniowa')]
     date = forms.DateTimeField(
         label='Data wizyty:',
         input_formats=settings.DATE_INPUT_FORMATS,
@@ -24,16 +23,22 @@ class AppointmentPatientMakeForm(forms.ModelForm):
         'min_length': _('Numer powinien zawierać 9 cyfr.'),
         'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
     })
-    choice = forms.ChoiceField(label='Usługa', choices=CHOICES)
 
     def __init__(self, *args, **kwargs):
         self.office = kwargs.pop('office', None)
         self.appointment = kwargs.pop('appointment', None)
+        self.date = kwargs.pop('date', None)
+        self.service = kwargs.pop('service', None)
         super(AppointmentPatientMakeForm, self).__init__(*args, **kwargs)
+        self.fields['date'].widget = forms.TextInput(attrs={'value': str(self.date), 'readonly': 'true'})
+        self.fields['service'] = forms.ModelChoiceField(queryset=Service.objects.filter(office=self.office),
+                                                        required=True, initial=self.service)
+        self.fields['service'].widget.attrs['readonly'] = 'True'
+        self.fields['service'].label = 'Usługa'
 
     class Meta:
         model = Appointment
-        fields = ['date', 'first_name', 'last_name', 'phone_number', 'choice']
+        fields = ['date', 'first_name', 'last_name', 'phone_number', 'service']
 
     error_messages = {
         'appointment_date_taken': _('Wybrana data jest już zajęta.'),
@@ -44,18 +49,22 @@ class AppointmentPatientMakeForm(forms.ModelForm):
     def clean(self):
         """Validate appointment date provided to form."""
         cleaned_data = super(AppointmentPatientMakeForm, self).clean()
-        try:
-            appointment = Appointment.objects.get(date=cleaned_data.get('date'), office=self.office)
-        except Appointment.DoesNotExist:
-            appointment = None
-        try:
+        dates_taken = Appointment.objects.filter(office=self.office)
+        # checking in case of UpdateForm where self.service is None
+        if self.service:
+            service = Service.objects.filter(name=self.service.name, office=self.office).first()
+        else:
+            service = None
+        appointment = Appointment.objects.filter(date=cleaned_data.get('date'), office=self.office).first()
+        if service:
+            dates_taken = get_dates_taken(dates_taken, service)
+        else:
+            dates_taken = []
+        if cleaned_data.get('date'):
             weekday = cleaned_data.get('date').weekday()
-        except AttributeError:
+        else:
             weekday = None
-        try:
-            day = OfficeDay.objects.get(office=self.office, day=weekday)
-        except OfficeDay.DoesNotExist:
-            day = None
+        day = OfficeDay.objects.filter(office=self.office, day=weekday).first()
         # if the user selected default hour time
         if cleaned_data.get('date') and cleaned_data.get('date').hour == 23 and cleaned_data.get('date').minute == 59:
             raise forms.ValidationError(
@@ -70,7 +79,8 @@ class AppointmentPatientMakeForm(forms.ModelForm):
                 code='appointment_incorrect_date'
             )
         # if the date of the visit is already taken
-        elif appointment and appointment.pk != self.appointment:
+        elif cleaned_data.get('date') and datetime.strftime(cleaned_data.get('date'), '%d.%m.%Y %H:%M') in dates_taken \
+                and appointment and appointment.pk != self.appointment:
             raise forms.ValidationError(
                 self.error_messages['appointment_date_taken'],
                 code='appointment_date_taken'
@@ -82,16 +92,14 @@ class AppointmentOfficeMakeForm(AppointmentPatientMakeForm):
     """Form for office to make an appointment."""
 
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        self.date = kwargs.pop('date', None)
         super(AppointmentOfficeMakeForm, self).__init__(*args, **kwargs)
         # removing unnecessary fields
         del self.fields['first_name']
         del self.fields['last_name']
         del self.fields['phone_number']
-        self.fields['patient'] = forms.ModelChoiceField(queryset=Patient.objects.filter(owner=self.user), required=True)
+        self.fields['patient'] = forms.ModelChoiceField(queryset=Patient.objects.filter(owner__useroffice=self.office),
+                                                        required=True)
         self.fields['patient'].label = 'Pacjent'
-        self.fields['date'].widget = forms.TextInput(attrs={'value': str(self.date), 'readonly': 'true'})
 
 
 class AppointmentOfficeUpdateForm(AppointmentOfficeMakeForm):
@@ -100,53 +108,47 @@ class AppointmentOfficeUpdateForm(AppointmentOfficeMakeForm):
 
     def __init__(self, *args, **kwargs):
         super(AppointmentOfficeUpdateForm, self).__init__(*args, **kwargs)
-        self.office = kwargs.pop('office', None)
-        self.appointment = kwargs.pop('appointment', None)
         self.fields['date'].widget = forms.TextInput()
+        self.fields['service'] = forms.ModelChoiceField(
+            queryset=Service.objects.filter(office=self.office), required=True
+        )
+        self.fields['service'].label = 'Usługa'
         del self.fields['patient']
 
     class Meta:
         model = Appointment
         fields = ['date', 'confirmed']
 
-    error_messages = {
-        'appointment_date_taken': _('Wybrana data jest już zajęta.'),
-        'appointment_default_time_error': _('Wybierz poprawną godzinę.'),
-        'appointment_incorrect_date': _('Wybierz poprawną godzinę.')
-    }
 
-    def clean(self):
-        """Validate appointment date provided to form."""
-        cleaned_data = super(AppointmentOfficeUpdateForm, self).clean()
-        try:
-            appointment = Appointment.objects.get(date=cleaned_data.get('date'), office=self.office)
-        except Appointment.DoesNotExist:
-            appointment = None
-        try:
-            weekday = cleaned_data.get('date').weekday()
-        except AttributeError:
-            weekday = None
-        try:
-            day = OfficeDay.objects.get(office=self.office, day=weekday)
-        except OfficeDay.DoesNotExist:
-            day = None
-        # if the user selected default hour time
-        if cleaned_data.get('date') and cleaned_data.get('date').hour == 23 and cleaned_data.get('date').minute == 59:
-            raise forms.ValidationError(
-                self.error_messages['appointment_default_time_error'],
-                code='appointment_default_time_error'
-            )
-        # if hour time selected is not correct with office hours
-        elif day and int(day.earliest_appointment_time.split(':')[0]) > int(cleaned_data.get('date').hour) \
-                or day and int(day.latest_appointment_time.split(':')[0]) < int(cleaned_data.get('date').hour):
-            raise forms.ValidationError(
-                self.error_messages['appointment_incorrect_date'],
-                code='appointment_incorrect_date'
-            )
-        # if the date of the visit is already taken
-        elif appointment and appointment.pk != self.appointment:
-            raise forms.ValidationError(
-                self.error_messages['appointment_date_taken'],
-                code='appointment_date_taken'
-            )
-        return cleaned_data
+class AppointmentPatientUpdateForm(AppointmentOfficeUpdateForm):
+    """Form for office to update an appointment."""
+
+    def __init__(self, *args, **kwargs):
+        super(AppointmentPatientUpdateForm, self).__init__(*args, **kwargs)
+        del self.fields['confirmed']
+        self.fields['first_name'] = forms.CharField(label='Imię')
+        self.fields['last_name'] = forms.CharField(label='Nazwisko')
+        self.fields['phone_number'] = forms.CharField(label='Numer telefonu', min_length=9, error_messages={
+            'min_length': _('Numer powinien zawierać 9 cyfr.'),
+            'max_length': _('Numer powinien składać się z maksymalnie 9 cyfr.')
+        })
+
+    class Meta:
+        model = Appointment
+        fields = ['first_name', 'last_name', 'phone_number', 'date']
+
+
+class ServiceForm(forms.ModelForm):
+    """Form for office to add and update an appointment."""
+
+    def __init__(self, *args, **kwargs):
+        super(ServiceForm, self).__init__(*args, **kwargs)
+        self.fields['duration'].help_text = 'czas podany w minutach'
+
+        label = ['Nazwa', 'Czas trwania']
+        for i, field_name in enumerate(['name', 'duration']):
+            self.fields[field_name].label = label[i]
+
+    class Meta:
+        model = Service
+        fields = ['name', 'duration']

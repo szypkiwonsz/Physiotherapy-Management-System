@@ -1,0 +1,31 @@
+{% extends user.is_patient|yesno:'base/base_panel_patient.html,base/base_panel_office.html' %}
+{% load static %}
+{% block head %}
+    <title>Fizjo-System - Harmonogram</title>
+{% endblock %}
+{% block content %}
+    <div class="container border rounded bg-light">
+        <div class="row">
+            <div class="search col">
+                <button class="btn border rounded" id="date-select-down"><<</button>
+                <button class="btn border rounded" id="date-select-up">>></button>
+            </div>
+            <select class="search col browser-default custom-select" name="cars" id="service">
+                <option selected="selected">Wybierz usługę</option>
+                {% for service in services %}
+                    <option value="{{ service }}">{{ service }}</option>
+                {% endfor %}
+            </select>
+            {% if user.is_office %}
+                <div class="search col"><a href="{% url 'users:office_profile' %}" class="btn btn-warning float-right"
+                                           role="button">Dostosuj godziny</a></div>
+            {% endif %}
+        </div>
+        <div class="form timetable" id="replaceable-content">
+            {% include 'appointments/timetable_results_partial.html' %}
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static "js/force_reload.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/timetable_selector.js" %}"></script>
+{% endblock content %}

@@ -5,17 +5,18 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import UpdateView, DeleteView, CreateView
 
-from applications.appointments.forms import AppointmentOfficeUpdateForm, AppointmentOfficeMakeForm
+from applications.appointments.forms import AppointmentOfficeUpdateForm, AppointmentOfficeMakeForm, ServiceForm
 from applications.appointments.models import Appointment
+from applications.appointments.models import Service
 from applications.appointments.utils import database_old_datetime_format_to_new
+from applications.office_panel.utils import get_dates_taken
 from applications.users.decorators import office_required
-from applications.users.models import OfficeDay
-from utils.add_zero import add_zero
+from applications.users.models import OfficeDay, UserOffice
 from utils.office_opening_hours import get_office_opening_hours
 from utils.paginate import paginate
 
@@ -60,19 +61,24 @@ class AppointmentListView(View):
 class AppointmentUpdateView(UpdateView):
     form_class = AppointmentOfficeUpdateForm
     template_name = 'appointments/office/appointment_update_form.html'
+    success_url = reverse_lazy('office_panel:appointments:list')
 
     def get_initial(self):
         """Replacing the initialized date due to an error with the date saving."""
         initial = super().get_initial()
         date = str(Appointment.objects.filter(id=self.object.pk).values_list('date').get()[0])
         date_object = database_old_datetime_format_to_new(date)
+        service_name = Appointment.objects.get(office=self.request.user.useroffice, pk=self.object.pk).service.name
         initial['date'] = date_object
+        initial['service'] = Service.objects.get(name=service_name, office=self.request.user.useroffice)
         return initial
 
     def get_context_data(self, **kwargs):
         context = super(AppointmentUpdateView, self).get_context_data(**kwargs)
         context['previous_url'] = self.request.META.get('HTTP_REFERER')
-        context['opening_hours'] = get_office_opening_hours(self.request.user.office)
+        context['opening_hours'] = get_office_opening_hours(self.request.user.useroffice)
+        context['appointment_time_interval'] = UserOffice.objects.values_list(
+            'appointment_time_interval', flat=True).filter(user=self.request.user).first()
         return context
 
     def get_form_kwargs(self, *args, **kwargs):
@@ -81,28 +87,20 @@ class AppointmentUpdateView(UpdateView):
         kwargs['office'] = self.object.office.pk
         # passing appointment object pk to form
         kwargs['appointment'] = self.object.pk
+        # passing service object pk to form
+        kwargs['service'] = self.object.service
         return kwargs
-
-    def appointment_date_taken(self, date):
-        messages.warning(
-            self.request,
-            f'Wybrana data {add_zero(date.day)}.{add_zero(date.month)}.{date.year} {date.hour}:00 '
-            f'jest już zajęta.'
-        )
 
     def form_valid(self, form):
         appointment = Appointment.objects.get(pk=self.object.pk)
-
         appointment.confirmed = form.cleaned_data['confirmed']
         appointment.date = form.cleaned_data['date']
+        appointment.service = form.cleaned_data['service']
         appointment.save()
         return redirect(self.get_success_url())
 
     def get_queryset(self):
         return Appointment.objects.filter(office=self.request.user.id)
-
-    def get_success_url(self):
-        return reverse('office_panel:appointments:list')
 
 
 @method_decorator([login_required, office_required], name='dispatch')
@@ -132,6 +130,12 @@ class MakeAppointment(CreateView):
     template_name = 'appointments/office/appointment_make_form.html'
     success_url = reverse_lazy('office_panel:appointments:list')
 
+    def get_context_data(self, **kwargs):
+        context = super(MakeAppointment, self).get_context_data(**kwargs)
+        # previous url for back button.
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
+
     def form_valid(self, form):
         appointment = form.save(commit=False)
         appointment.first_name = form.cleaned_data.get('patient').first_name
@@ -139,6 +143,8 @@ class MakeAppointment(CreateView):
         appointment.owner = self.request.user
         appointment.office_id = self.kwargs.get('pk')
         appointment.patient_email = form.cleaned_data.get('patient').email
+        service = Service.objects.get(name=form.cleaned_data['service'], office=self.kwargs.get('pk'))
+        appointment.service = service
         appointment.save()
         return redirect('office_panel:appointments:list')
 
@@ -146,20 +152,91 @@ class MakeAppointment(CreateView):
         """Overriding the method to send the date from the url to the form."""
         kwargs = super(MakeAppointment, self).get_form_kwargs()
         # passing office pk to form
-        kwargs['office'] = self.kwargs.get('pk')
-        date = self.request.GET['date']
+        kwargs['office'] = self.request.user.useroffice
+        date = self.kwargs.get('date')
+        service = self.kwargs.get('service')
+        services = Service.objects.values_list('name', flat=True).filter(office=self.request.user.useroffice)
+        if service not in services:
+            raise Http404
+        service_obj = Service.objects.filter(name=service, office=self.request.user.useroffice).first()
         date_database_format = datetime.datetime.strptime(date, '%d.%m.%Y %H:%M')
-        if Appointment.objects.filter(date=date_database_format, office=self.request.user.office):
+        dates_taken = Appointment.objects.filter(office=self.request.user.useroffice)
+        dates_taken = get_dates_taken(dates_taken, service_obj)
+        if date in dates_taken:
             # if date from url is taken raise 404 error (in case the user changes the url)
             raise Http404
-        office_day = OfficeDay.objects.get(office=self.request.user.office, day=date_database_format.weekday())
-        if int(office_day.earliest_appointment_time.split(':')[0]) > int(self.request.GET['date'][-5:-3]) or \
-                int(office_day.latest_appointment_time.split(':')[0]) < int(self.request.GET['date'][-5:-3]):
+        office_day = OfficeDay.objects.get(office=self.request.user.useroffice, day=date_database_format.weekday())
+        if int(office_day.earliest_appointment_time.split(':')[0]) > int(date[-5:-3]) or \
+                int(office_day.latest_appointment_time.split(':')[0]) < int(date[-5:-3]):
             # if the visit time given in the url is smaller or greater than the possibility of making an appointment
             # raise 404 error (in case the user changes the url)
             raise Http404
         if datetime.datetime.strptime(date.split(' ')[0], "%d.%m.%Y").date() < datetime.datetime.today().date():
             raise Http404
-        kwargs['user'] = self.request.user
         kwargs['date'] = date
+        kwargs['service'] = service_obj
         return kwargs
+
+
+@method_decorator([login_required, office_required], name='dispatch')
+class AddServiceView(CreateView):
+    form_class = ServiceForm
+    template_name = 'appointments/office/service_add_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AddServiceView, self).get_context_data(**kwargs)
+        # previous url for back button.
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
+
+    def form_valid(self, form):
+        service = form.save(commit=False)
+        service.office_id = self.request.user.useroffice.pk
+        service.save()
+        messages.success(
+            self.request, f'Poprawnie dodałeś nową usługę.'
+        )
+        return redirect('office_panel:appointments:service_list')
+
+
+@method_decorator([login_required, office_required], name='dispatch')
+class ServiceListView(View):
+    model = Service
+    template_name = 'appointments/office/services.html'
+
+    def get(self, request):
+        """Function override due to adding pagination."""
+        services = Service.objects.filter(office=self.request.user.id)
+        paginated_services = paginate(request, services, 10)
+        ctx = {
+            'services': paginated_services,
+        }
+        return render(request, self.template_name, ctx)
+
+
+@method_decorator([login_required, office_required], name='dispatch')
+class ServiceUpdateView(UpdateView):
+    form_class = ServiceForm
+    template_name = 'appointments/office/service_update_form.html'
+    success_url = reverse_lazy('office_panel:appointments:service_list')
+
+    def get_queryset(self):
+        queryset = Service.objects.filter(pk=self.kwargs.get('pk'))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ServiceUpdateView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context
+
+
+@method_decorator([login_required, office_required], name='dispatch')
+class ServiceDeleteView(DeleteView):
+    model = Service
+    template_name = 'appointments/office/service_delete_confirm.html'
+    success_url = reverse_lazy('office_panel:appointments:service_list')
+
+    def get_context_data(self, **kwargs):
+        context = super(ServiceDeleteView, self).get_context_data(**kwargs)
+        context['previous_url'] = self.request.META.get('HTTP_REFERER')
+        return context

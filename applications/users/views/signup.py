@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView, CreateView
 
 from applications.users.forms import OfficeSignUpForm, PatientSignUpForm
-from applications.users.models import Office, UserPatient
+from applications.users.models import UserOffice, UserPatient
 from applications.users.tasks import send_activation_email
 from applications.users.utils import user_save
 
@@ -42,7 +42,7 @@ class RegisterOffice(CreateView):
     @staticmethod
     def create_office(form, user):
         """Helper function creating a user as a office"""
-        office = Office.objects.create(user=user)
+        office = UserOffice.objects.create(user=user)
         office.name = form.cleaned_data.get('name')
         office.address = form.cleaned_data.get('address')
         office.city = form.cleaned_data.get('city')
