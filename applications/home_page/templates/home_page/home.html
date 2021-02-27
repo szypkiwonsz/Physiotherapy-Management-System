@@ -6,8 +6,20 @@
 {% block content %}
     <div class="container-flex" id="behind-jumbotron">
         <div class="jumbotron">
-            <div class="centered-left">SYSTEM DLA GABINETÓW I<br>PACJENTÓW FIZJOTERAPII</div>
-            <div class="title">FIZJO-SYSTEM</div>
+            <div class="row row-home-page">
+                <div class="col-lg-6 col-md-0"><img class="jumbotron-home-image" alt="Office panel."
+                                                    src="{% static "img/jumbotron-home.png" %}">
+                    <div class="home-image-text text-muted"><i>panel zarządzania gabinetem aplikacji Fizjo-System</i>
+                    </div>
+                </div>
+                <div class="centered-left col-lg-6 col-md-12">SYSTEM DLA GABINETÓW I<br>PACJENTÓW FIZJOTERAPII<br>
+                    <div class="title">FIZJO-SYSTEM</div>
+                    <br>
+                    <a class="btn btn-jumbotron" href="{% url 'users:signup' %}">ZAŁÓŻ BEZPŁATNE KONTO</a>
+                </div>
+            </div>
+            <img class="jumbotron-triangle" alt="Office panel."
+                 src="{% static "img/blue_triangle_reflection.png" %}">
         </div>
     </div>
     <div class="container-flex border rounded bg-light shadow-lg" id="home-about">
