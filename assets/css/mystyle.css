@@ -5,9 +5,10 @@ a:hover, a:visited, a:link, a:active {
 .jumbotron {
     text-align: center;
     background-size: cover;
-    background-image: url(../img/offices.jpg);
     border-radius: 0 0 0 0;
     overflow: hidden;
+
+    background-color: rgba(107, 180, 206, 0.33);
 }
 
 .margin-hr-home-timetable {
@@ -59,9 +60,9 @@ a:hover, a:visited, a:link, a:active {
 }
 
 .title {
-    color: white;
-    font-weight: lighter;
-    font-size: 18px;
+    color: #2e658d;
+    font-size: 1.3vw;
+    font-weight: 800;
 }
 
 .center-button {
@@ -74,7 +75,38 @@ a:hover, a:visited, a:link, a:active {
     margin: 10px;
 }
 
+.jumbotron-home-image {
+    margin-top: 30px;
+    height: 20vw;
+    width: auto;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: #cbcbcb;
+    min-height: 270px;
+    min-width: 270px;
+
+}
+
+.home-image-text {
+    text-align: left;
+    margin-top: 5px;
+    margin-left: 6.5vw;
+    font-size: 12px;
+}
+
+.centered-left {
+    padding-top: 20px;
+    color: #305782;
+    font-weight: 400;
+    font-size: 2.5vw;
+    margin-left: -10vw;
+    margin-top: 40px;
+}
+
+
 @media screen and (min-width: 1500px) {
+
     .home-icon-right {
         max-height: 50px;
         max-width: 50px;
@@ -91,9 +123,34 @@ a:hover, a:visited, a:link, a:active {
         opacity: 60%;
         margin-left: 10px;
     }
+
+    .jumbotron-triangle {
+        margin-bottom: -125px
+    }
 }
 
 @media screen and (max-width: 1500px) {
+
+    .jumbotron-home-image {
+        margin-top: 30px;
+        height: 20vw;
+        width: auto;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 5px;
+        border-color: #cbcbcb;
+        min-height: 270px;
+        min-width: 270px;
+
+    }
+
+    .home-image-text {
+        text-align: left;
+        margin-top: 5px;
+        margin-left: 6vw;
+        font-size: 12px;
+    }
+
     .home-icon-right {
         display: none;
     }
@@ -101,11 +158,67 @@ a:hover, a:visited, a:link, a:active {
     .home-icon-left {
         display: none;
     }
+
+    .jumbotron-triangle {
+        margin-bottom: -13.5vw;
+    }
+}
+
+@media screen and (max-width: 1300px) {
+    .jumbotron-home-image {
+        display: none;
+    }
+
+    .home-image-text {
+        display: none;
+    }
+
+    .centered-left {
+        margin-left: 17.1vw;
+        margin-top: 70px;
+    }
+
+    .title {
+        /*margin-right: -200px;*/
+    }
+
+    .btn-jumbotron {
+        font-size: 1vw;
+        margin-top: -5.5vw;
+        /*margin-right: 18.5vw;*/
+        color: white;
+        background-color: #fa9c06;
+        padding: 15px;
+    }
+
+    .jumbotron-triangle {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1300px) {
+    .title {
+        margin-right: 24.3vw;
+    }
+
+    .btn-jumbotron {
+        font-size: 1vw;
+        margin-top: -5.5vw;
+        margin-right: 18.5vw;
+        color: white;
+        background-color: #fa9c06;
+        padding: 15px;
+    }
 }
 
 @media screen and (min-width: 1000px) {
+    .row-home-page {
+        margin-left: 110px;
+        margin-top: 10px;
+    }
+
     .jumbotron {
-        min-height: 700px;
+        min-height: 500px;
     }
 
     .about-title {
@@ -126,18 +239,10 @@ a:hover, a:visited, a:link, a:active {
         margin-left: 15%;
         margin-right: 15%;
         padding: 50px 20px 20px 20px;
-        -moz-box-shadow: 0 0 20px 0 #ccc;
-        -webkit-box-shadow: 0 0 20px 0 #ccc;
-        box-shadow: 0 0 20px 0 #ccc;
+        /*-moz-box-shadow: 0 0 20px 0 #ccc;*/
+        /*-webkit-box-shadow: 0 0 20px 0 #ccc;*/
+        /*box-shadow: 0 0 20px 0 #ccc;*/
 
-    }
-
-    .centered-left {
-        padding-top: 30px;
-        color: white;
-        font-weight: lighter;
-        font-size: 48px;
-        margin-top: 135px;
     }
 
     #image-patient {
@@ -225,6 +330,23 @@ a:hover, a:visited, a:link, a:active {
 
 @media screen and (max-width: 1000px) {
 
+    .jumbotron-triangle {
+        display: revert;
+        margin-top: 40px;
+    }
+
+    .jumbotron-home-image {
+        display: none;
+    }
+
+    .btn-jumbotron {
+        font-size: 1vw;
+        margin-top: -15px;
+        color: white;
+        background-color: #fa9c06;
+        padding: 15px;
+    }
+
     .d-flex {
         margin-top: -5px;
     }
@@ -252,10 +374,11 @@ a:hover, a:visited, a:link, a:active {
     }
 
     .centered-left {
-        color: white;
+        color: #305782;
         font-weight: lighter;
-        margin-top: 70px;
+        margin-top: 50px;
         font-size: 22px;
+        margin-left: 0;
     }
 
     .title {
