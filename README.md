@@ -48,7 +48,7 @@ Download project
 Install requirements
 ```
 ```
-Run terminal with choosen folder "Physiotherapy_Management_System>" where manage.py file is
+Run terminal with selected folder "Physiotherapy_Management_System>" where manage.py file is
 ```
 ```
 Go to the seetings.py file and at the bottom set the mailbox from which messages will be sent
@@ -88,7 +88,7 @@ Download the chromedriver.exe from https://chromedriver.chromium.org/downloads/
 Move the downloaded file to "Physiotherapy_Management_System\functional_tests>"
 ```
 ```
-Open terminal with choosen folder "Physiotherapy_Management_System>" where manage.py file is
+Open terminal with selected folder "Physiotherapy_Management_System>" where manage.py file is
 ```
 ```
 Type: "python manage.py test"
